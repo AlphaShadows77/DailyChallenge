@@ -15,6 +15,9 @@ public class Main extends JavaPlugin {
 		//Config Loading
 		loadConfig();
 		
+		//Main setting
+		Utils.setMain(this);
+		
 	}
 	
 	private void loadConfig(){
@@ -24,6 +27,10 @@ public class Main extends JavaPlugin {
 		}
 		
 		mainConfig = getConfig();
+	}
+	
+	protected FileConfiguration getMainConfig(){
+		return mainConfig;
 	}
 	
 }
