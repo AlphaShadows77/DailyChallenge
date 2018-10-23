@@ -8,4 +8,8 @@ public class Utils {
 	protected static void setMain(Main pMain){
 		main = pMain;
 	}
+	
+	public static String getMessage(String pKey){
+		return main.getMessagesConfig().getString(pKey);
+	}
 }
