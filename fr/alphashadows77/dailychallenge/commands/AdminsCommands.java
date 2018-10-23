@@ -12,7 +12,12 @@ public class AdminsCommands implements CommandExecutor {
 		
 		if (isCommand(cmd, "modifychallenge")){
 			
-			
+			//Si on veut ajouter un challenge
+			if (args[0].equalsIgnoreCase("add")){
+				
+				
+				
+			}
 			
 		}
 		
