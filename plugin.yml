@@ -2,3 +2,8 @@ name: Daily Challenge
 version: 1.0
 author: AlphaShadows77
 main: fr.alphashadows77.Main
+commands:
+  modifychallenge:
+    description: Permet de gérer les challenges
+    permission: dailychallenge.modifychallenge
+    aliases: mc
