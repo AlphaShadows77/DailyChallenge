@@ -2,6 +2,8 @@ package fr.alphashadows77.dailychallenge;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,7 +15,7 @@ import fr.alphashadows77.dailychallenge.commands.AdminsCommands;
 public class Main extends JavaPlugin {
 	
 	private static FileConfiguration mainConfig;
-	private static FileConfiguration messagesConfig;
+	private static Map<String, FileConfiguration> customConfigs = new HashMap<String, FileConfiguration>();
 	
 	@Override
 	public void onEnable(){
@@ -27,6 +29,9 @@ public class Main extends JavaPlugin {
 		//Commands Registering
 		getCommand("modifychallenge").setExecutor(new AdminsCommands());
 		
+		//Events Registering
+		getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
+		
 	}
 	
 	private void loadConfig(){
@@ -39,23 +44,9 @@ public class Main extends JavaPlugin {
 		
 		mainConfig = getConfig();
 		
-		
-		//Messages Config
-		File messagesFile = new File(getDataFolder(), "messages.yml");
-		if (!messagesFile.exists()){
-			
-			try {
-				messagesFile.createNewFile();
-				messagesConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getResource("messages.yml")));
-				messagesConfig.save(messagesFile);
-			}
-			catch (IOException e) {e.printStackTrace();}
-			
-		}
-		
-		else{
-			messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
-		}
+		//Custom configs
+		addCustomConfig("messages");
+		addCustomConfig("challenges");
 		
 	}
 	
@@ -63,8 +54,31 @@ public class Main extends JavaPlugin {
 		return mainConfig;
 	}
 	
-	protected FileConfiguration getMessagesConfig(){
-		return messagesConfig;
+	private void addCustomConfig(String pKey){
+		
+		FileConfiguration customConfig = null;
+		File customFile = new File(getDataFolder(), pKey + ".yml");
+		if (!customFile.exists()){
+			
+			try {
+				customFile.createNewFile();
+				customConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getResource(pKey + ".yml")));
+				customConfig.save(customFile);
+			}
+			catch (IOException e) {e.printStackTrace();}
+			
+		}
+		
+		else{
+			customConfig = YamlConfiguration.loadConfiguration(customFile);
+		}
+		
+		customConfigs.put(pKey, customConfig);
+		
+	}
+	
+	protected FileConfiguration getCustomConfig(String pKey){
+		return customConfigs.get(pKey);
 	}
 	
 }

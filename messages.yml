@@ -1,0 +1,6 @@
+#Titres
+title-add_challenge_inventory: §rAjouter un challenge
+
+#Messages
+inventory-opened-need-item: "§aPose les items demandé dans l'inventaire puis ferme le quand tu as finis !"
+need-challenge-name: "§aExecute la commande \"/mc name <name>\" afin de définir un nom pour le challenge et de le sauvegarder"
