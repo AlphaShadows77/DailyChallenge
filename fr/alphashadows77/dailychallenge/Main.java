@@ -2,21 +2,24 @@ package fr.alphashadows77.dailychallenge;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.alphashadows77.dailychallenge.challengestype.Challenge;
+import fr.alphashadows77.dailychallenge.challengestype.ItemChallenge;
 import fr.alphashadows77.dailychallenge.commands.AdminsCommands;
 
 public class Main extends JavaPlugin {
 	
 	private static FileConfiguration mainConfig;
 	private static Map<String, FileConfiguration> customConfigs = new HashMap<String, FileConfiguration>();
-	
+		
 	@Override
 	public void onEnable(){
 		
@@ -47,6 +50,11 @@ public class Main extends JavaPlugin {
 		//Custom configs
 		addCustomConfig("messages");
 		addCustomConfig("challenges");
+		
+		//Serialization registering
+		ConfigurationSerialization.registerClass(Challenge.class);
+		ConfigurationSerialization.registerClass(ItemChallenge.class);
+		ConfigurationSerialization.registerClass(Gift.class);
 		
 	}
 	

@@ -1,9 +1,11 @@
 package fr.alphashadows77.dailychallenge;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
+import fr.alphashadows77.dailychallenge.challengestype.ItemChallenge;
 
 public class Utils {
 	
@@ -43,7 +46,7 @@ public class Utils {
 	public static void toGift(Player pPlayer, ItemStack[] pItemList){
 		
 		Set<ItemStack> sortedItemList = sortItems(pItemList);
-		challenges.get(pPlayer).setNeed(sortedItemList);		
+		challenges.get(pPlayer).setNeed(sortedItemList);
 		giftInventory(pPlayer);
 		
 	}
@@ -63,7 +66,14 @@ public class Utils {
 		final Inventory itemsAddInventory = Bukkit.createInventory(null, inventorySize, inventoryTitle);
 		
 		pPlayer.sendMessage(Utils.getMessage("inventory-opened-need-item"));
-		pPlayer.openInventory(itemsAddInventory);
+		Bukkit.getScheduler().runTaskLater(main, new Runnable(){
+
+			@Override
+			public void run() {
+				pPlayer.openInventory(itemsAddInventory);
+			}
+			
+		}, 20L);
 		
 	}
 	
@@ -72,7 +82,6 @@ public class Utils {
 		Set<ItemStack> sortedItemList = sortItems(pItemList);
 		challenges.get(pPlayer).setGift(new Gift(sortedItemList));
 		
-		pPlayer.closeInventory();
 		pPlayer.sendMessage(Utils.getMessage("need-challenge-name"));
 		needName.add(pPlayer);
 		
@@ -83,8 +92,15 @@ public class Utils {
 		
 		FileConfiguration challengesConfig = main.getCustomConfig("challenges");
 		List<Object> challengesList = (List<Object>) challengesConfig.getList("challenges");
-		challengesList.add((Object) pChallenge);
+		if (challengesList == null){
+			challengesList = new ArrayList<Object>();
+		}
+		
+		if (pChallenge instanceof ItemChallenge)
+			challengesList.add((ItemChallenge) pChallenge);
+
 		challengesConfig.set("challenges", challengesList);
+		
 		
 		saveCustomConfig("challenges");
 		
@@ -92,6 +108,10 @@ public class Utils {
 	
 	public static void resetNeed(Player pPlayer){
 		needName.remove(pPlayer);
+	}
+	
+	public static boolean isNeeded(Player pPlayer){
+		return needName.contains(pPlayer);
 	}
 	
 	
@@ -109,42 +129,45 @@ public class Utils {
 		
 	}
 	
+	public static String removeArgs(String pString, String[] args){
+		
+		for (String tmpArg : args){
+			pString = pString.replaceFirst(tmpArg + " ", "");
+		}
+		
+		return pString;
+		
+	}
+	
 	public static Set<ItemStack> sortItems(ItemStack[] pItemList){
 		
 		final Set<ItemStack> finalList = new HashSet<ItemStack>();
+		final List<ItemStack> itemList = new ArrayList<ItemStack>();
+		itemList.addAll(Arrays.asList(pItemList));
 		
-		for (ItemStack tmpItem : pItemList){
+		while (itemList.size() != 0){
 			
-			Iterator<ItemStack> it = finalList.iterator();
-			boolean continueWhile = true;
-			while (it.hasNext() && continueWhile){
+			ItemStack tmpItem = itemList.remove(0);
+			
+			if (tmpItem != null){
+			
+				int amount = tmpItem.getAmount();
 				
-				ItemStack tmpFinalItem = it.next();
-				if (isSameItems(tmpItem, tmpFinalItem)){
+				for (ItemStack itemToCompare : itemList){
 					
-					tmpFinalItem.setAmount(tmpItem.getAmount() + tmpFinalItem.getAmount());
-					it.remove();
-					finalList.add(tmpFinalItem);
-					continueWhile = false;
+					if (tmpItem.isSimilar(itemToCompare))
+						amount += itemToCompare.getAmount();
 					
 				}
 				
+				tmpItem.setAmount(amount);
+				finalList.add(tmpItem);
+			
 			}
 			
 		}
 		
-		
 		return finalList;
-		
-	}
-	
-	private static boolean isSameItems(ItemStack pFirstItem, ItemStack pSecondItem){
-		
-		pFirstItem.setAmount(0);
-		pSecondItem.setAmount(0);
-		
-		return pFirstItem == pSecondItem;
-		
 		
 	}
 	
@@ -155,13 +178,18 @@ public class Utils {
 	}
 	
 	public static String getMessage(String pKey){
-		return main.getCustomConfig("message").getString(pKey);
+		return main.getCustomConfig("messages").getString(pKey);
 	}
 	
 	public static void saveCustomConfig(String pKey){
 		try {
-			main.getCustomConfig(pKey).save(pKey + ".yml");
+			main.getCustomConfig(pKey).save(new File(main.getDataFolder(), pKey + ".yml"));
 		}
 		catch (IOException e) {e.printStackTrace();}
+	}
+	
+	
+	public static List<String> getCommandAliases(String pCmdName){
+		return main.getCommand(pCmdName).getAliases();
 	}
 }
