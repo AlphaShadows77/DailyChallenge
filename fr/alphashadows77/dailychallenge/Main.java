@@ -21,8 +21,8 @@ public class Main extends JavaPlugin {
 	private static Map<String, FileConfiguration> customConfigs = new HashMap<String, FileConfiguration>();
 		
 	@Override
-	public void onEnable(){
-		
+	public void onEnable() {
+
 		//Config Loading
 		loadConfig();
 		
@@ -39,6 +39,12 @@ public class Main extends JavaPlugin {
 	
 	private void loadConfig(){
 		
+		//Serialization registering
+		ConfigurationSerialization.registerClass(Challenge.class);
+		ConfigurationSerialization.registerClass(ItemChallenge.class);
+		ConfigurationSerialization.registerClass(Gift.class);
+		ConfigurationSerialization.registerClass(Stat.class);
+		
 		//Main Config
 		if (!new File(getDataFolder(), "config.yml").exists()){
 			saveDefaultConfig();
@@ -46,15 +52,10 @@ public class Main extends JavaPlugin {
 		}
 		
 		mainConfig = getConfig();
-		
+
 		//Custom configs
 		addCustomConfig("messages");
 		addCustomConfig("challenges");
-		
-		//Serialization registering
-		ConfigurationSerialization.registerClass(Challenge.class);
-		ConfigurationSerialization.registerClass(ItemChallenge.class);
-		ConfigurationSerialization.registerClass(Gift.class);
 		
 	}
 	

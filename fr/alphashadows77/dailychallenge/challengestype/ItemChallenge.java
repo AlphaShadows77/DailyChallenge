@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 
-public class ItemChallenge extends Challenge {
+public class ItemChallenge extends Challenge implements ConfigurationSerializable{
 	
 	//Variables
 	private Set<ItemStack> need;
@@ -48,7 +49,7 @@ public class ItemChallenge extends Challenge {
 	@Override
 	public Map<String, Object> serialize() {
 		
-		Map<String, Object> serializerMap = super.serialize();
+		Map<String, Object> serializedMap = super.serialize();
 		
 		List<Map<String, Object>> needSerializedMap = new ArrayList<Map<String, Object>>();
 		
@@ -56,9 +57,9 @@ public class ItemChallenge extends Challenge {
 			needSerializedMap.add(tmpItem.serialize());			
 		}
 		
-		serializerMap.put("need", needSerializedMap);
+		serializedMap.put("need", needSerializedMap);
 		
-		return serializerMap;
+		return serializedMap;
 	}
 	
 }

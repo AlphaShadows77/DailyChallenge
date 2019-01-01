@@ -34,7 +34,7 @@ public class Gift implements ConfigurationSerializable{
 		}
 		
 		this.itemList = itemList;
-		this.xp = (short) serializedGift.get("xp");
+		this.xp = ((Integer) serializedGift.get("xp")).shortValue();
 		this.money = (double) serializedGift.get("money");
 		
 	}

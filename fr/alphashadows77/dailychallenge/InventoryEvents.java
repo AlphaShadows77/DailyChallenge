@@ -6,6 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.alphashadows77.dailychallenge.challengestype.ItemChallenge;
+
 public class InventoryEvents implements Listener {
 	
 	private static long lastStepTime;
@@ -22,7 +24,7 @@ public class InventoryEvents implements Listener {
 			lastStepTime = System.currentTimeMillis();
 			Player player = (Player) e.getPlayer();
 			
-			if (Utils.getPlayerChallenge(player).getNeed() == null){
+			if (Utils.getPlayerChallenge(player).getNeed() == null && Utils.getPlayerChallenge(player) instanceof ItemChallenge){
 				Utils.toGift(player, inventory.getContents());
 			}
 			

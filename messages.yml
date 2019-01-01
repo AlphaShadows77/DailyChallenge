@@ -4,5 +4,14 @@ title-add_challenge_inventory: §rAjouter un challenge
 #Messages
 inventory-opened-need-item: "§aPose les items demandé dans l'inventaire puis ferme le quand tu as finis !"
 need-challenge-name: "§aExecute la commande \"/mc add <money> <xp> <name>\" afin de définir un nom pour le challenge et de le sauvegarder"
-can_not-add: "§cTu n'as pas de challenge en cours, fais /mc additem ou /mc addstats pour en ajouter un"
 challenge-added: "§aLe challenge vient d'être ajouté !"
+
+#Erreurs
+can_not-add: "§cTu n'as pas de challenge en cours, fais /mc additem ou /mc addstats pour en ajouter un"
+stat-not-found: "§cLa statistique renseignée n'a pas été trouvée !"
+not-a-number: "§cLe nombre renseigné n'en est pas un !"
+data-required: "§cUtilise /mc addstats <[add <stat> <amount> <data>]|[remove <stat> <data>]>"
+data-not-required: "§cUtilise /mc addstats <[add <stat> <amount>]|[remove <stat>]>"
+addstats-syntax: "§cUsage: /mc addstats <[add <stat> <amount> [data]]|[remove <stat> [data]]|[clearneed]|[gift]|[list]>"
+stat-exists: "§cLa statistique renseignée est déjà présente dans la liste des statistiques nécessaires !"
+no-need: "§cAucune statistique nécessaire n'a été renseigné !"

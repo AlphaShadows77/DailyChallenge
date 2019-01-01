@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +18,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
-import fr.alphashadows77.dailychallenge.challengestype.ItemChallenge;
 
 public class Utils {
 	
@@ -51,11 +51,8 @@ public class Utils {
 		
 	}
 	
-	public static void toGift(Player pPlayer, String t){
-		
-		//Ici ce sera pour les stats
-		challenges.get(pPlayer).setNeed(t);
-		
+	public static void toGift(Player pPlayer){
+		giftInventory(pPlayer);
 	}
 	
 	public static void giftInventory(Player pPlayer){
@@ -96,8 +93,7 @@ public class Utils {
 			challengesList = new ArrayList<Object>();
 		}
 		
-		if (pChallenge instanceof ItemChallenge)
-			challengesList.add((ItemChallenge) pChallenge);
+		challengesList.add(pChallenge);
 
 		challengesConfig.set("challenges", challengesList);
 		
@@ -152,12 +148,17 @@ public class Utils {
 			if (tmpItem != null){
 			
 				int amount = tmpItem.getAmount();
+				Iterator<ItemStack> it = itemList.iterator();
 				
-				for (ItemStack itemToCompare : itemList){
+				while (it.hasNext()){
 					
-					if (tmpItem.isSimilar(itemToCompare))
+					ItemStack itemToCompare = it.next();
+					
+					if (tmpItem.isSimilar(itemToCompare)){
 						amount += itemToCompare.getAmount();
-					
+						it.remove();
+					}
+										
 				}
 				
 				tmpItem.setAmount(amount);
