@@ -10,10 +10,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-
 import fr.alphashadows77.dailychallenge.Stat;
 import fr.alphashadows77.dailychallenge.Utils;
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
+import fr.alphashadows77.dailychallenge.challengestype.ChallengeFrequency;
 import fr.alphashadows77.dailychallenge.challengestype.ItemChallenge;
 import fr.alphashadows77.dailychallenge.challengestype.StatChallenge;
 
@@ -22,14 +22,14 @@ public class AdminsCommands implements CommandExecutor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-				
+
 		if (!(sender instanceof Player)){
 			return false;
 		}
 		
 		final Player player = (Player) sender;
 		
-		if (isCommand(label, "modifychallenge")){
+		if (Utils.isCommand(label, "modifychallenge")){
 			
 			if (args.length == 1){
 			
@@ -85,7 +85,7 @@ public class AdminsCommands implements CommandExecutor {
 							Utils.setPlayerChallenge(player, challenge);
 						}
 						
-						StatChallenge playerChallenge = (StatChallenge) Utils.getPlayerChallenge(player);
+						final StatChallenge playerChallenge = (StatChallenge) Utils.getPlayerChallenge(player);
 						
 						if (args.length == 4){
 							
@@ -191,34 +191,43 @@ public class AdminsCommands implements CommandExecutor {
 			}
 			
 			// Permet de choisir le nom du challenge une fois que ce qui est nécessaire et les récompenses ont été définis				
-			else if (args.length >= 4 && args[0].equalsIgnoreCase("add")){
-							
+			else if (args.length >= 5 && args[0].equalsIgnoreCase("add")){
+				
+				// Si les items récompenses ont été choisis
 				if (!Utils.isNeeded(player)){
 					player.sendMessage(Utils.getMessage("can_not-add"));
 					return true;
 				}
 				
-				double money = 0.0;
-				short xp = 0;
+				String frequency = args[1].toUpperCase();
 				
-				try{
-					money = Double.parseDouble(args[1]);
-					xp = Short.parseShort(args[2]);
+				if (frequency.equals("DAILY") || frequency.equals("WEEKLY") || frequency.equals("MONTHLY")){
+				
+					double money = 0.0;
+					short xp = 0;
+					
+					try{
+						money = Double.parseDouble(args[2]);
+						xp = Short.parseShort(args[3]);
+					}
+					catch(NumberFormatException e) {return false;}
+					
+					
+					Challenge challenge = Utils.getPlayerChallenge(player);
+					
+					challenge.setFrequency(ChallengeFrequency.valueOf(frequency));
+					
+					challenge.getGift().setMoney(money);
+					challenge.getGift().setXp(xp);
+					
+					String name = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1], args[2], args[3]});
+					challenge.setName(name);
+					
+					Utils.setChallengeInConfig(challenge);
+					
+					player.sendMessage(Utils.getMessage("challenge-added"));
+					
 				}
-				catch(NumberFormatException e) {return false;}
-				
-				
-				Challenge challenge = Utils.getPlayerChallenge(player);
-				
-				challenge.getGift().setMoney(money);
-				challenge.getGift().setXp(xp);
-				
-				String name = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1], args[2]});
-				challenge.setName(name);
-				
-				Utils.setChallengeInConfig(challenge);
-				
-				player.sendMessage(Utils.getMessage("challenge-added"));
 				
 			}
 			
@@ -231,25 +240,6 @@ public class AdminsCommands implements CommandExecutor {
 		
 		return false;
 		
-	}
-	
-	/**
-	 * Vérifie si la commande appelé correspond à la commande à vérifier.
-	 * @param pLabel Nom de la commande tapé
-	 * @param cmdName Nom de la commande à vérifier
-	 * @return Vrai si la commande appelé correspond à la commande à vérifier, faux sinon.
-	 */
-	private boolean isCommand(String pLabel, String pCmdName){
-		
-		if (pLabel.equalsIgnoreCase(pCmdName)) return true;
-		
-		for (String alias : Utils.getCommandAliases(pCmdName)){
-			if (pLabel.equalsIgnoreCase(alias)){
-				return true;
-			}
-		}
-		
-		return false;
 	}
 
 }

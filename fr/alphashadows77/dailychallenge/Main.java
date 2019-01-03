@@ -3,8 +3,11 @@ package fr.alphashadows77.dailychallenge;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
 import fr.alphashadows77.dailychallenge.challengestype.ItemChallenge;
 import fr.alphashadows77.dailychallenge.commands.AdminsCommands;
+import fr.alphashadows77.dailychallenge.commands.PlayersCommands;
 
 public class Main extends JavaPlugin {
 	
@@ -31,9 +35,40 @@ public class Main extends JavaPlugin {
 		
 		//Commands Registering
 		getCommand("modifychallenge").setExecutor(new AdminsCommands());
+		getCommand("dailychallenge").setExecutor(new PlayersCommands());
 		
 		//Events Registering
 		getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
+		
+		// Sélection aléatoire des challenges périodiques
+		FileConfiguration challengesConfig = getCustomConfig("challenges");
+		Calendar calendar = Calendar.getInstance();
+		for (String tempFrequency : new String[] {"daily", "weekly", "monthly"}){
+			
+			// Vérification si c'est bien un reload quotidien et non ponctuel ou qu'aucun challenge journalier n'est défini
+			if ((calendar.get(Calendar.HOUR_OF_DAY) == 5 || calendar.get(Calendar.HOUR_OF_DAY) == 6 || challengesConfig.get(tempFrequency + "now") == null) && !challengesConfig.getConfigurationSection(tempFrequency).getValues(false).isEmpty()){
+				
+				Set<String> challenges = new HashSet<String>();
+				//Ajout de tous les challenges dans une liste
+				for (String challenge : challengesConfig.getConfigurationSection(tempFrequency).getValues(false).keySet()){
+					challenges.add(challenge);
+				}
+				
+				//Choix aléatoire d'un challenge et assignation comme challenge périodique
+				int random = (int) (Math.random() * challenges.size());
+				challengesConfig.getConfigurationSection(tempFrequency).getKeys(false);
+				challengesConfig.set(tempFrequency + "now", challenges.toArray()[random]);
+				challengesConfig.set(tempFrequency + "success", null); //Mise à zéro des joueurs ayant réussi le challenge actuel
+				challengesConfig.set(tempFrequency + "playersstats", null); //Mise à zéro des stats enregistrées des joueurs pour les challenges statistiques
+			
+			}
+			
+		}
+		try {
+			challengesConfig.save(new File(getDataFolder(), "challenges.yml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	

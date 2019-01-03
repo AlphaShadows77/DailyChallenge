@@ -88,17 +88,17 @@ public class Utils {
 	public static void setChallengeInConfig(Challenge pChallenge){
 		
 		FileConfiguration challengesConfig = main.getCustomConfig("challenges");
-		List<Object> challengesList = (List<Object>) challengesConfig.getList("challenges");
+		String frequency = pChallenge.getFrequency().toString().toLowerCase();
+		List<Object> challengesList = (List<Object>) challengesConfig.getList(frequency);
 		if (challengesList == null){
 			challengesList = new ArrayList<Object>();
 		}
 		
 		challengesList.add(pChallenge);
 
-		challengesConfig.set("challenges", challengesList);
+		challengesConfig.set(frequency, challengesList);
 		
-		
-		saveCustomConfig("challenges");
+		saveCustomConfig("challenge");
 		
 	}
 	
@@ -178,8 +178,20 @@ public class Utils {
 		return main.getMainConfig().getString(pKey);
 	}
 	
+	public static boolean getBoolean(String pKey){
+		return main.getMainConfig().getBoolean(pKey);
+	}
+	
 	public static String getMessage(String pKey){
 		return main.getCustomConfig("messages").getString(pKey);
+	}
+	
+	public static List<String> getMessageList(String pKey){
+		return main.getCustomConfig("messages").getStringList(pKey);
+	}
+	
+	public static FileConfiguration getCustomConfig(String pConfig){
+		return main.getCustomConfig("challenges");
 	}
 	
 	public static void saveCustomConfig(String pKey){
@@ -192,5 +204,39 @@ public class Utils {
 	
 	public static List<String> getCommandAliases(String pCmdName){
 		return main.getCommand(pCmdName).getAliases();
+	}
+	
+	/**
+	 * Vérifie si la commande appelé correspond à la commande à vérifier.
+	 * @param pLabel Nom de la commande tapé
+	 * @param cmdName Nom de la commande à vérifier
+	 * @return Vrai si la commande appelé correspond à la commande à vérifier, faux sinon.
+	 */
+	public static boolean isCommand(String pLabel, String pCmdName){
+		
+		if (pLabel.equalsIgnoreCase(pCmdName)) return true;
+		
+		for (String alias : Utils.getCommandAliases(pCmdName)){
+			if (pLabel.equalsIgnoreCase(alias)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Converti la chaine en minuscule, la première lettre en majuscule et transforme les underscore en espace
+	 * @param string Chaîne à convertir
+	 * @return converted Chaîne convertit
+	 */
+	public static String makesBeautiful(String string){
+		
+		char[] charsName = string.toLowerCase().toCharArray();
+		charsName[0] = Character.toUpperCase(charsName[0]);
+		String name = String.copyValueOf(charsName);
+		
+		return name.replaceAll("_", " ");
+		
 	}
 }
