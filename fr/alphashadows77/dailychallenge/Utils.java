@@ -102,6 +102,16 @@ public class Utils {
 		
 	}
 	
+	public static void changePeriodicChallenge(String frequency, String challengeName){
+		
+		FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
+		
+		challengesConfig.set(frequency + "now", challengeName);
+		challengesConfig.set(frequency + "success", null); //Mise à zéro des joueurs ayant réussi le challenge actuel
+		challengesConfig.set(frequency + "playersstats", null); //Mise à zéro des stats enregistrées des joueurs pour les challenges statistiques
+		
+	}
+	
 	public static void resetNeed(Player pPlayer){
 		needName.remove(pPlayer);
 	}
@@ -176,6 +186,10 @@ public class Utils {
 	//Configs
 	public static String getString(String pKey){
 		return main.getMainConfig().getString(pKey);
+	}
+	
+	public static void setValue(String pKey, Object pValue){
+		main.getMainConfig().set(pKey, pValue);
 	}
 	
 	public static boolean getBoolean(String pKey){

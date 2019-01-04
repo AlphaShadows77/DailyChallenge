@@ -5,6 +5,8 @@ title-add_challenge_inventory: §rAjouter un challenge
 inventory-opened-need-item: "§aPose les items demandé dans l'inventaire puis ferme le quand tu as finis !"
 need-challenge-name: "§aExecute la commande \"/mc add <money> <xp> <name>\" afin de définir un nom pour le challenge et de le sauvegarder"
 challenge-added: "§aLe challenge vient d'être ajouté !"
+allowdailychallenge-switch-on: "§aLa commande /dailychallenge est désormais activée !"
+allowdailychallenge-switch-off: "§cLa commande /dailychallenge n'est désormais plus activée !"
 
 #Erreurs
 can_not-add: "§cTu n'as pas de challenge en cours, fais /mc additem ou /mc addstats pour en ajouter un"

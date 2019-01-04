@@ -9,14 +9,14 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 public class Stat implements ConfigurationSerializable{
 	
 	private Statistic stat;
-	private String data;
+	private Object data;
 	private int amount;
 	
 	public Stat(Statistic stat, int amount){
 		this(stat, null, amount);
 	}
 	
-	public Stat(Statistic stat, String data, int amount){
+	public Stat(Statistic stat, Object data, int amount){
 		this.stat = stat;
 		this.data = data;
 		this.amount = amount;
@@ -24,7 +24,7 @@ public class Stat implements ConfigurationSerializable{
 	
 	public Stat(Map<String, Object> serializedMap){
 		this.stat = (Statistic) serializedMap.get("stat");
-		this.data = (String) serializedMap.get("data");
+		this.data = (Object) serializedMap.get("data");
 		this.amount = (int) serializedMap.get("amount");
 	}
 	
@@ -42,7 +42,7 @@ public class Stat implements ConfigurationSerializable{
 	
 	public String toString(){
 		String stringedStat = "[Stat: {" + stat.toString() + "}; "
-	+ (data == null ? "" : "Data: {" + data + "}; ")
+	+ (data == null ? "" : "Data: {" + data.toString() + "}; ")
 	+ "Amount: {" + amount + "}]";
 		return stringedStat;
 	}

@@ -11,3 +11,11 @@ commands:
     permission: dailychallenge.modifychallenge
     aliases: mc
     usage: "§cUsage: /mc additem|addstats §fou §c/mc add <daily|weekly|monthly> <money> <xp> <nom>"
+  allowdailychallenge:
+    description: Permet d'activer ou de désactiver la commande /dailychallenge
+    permission: dailychallenge.allowdailychallenge
+  forcechallenge:
+    description: Permet de changer un challenge périodique manuellement
+    permission: dailychallenge.forcechallenge
+    aliases: fc
+    usage: "§cUsage: /fc <frequence> <nom du challenge>"

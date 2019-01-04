@@ -3,6 +3,7 @@ package fr.alphashadows77.dailychallenge.commands;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.Statistic.Type;
 import org.bukkit.command.Command;
@@ -10,6 +11,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+
+import com.avaje.ebeaninternal.server.deploy.BeanDescriptor.EntityType;
+
 import fr.alphashadows77.dailychallenge.Stat;
 import fr.alphashadows77.dailychallenge.Utils;
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
@@ -22,10 +26,29 @@ public class AdminsCommands implements CommandExecutor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
-		if (!(sender instanceof Player)){
-			return false;
+		
+		if (Utils.isCommand(label, "allowdailychallenge")){
+			boolean isNowAllowed = !Utils.getBoolean("allowdailychallenge");
+			Utils.setValue("allowdailychallenge", isNowAllowed);
+			sender.sendMessage(Utils.getMessage("allowdailychallenge-switch-" + (isNowAllowed ? "on" : "off")));
 		}
+		
+		else if (Utils.isCommand(label, "forcechallenge")){
+			if (args.length >= 2){
+				
+				String frequency = args[0];
+				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0]});
+				
+				Utils.changePeriodicChallenge(frequency, challengeName);
+				
+			}
+			
+			else
+				return false;
+		}
+
+		if (!(sender instanceof Player))
+			return true;
 		
 		final Player player = (Player) sender;
 		
@@ -116,7 +139,8 @@ public class AdminsCommands implements CommandExecutor {
 								return true;
 							}
 							
-							Stat challengeStat = new Stat(stat, args[4], amount);
+							Object data = (stat.getType().equals(Type.BLOCK) || stat.getType().equals(Type.ITEM)) ? Material.valueOf(args[4].toUpperCase()) : EntityType.valueOf(args[4].toUpperCase());
+							Stat challengeStat = new Stat(stat, data, amount);
 							((StatChallenge) challenge).addNeededStat(challengeStat);
 							
 						}

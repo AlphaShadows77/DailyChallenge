@@ -36,6 +36,8 @@ public class Main extends JavaPlugin {
 		//Commands Registering
 		getCommand("modifychallenge").setExecutor(new AdminsCommands());
 		getCommand("dailychallenge").setExecutor(new PlayersCommands());
+		getCommand("allowdailychallenge").setExecutor(new AdminsCommands());
+		getCommand("forcechallenge").setExecutor(new AdminsCommands());
 		
 		//Events Registering
 		getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
@@ -56,10 +58,7 @@ public class Main extends JavaPlugin {
 				
 				//Choix aléatoire d'un challenge et assignation comme challenge périodique
 				int random = (int) (Math.random() * challenges.size());
-				challengesConfig.getConfigurationSection(tempFrequency).getKeys(false);
-				challengesConfig.set(tempFrequency + "now", challenges.toArray()[random]);
-				challengesConfig.set(tempFrequency + "success", null); //Mise à zéro des joueurs ayant réussi le challenge actuel
-				challengesConfig.set(tempFrequency + "playersstats", null); //Mise à zéro des stats enregistrées des joueurs pour les challenges statistiques
+				Utils.changePeriodicChallenge(tempFrequency, challenges.toArray(new String[challenges.size()])[random]);
 			
 			}
 			
