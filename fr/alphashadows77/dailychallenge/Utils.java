@@ -70,7 +70,7 @@ public class Utils {
 				pPlayer.openInventory(itemsAddInventory);
 			}
 			
-		}, 20L);
+		}, 1L);
 		
 	}
 	
@@ -84,21 +84,14 @@ public class Utils {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static void setChallengeInConfig(Challenge pChallenge){
 		
 		FileConfiguration challengesConfig = main.getCustomConfig("challenges");
 		String frequency = pChallenge.getFrequency().toString().toLowerCase();
-		List<Object> challengesList = (List<Object>) challengesConfig.getList(frequency);
-		if (challengesList == null){
-			challengesList = new ArrayList<Object>();
-		}
-		
-		challengesList.add(pChallenge);
 
-		challengesConfig.set(frequency, challengesList);
+		challengesConfig.set(frequency + "." + pChallenge.getName().replaceAll("_", " "), pChallenge);
 		
-		saveCustomConfig("challenge");
+		saveCustomConfig("challenges");
 		
 	}
 	
@@ -109,6 +102,8 @@ public class Utils {
 		challengesConfig.set(frequency + "now", challengeName);
 		challengesConfig.set(frequency + "success", null); //Mise à zéro des joueurs ayant réussi le challenge actuel
 		challengesConfig.set(frequency + "playersstats", null); //Mise à zéro des stats enregistrées des joueurs pour les challenges statistiques
+		
+		Utils.saveCustomConfig("challenges");
 		
 	}
 	
@@ -206,6 +201,10 @@ public class Utils {
 	
 	public static FileConfiguration getCustomConfig(String pConfig){
 		return main.getCustomConfig("challenges");
+	}
+	
+	public static void saveMainConfig(){
+		main.saveConfig();
 	}
 	
 	public static void saveCustomConfig(String pKey){

@@ -35,9 +35,11 @@ public class PlayersCommands implements CommandExecutor {
 			
 			if (Utils.isCommand(label, "dailychallenge")){
 				
+				System.out.println("isCommand");
+				
 				// Si la commande est activée
 				if (Utils.getBoolean("allow-dailychallenge")){
-	
+						
 					Inventory menu = Bukkit.createInventory(null, 27, Utils.getMessage("challenge-title")); //Création du menu principale des challenges
 					// On place les items représentant les différentes sections dans le menu
 					ItemStack itemSection = new ItemStack(Material.WATCH);
@@ -54,6 +56,14 @@ public class PlayersCommands implements CommandExecutor {
 						String path = tempFrequency + "." + challengesConfig.getString(tempFrequency + "now");
 						Challenge challenge = (Challenge) challengesConfig.get(path);
 						
+						if (challenge == null){
+							
+							player.sendMessage(Utils.getMessage("error-dailychallenge-disabled"));
+							
+							return true;
+							
+						}
+						
 						String nowType = challenge instanceof ItemChallenge ? "items" : "stats";
 						
 						ArrayList<String> lore = new ArrayList<String>();
@@ -62,28 +72,35 @@ public class PlayersCommands implements CommandExecutor {
 						for (String lineLore : loreConfig){
 							
 							if (lineLore.contains("%need%")){
-																
-								for (Object need : (Set<?>) challenge.getNeed()){
-									
-									if (nowType == "items"){
-										ItemStack item = (ItemStack) need;
-										String tempLineLoreNeed = lineLore.replaceAll("%amount%", Integer.toString(item.getAmount()));
-										ItemsWithData itemWithData = ItemsWithData.getValue(item.getType(), item.getDurability());
-										String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(item.getType().toString());
-										tempLineLoreNeed = tempLineLoreNeed.replaceAll("%need%", itemName);
+								
+								if (!challenge.getNeed().isEmpty()){
+								
+									for (Object need : (Set<?>) challenge.getNeed()){
 										
-										lore.add(tempLineLoreNeed);
+										if (nowType == "items"){
+											ItemStack item = (ItemStack) need;
+											String tempLineLoreNeed = lineLore.replaceAll("%amount%", Integer.toString(item.getAmount()));
+											ItemsWithData itemWithData = ItemsWithData.getValue(item.getType(), item.getDurability());
+											String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(item.getType().toString());
+											tempLineLoreNeed = tempLineLoreNeed.replaceAll("%need%", itemName);
+											
+											lore.add(tempLineLoreNeed);
+										}
+										
+										else{
+											Stat stat = (Stat) need;
+											String tempLineLoreNeed = lineLore.replaceAll("%amount%", Integer.toString(stat.getAmount()));
+											String statName = Utils.makesBeautiful(stat.getStat().toString());
+											tempLineLoreNeed = tempLineLoreNeed.replaceAll("%need%", statName);
+											lore.add(tempLineLoreNeed);
+										}
+										
 									}
-									
-									else{
-										Stat stat = (Stat) need;
-										String tempLineLoreNeed = lineLore.replaceAll("%amount%", Integer.toString(stat.getAmount()));
-										String statName = Utils.makesBeautiful(stat.getStat().toString());
-										tempLineLoreNeed = tempLineLoreNeed.replaceAll("%need%", statName);
-										lore.add(tempLineLoreNeed);
-									}
-									
+								
 								}
+								
+								else
+									lore.add(Utils.getMessage("lore-nothing-need"));
 								
 							}
 							
@@ -117,7 +134,7 @@ public class PlayersCommands implements CommandExecutor {
 								lore.add(lineLore);
 							
 						}
-						ItemStack item = nowType == "items" ? (ItemStack) Arrays.asList(challenge.getNeed()).get(0) : StatsWithItem.getValue(((Stat) Arrays.asList(challenge.getNeed()).get(0)).getStat()).getItem();
+						ItemStack item = nowType == "items" ? (ItemStack) (Arrays.asList(challenge.getNeed()).get(0)) : StatsWithItem.getValue(((Stat) Arrays.asList(challenge.getNeed()).get(0)).getStat()).getItem();
 						// Place l'item représentant le challenge dans le menu
 						menu.setItem(2 + 9 * index, modifyForGui(item, "§a" + challenge.getName(), false, lore));
 						List<String> playerSuccess = challengesConfig.getStringList(tempFrequency + "success");
@@ -129,6 +146,9 @@ public class PlayersCommands implements CommandExecutor {
 					
 					player.openInventory(menu);
 				}
+				
+				else
+					player.sendMessage(Utils.getMessage("error-dailychallenge-disabled"));
 			}
 				
 		}

@@ -48,7 +48,7 @@ public class Main extends JavaPlugin {
 		for (String tempFrequency : new String[] {"daily", "weekly", "monthly"}){
 			
 			// Vérification si c'est bien un reload quotidien et non ponctuel ou qu'aucun challenge journalier n'est défini
-			if ((calendar.get(Calendar.HOUR_OF_DAY) == 5 || calendar.get(Calendar.HOUR_OF_DAY) == 6 || challengesConfig.get(tempFrequency + "now") == null) && !challengesConfig.getConfigurationSection(tempFrequency).getValues(false).isEmpty()){
+			if ((calendar.get(Calendar.HOUR_OF_DAY) == 5 || calendar.get(Calendar.HOUR_OF_DAY) == 6 || challengesConfig.get(tempFrequency + "now") == null) && challengesConfig.getConfigurationSection(tempFrequency) != null && !challengesConfig.getConfigurationSection(tempFrequency).getValues(false).isEmpty()){
 				
 				Set<String> challenges = new HashSet<String>();
 				//Ajout de tous les challenges dans une liste
@@ -99,16 +99,23 @@ public class Main extends JavaPlugin {
 	
 	private void addCustomConfig(String pKey){
 		
-		FileConfiguration customConfig = null;
+		FileConfiguration customConfig = new YamlConfiguration();
 		File customFile = new File(getDataFolder(), pKey + ".yml");
 		if (!customFile.exists()){
 			
-			try {
-				customFile.createNewFile();
-				customConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getResource(pKey + ".yml")));
-				customConfig.save(customFile);
+			if (getResource(pKey + ".yml") != null){
+				
+				try{
+					customFile.createNewFile();
+					customConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getResource(pKey + ".yml")));
+					customConfig.save(customFile);
+				}
+				
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+				
 			}
-			catch (IOException e) {e.printStackTrace();}
 			
 		}
 		

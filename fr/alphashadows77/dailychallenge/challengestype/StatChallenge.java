@@ -25,22 +25,24 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 	public StatChallenge(Map<String, Object> serializedMap){
 		super.deserialize(this, serializedMap);
 		
-		for (Map<String, Object> serializedStat : (Map<String, Object>[]) serializedMap.get("need")){
-			
-			this.need.add(new Stat(serializedStat));
-			
+		if (serializedMap.containsKey("need")){
+		
+			for (Map<String, Object> serializedStat : (Map<String, Object>[]) serializedMap.get("need")){
+				this.need.add(new Stat(serializedStat));
+			}
+		
 		}
 		
 	}
 	
 	@Override
-	public Object getNeed() {
+	public Set<?> getNeed() {
 		return this.need;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setNeed(Object pNeed) {
+	public void setNeed(Set<?> pNeed) {
 		this.need = (Set<Stat>) pNeed;
 	}
 	
@@ -49,13 +51,17 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 		
 		Map<String, Object> serializedMap = super.serialize();
 	
-		List<Map<String, Object>> serializedStatSet = new ArrayList<Map<String, Object>>();
+		if (!need.isEmpty()){
 		
-		for (Stat tmpStat : need){
-			serializedStatSet.add(tmpStat.serialize());
+			List<Map<String, Object>> serializedStatSet = new ArrayList<Map<String, Object>>();
+			
+			for (Stat tmpStat : need){
+				serializedStatSet.add(tmpStat.serialize());
+			}
+			
+			serializedMap.put("need", serializedStatSet.toArray(new Map[serializedStatSet.size()]));
+		
 		}
-		
-		serializedMap.put("need", serializedStatSet.toArray(new Map[serializedStatSet.size()]));
 		
 		return serializedMap;
 		

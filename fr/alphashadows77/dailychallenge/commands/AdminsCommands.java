@@ -28,18 +28,24 @@ public class AdminsCommands implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
 		if (Utils.isCommand(label, "allowdailychallenge")){
-			boolean isNowAllowed = !Utils.getBoolean("allowdailychallenge");
-			Utils.setValue("allowdailychallenge", isNowAllowed);
+			boolean isNowAllowed = !Utils.getBoolean("allow-dailychallenge");
+			Utils.setValue("allow-dailychallenge", isNowAllowed);
+			Utils.saveMainConfig();
 			sender.sendMessage(Utils.getMessage("allowdailychallenge-switch-" + (isNowAllowed ? "on" : "off")));
 		}
 		
 		else if (Utils.isCommand(label, "forcechallenge")){
 			if (args.length >= 2){
 				
-				String frequency = args[0];
+				String frequency = args[0].toLowerCase();
 				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0]});
 				
+				if (!(frequency.equals("daily") || frequency.equals("weekly") || frequency.equals("monthly")))
+					return false;
+				
 				Utils.changePeriodicChallenge(frequency, challengeName);
+				
+				return true;
 				
 			}
 			
@@ -57,7 +63,7 @@ public class AdminsCommands implements CommandExecutor {
 			if (args.length == 1){
 			
 				// Si on veut ajouter un challenge nécessitant des items
-				if (args[0].equalsIgnoreCase("additem")){
+				if (args[0].equalsIgnoreCase("additems")){
 					
 					Utils.setPlayerChallenge(player, new ItemChallenge());
 					final byte inventorySize = 36;
@@ -73,11 +79,24 @@ public class AdminsCommands implements CommandExecutor {
 				
 				else if (args[0].equalsIgnoreCase("addstats"))
 					player.sendMessage(Utils.getMessage("addstats-syntax"));
+				
+				else
+					return false;
 			
 			}
 			
 			// Si on veut ajouter un challenge nécessitant des stats
 			else if (args.length >= 2 && args[0].equalsIgnoreCase("addstats")){
+				
+				Challenge tmpChallenge = Utils.getPlayerChallenge(player);
+				StatChallenge challenge;
+				if (tmpChallenge == null || !(tmpChallenge instanceof StatChallenge)){
+					challenge = new StatChallenge();
+					Utils.setPlayerChallenge(player, challenge);
+				}
+				
+				else
+					challenge = (StatChallenge) tmpChallenge;
 				
 				switch (args[1].toLowerCase()){
 				case "add":
@@ -101,15 +120,7 @@ public class AdminsCommands implements CommandExecutor {
 							player.sendMessage(Utils.getMessage("not-a-number"));
 							return true;
 						}
-						
-						Challenge challenge = Utils.getPlayerChallenge(player);
-						if (challenge == null || !(challenge instanceof StatChallenge)){
-							challenge = new StatChallenge();
-							Utils.setPlayerChallenge(player, challenge);
-						}
-						
-						final StatChallenge playerChallenge = (StatChallenge) Utils.getPlayerChallenge(player);
-						
+																		
 						if (args.length == 4){
 							
 							if (!stat.getType().equals(Type.UNTYPED)){
@@ -117,31 +128,35 @@ public class AdminsCommands implements CommandExecutor {
 								return true;
 							}
 							
-							if (playerChallenge.containsStat(stat)){
+							if (challenge.containsStat(stat)){
 								player.sendMessage(Utils.getMessage("stat-exists"));
 								return true;
 							}
 							
 							Stat challengeStat = new Stat(stat, amount);
-							((StatChallenge) challenge).addNeededStat(challengeStat);
+							challenge.addNeededStat(challengeStat);
+							
+							player.sendMessage(Utils.getMessage("stat-added"));
 														
 						}
 						
 						else if (args.length == 5){
 							
 							if (stat.getType().equals(Type.UNTYPED)){
-								player.sendMessage("data-not-required");
+								player.sendMessage(Utils.getMessage("data-not-required"));
 								return true;
 							}
 							
-							if (playerChallenge.containsStat(stat, args[4])){
-								player.sendMessage("stat-exists");
+							if (challenge.containsStat(stat, args[4])){
+								player.sendMessage(Utils.getMessage("stat-exists"));
 								return true;
 							}
 							
 							Object data = (stat.getType().equals(Type.BLOCK) || stat.getType().equals(Type.ITEM)) ? Material.valueOf(args[4].toUpperCase()) : EntityType.valueOf(args[4].toUpperCase());
 							Stat challengeStat = new Stat(stat, data, amount);
-							((StatChallenge) challenge).addNeededStat(challengeStat);
+							challenge.addNeededStat(challengeStat);
+							
+							player.sendMessage(Utils.getMessage("stat-added"));
 							
 						}
 												
@@ -165,7 +180,7 @@ public class AdminsCommands implements CommandExecutor {
 							return true;
 						}
 						
-						((StatChallenge) Utils.getPlayerChallenge(player)).removeNeededStat(stat);
+						challenge.removeNeededStat(stat);
 						
 					}
 					
@@ -181,13 +196,13 @@ public class AdminsCommands implements CommandExecutor {
 							return true;
 						}
 						
-						((StatChallenge) Utils.getPlayerChallenge(player)).removeNeededStat(stat, args[2]);
+						challenge.removeNeededStat(stat, args[2]);
 						
 					}
 					break;
 					
 				case "clearneed":
-					((StatChallenge) Utils.getPlayerChallenge(player)).clearNeed();
+					challenge.clearNeed();
 					break;
 					
 				case "gift":
@@ -195,8 +210,7 @@ public class AdminsCommands implements CommandExecutor {
 					break;
 				
 				case "list":
-					StatChallenge challenge = ((StatChallenge) Utils.getPlayerChallenge(player));
-					if (challenge == null || ((Set<Stat>) challenge.getNeed()).isEmpty()){
+					if (((Set<Stat>) challenge.getNeed()).isEmpty()){
 						player.sendMessage(Utils.getMessage("no-need"));
 						return true;
 					}

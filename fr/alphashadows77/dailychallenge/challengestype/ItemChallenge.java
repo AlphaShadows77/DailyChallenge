@@ -24,10 +24,15 @@ public class ItemChallenge extends Challenge implements ConfigurationSerializabl
 		super.deserialize(this, serializedItemChallenge);
 		
 		Set<ItemStack> needSet = new HashSet<ItemStack>();
-		List<Map<String, Object>> serializedItemList = (List<Map<String, Object>>) serializedItemChallenge.get("need");
 		
-		for (Map<String, Object> serializedItem : serializedItemList){
-			needSet.add(ItemStack.deserialize(serializedItem));
+		if (serializedItemChallenge.containsKey("need")){
+			
+			List<Map<String, Object>> serializedItemList = (List<Map<String, Object>>) serializedItemChallenge.get("need");
+			
+			for (Map<String, Object> serializedItem : serializedItemList){
+				needSet.add(ItemStack.deserialize(serializedItem));
+			}
+		
 		}
 		
 		this.need = needSet;
@@ -38,11 +43,11 @@ public class ItemChallenge extends Challenge implements ConfigurationSerializabl
 	 * Permet de définir ce qui est nécessaire
 	 */
 	@SuppressWarnings("unchecked")
-	public void setNeed(Object pNeed){
+	public void setNeed(Set<?> pNeed){
 		this.need = (Set<ItemStack>) pNeed;
 	}
 
-	public Object getNeed(){
+	public Set<?> getNeed(){
 		return this.need;
 	}
 
@@ -51,13 +56,17 @@ public class ItemChallenge extends Challenge implements ConfigurationSerializabl
 		
 		Map<String, Object> serializedMap = super.serialize();
 		
-		List<Map<String, Object>> needSerializedMap = new ArrayList<Map<String, Object>>();
+		if (!need.isEmpty()){
 		
-		for (ItemStack tmpItem : need){
-			needSerializedMap.add(tmpItem.serialize());			
+			List<Map<String, Object>> needSerializedMap = new ArrayList<Map<String, Object>>();
+			
+			for (ItemStack tmpItem : need){
+				needSerializedMap.add(tmpItem.serialize());			
+			}
+			
+			serializedMap.put("need", needSerializedMap);
+		
 		}
-		
-		serializedMap.put("need", needSerializedMap);
 		
 		return serializedMap;
 	}

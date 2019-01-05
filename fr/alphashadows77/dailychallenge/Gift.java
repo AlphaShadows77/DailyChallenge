@@ -26,16 +26,22 @@ public class Gift implements ConfigurationSerializable{
 	@SuppressWarnings("unchecked")
 	public Gift(Map<String, Object> serializedGift){
 		
-		Set<ItemStack> itemList = new HashSet<ItemStack>();
-		List<Map<String, Object>> serializedItemList = (List<Map<String, Object>>) serializedGift.get("itemlist");
+		this.xp = ((Integer) serializedGift.get("xp")).shortValue();
+		this.money = (double) serializedGift.get("money");
 		
-		for (Map<String, Object> serializedItem : serializedItemList){
-			itemList.add(ItemStack.deserialize(serializedItem));
+		Set<ItemStack> itemList = new HashSet<ItemStack>();
+		
+		if (serializedGift.containsKey("itemlist")){
+		
+			List<Map<String, Object>> serializedItemList = (List<Map<String, Object>>) serializedGift.get("itemlist");
+			
+			for (Map<String, Object> serializedItem : serializedItemList){
+				itemList.add(ItemStack.deserialize(serializedItem));
+			}
+		
 		}
 		
 		this.itemList = itemList;
-		this.xp = ((Integer) serializedGift.get("xp")).shortValue();
-		this.money = (double) serializedGift.get("money");
 		
 	}
 	
@@ -81,13 +87,17 @@ public class Gift implements ConfigurationSerializable{
 		serializerMap.put("xp", xp);
 		serializerMap.put("money", money);
 		
-		List<Map<String, Object>> itemsSerialized = new ArrayList<Map<String, Object>>();
+		if (!itemList.isEmpty()){
 		
-		for (ItemStack tmpItem : itemList){
-			itemsSerialized.add(tmpItem.serialize());
+			List<Map<String, Object>> itemsSerialized = new ArrayList<Map<String, Object>>();
+			
+			for (ItemStack tmpItem : itemList){
+				itemsSerialized.add(tmpItem.serialize());
+			}
+			
+			serializerMap.put("itemlist", itemsSerialized);
+		
 		}
-		
-		serializerMap.put("itemlist", itemsSerialized);
 		
 		return serializerMap;
 	}
