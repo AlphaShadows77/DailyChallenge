@@ -1,6 +1,6 @@
 package fr.alphashadows77.dailychallenge.challengestype;
 
-public enum ChallengeFrequency {
+public enum ChallengeFrequency{
 	
 	DAILY,
 	WEEKLY,

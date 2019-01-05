@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
 import fr.alphashadows77.dailychallenge.challengestype.ItemChallenge;
+import fr.alphashadows77.dailychallenge.challengestype.StatChallenge;
 import fr.alphashadows77.dailychallenge.commands.AdminsCommands;
 import fr.alphashadows77.dailychallenge.commands.PlayersCommands;
 
@@ -76,6 +77,7 @@ public class Main extends JavaPlugin {
 		//Serialization registering
 		ConfigurationSerialization.registerClass(Challenge.class);
 		ConfigurationSerialization.registerClass(ItemChallenge.class);
+		ConfigurationSerialization.registerClass(StatChallenge.class);
 		ConfigurationSerialization.registerClass(Gift.class);
 		ConfigurationSerialization.registerClass(Stat.class);
 		
@@ -101,8 +103,9 @@ public class Main extends JavaPlugin {
 		
 		FileConfiguration customConfig = new YamlConfiguration();
 		File customFile = new File(getDataFolder(), pKey + ".yml");
+		
 		if (!customFile.exists()){
-			
+						
 			if (getResource(pKey + ".yml") != null){
 				
 				try{

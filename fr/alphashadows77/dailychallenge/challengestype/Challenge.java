@@ -48,7 +48,7 @@ public abstract class Challenge implements ConfigurationSerializable{
 		
 		Map<String, Object> serializedMap = new HashMap<String, Object>();
 		serializedMap.put("name", name);
-		serializedMap.put("frequency", frequency);
+		serializedMap.put("frequency", frequency.toString());
 		serializedMap.put("gift", gift.serialize());
 		
 		return serializedMap;
@@ -59,7 +59,7 @@ public abstract class Challenge implements ConfigurationSerializable{
 	public static Challenge deserialize(Challenge pChallenge, Map<String, Object> serializedObject){
 		
 		pChallenge.setName((String) serializedObject.get("name"));
-		pChallenge.setFrequency((ChallengeFrequency) serializedObject.get("frequency"));
+		pChallenge.setFrequency(ChallengeFrequency.valueOf((String) serializedObject.get("frequency")));
 		pChallenge.setGift(new Gift((Map<String, Object>) serializedObject.get("gift")));
 		
 		return pChallenge;

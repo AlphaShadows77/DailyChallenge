@@ -57,6 +57,9 @@ public class InventoryEvents implements Listener {
 		
 		//Menu principal des challenges
 		if (inventory.getHolder() == null && e.getClickedInventory().getTitle().equalsIgnoreCase(Utils.getMessage("challenge-title"))){
+			
+			e.setCancelled(true);
+			
 			Player player = (Player) e.getWhoClicked();
 			FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
 			int nombreItem = 0;
@@ -100,7 +103,21 @@ public class InventoryEvents implements Listener {
 							nombreItem = 0;
 							Material needType = need.getType();
 							short needDamage = need.getDurability();
-							if (!player.getInventory().contains(needType)){
+						
+							for (ItemStack item : player.getInventory().getContents()){
+								
+								System.out.println(item != null ? item.toString() : "Empty !");
+								System.out.println(need.toString());
+								
+								if (item == null)
+									continue;
+								
+								if (item.isSimilar(need))
+									nombreItem += item.getAmount();
+								
+							}
+							
+							if (nombreItem < need.getAmount()){
 								
 								if (needDamage != 0)
 									dontHave += Utils.makesBeautiful(ItemsWithData.getValue(need.getType(), needDamage).toString());
@@ -109,28 +126,7 @@ public class InventoryEvents implements Listener {
 									dontHave += Utils.makesBeautiful(needType.toString());
 								
 							}
-							
-							else{
-								
-								for (ItemStack item : player.getInventory().getContents()){
-									
-									if (item.isSimilar(need))
-										nombreItem += item.getAmount();
-									
-								}
-								
-								if (nombreItem < need.getAmount()){
-									
-									if (needDamage != 0)
-										dontHave += Utils.makesBeautiful(ItemsWithData.getValue(need.getType(), needDamage).toString());
-									
-									else
-										dontHave += Utils.makesBeautiful(needType.toString());
-									
-								}
-								
-							}
-							
+															
 						}
 					
 					}
@@ -195,17 +191,26 @@ public class InventoryEvents implements Listener {
 								int playerStat;
 								Statistic stat = tmpNeed.getStat();
 								Object needData = tmpNeed.getData();
+								String statName;
 								
-								if (needData == null)
+								if (needData == null){
+									statName = stat.toString();
 									playerStat = player.getStatistic(stat);
+								}
 								
-								else if (needData instanceof EntityType)
+								else if (needData instanceof EntityType){
+									statName = stat.toString() + "_" + needData.toString();
 									playerStat = player.getStatistic(stat, (EntityType) needData);
+								}
 								
-								else
+								else{
+									statName = stat.toString() + "_" + needData.toString();
 									playerStat = player.getStatistic(stat, (Material) needData);
+								}
+								
+								System.out.println("playerStat = " + playerStat);
 															
-								challengesConfig.set(frequency + "playersstats." + player.getName() + "." + stat.toString() + "_" + needData.toString(), playerStat);
+								challengesConfig.set(frequency + "playersstats." + player.getName() + "." + statName, playerStat);
 								
 							}
 							
@@ -223,18 +228,25 @@ public class InventoryEvents implements Listener {
 							int playerStat;
 							Statistic stat = tmpNeed.getStat();
 							Object needData = tmpNeed.getData();
+							String statName;
 							
-							if (needData == null)
+							if (needData == null){
+								statName = stat.toString();
 								playerStat = player.getStatistic(stat);
+							}
 							
-							else if (needData instanceof EntityType)
+							else if (needData instanceof EntityType){
+								statName = stat.toString() + "_" + needData.toString();
 								playerStat = player.getStatistic(stat, (EntityType) needData);
+							}
 							
-							else
+							else{
+								statName = stat.toString() + "_" + needData.toString();
 								playerStat = player.getStatistic(stat, (Material) needData);
+							}
 							
-							if (challengesConfig.getInt(frequency + "playersstats." + player.getName() + "." + stat.toString() + "_" + needData.toString()) + tmpNeed.getAmount() >= playerStat)
-								dontHave += stat.toString() + "_" + needData.toString();
+							if (challengesConfig.getInt(frequency + "playersstats." + player.getName() + "." + statName) + tmpNeed.getAmount() >= playerStat)
+								dontHave += statName;
 							
 						}
 						

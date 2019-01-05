@@ -1,7 +1,6 @@
 package fr.alphashadows77.dailychallenge.commands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -34,9 +33,7 @@ public class PlayersCommands implements CommandExecutor {
 			Player player = (Player) sender;	
 			
 			if (Utils.isCommand(label, "dailychallenge")){
-				
-				System.out.println("isCommand");
-				
+								
 				// Si la commande est activée
 				if (Utils.getBoolean("allow-dailychallenge")){
 						
@@ -70,6 +67,8 @@ public class PlayersCommands implements CommandExecutor {
 						List<String> loreConfig = Utils.getMessageList("lore-" + nowType + "-challenge");
 						//Modifie les données modifiables (%need%, %gift%, ...) du lore de la config
 						for (String lineLore : loreConfig){
+							
+							System.out.println(challenge.getNeed().toArray(new ItemStack[challenge.getNeed().size()])[0].hasItemMeta());
 							
 							if (lineLore.contains("%need%")){
 								
@@ -134,7 +133,8 @@ public class PlayersCommands implements CommandExecutor {
 								lore.add(lineLore);
 							
 						}
-						ItemStack item = nowType == "items" ? (ItemStack) (Arrays.asList(challenge.getNeed()).get(0)) : StatsWithItem.getValue(((Stat) Arrays.asList(challenge.getNeed()).get(0)).getStat()).getItem();
+						lore.add(Utils.getMessage("end-lore-items-" + tempFrequency + "-challenge"));
+						ItemStack item = nowType == "items" ? (ItemStack) challenge.getNeed().toArray(new ItemStack[challenge.getNeed().size()])[0] : StatsWithItem.getValue(challenge.getNeed().toArray(new Stat[challenge.getNeed().size()])[0].getStat()).getItem();
 						// Place l'item représentant le challenge dans le menu
 						menu.setItem(2 + 9 * index, modifyForGui(item, "§a" + challenge.getName(), false, lore));
 						List<String> playerSuccess = challengesConfig.getStringList(tempFrequency + "success");
@@ -142,6 +142,7 @@ public class PlayersCommands implements CommandExecutor {
 						// Place l'item montrant le nombre de joueurs ayant réussi le challenge dans le menu
 						menu.setItem(8 + 9 * index, modifyForGui(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), Utils.getMessage("success-number").replaceAll("%number%", Integer.toString(playerSuccessNumber)), false));
 						index++;
+						System.out.println(challenge.getNeed().toArray(new ItemStack[challenge.getNeed().size()])[0].hasItemMeta());
 					}
 					
 					player.openInventory(menu);

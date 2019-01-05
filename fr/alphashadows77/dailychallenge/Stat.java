@@ -23,7 +23,7 @@ public class Stat implements ConfigurationSerializable{
 	}
 	
 	public Stat(Map<String, Object> serializedMap){
-		this.stat = (Statistic) serializedMap.get("stat");
+		this.stat = Statistic.valueOf((String) serializedMap.get("stat"));
 		this.data = (Object) serializedMap.get("data");
 		this.amount = (int) serializedMap.get("amount");
 	}
@@ -50,7 +50,7 @@ public class Stat implements ConfigurationSerializable{
 	@Override
 	public Map<String, Object> serialize() {
 		Map<String, Object> serializedMap = new HashMap<String, Object>();
-		serializedMap.put("stat", stat);
+		serializedMap.put("stat", stat.toString());
 		serializedMap.put("data", data);
 		serializedMap.put("amount", amount);
 		return serializedMap;

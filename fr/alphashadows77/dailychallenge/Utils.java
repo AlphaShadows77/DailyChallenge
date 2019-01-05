@@ -38,6 +38,10 @@ public class Utils {
 		return challenges.get(pPlayer);
 	}
 	
+	public static void removePlayerChallenge(Player pPlayer){
+		challenges.remove(pPlayer);
+	}
+	
 	
 	public static boolean needSet(Player pPlayer){
 		return challenges.get(pPlayer).getNeed() != null;

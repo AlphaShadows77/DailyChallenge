@@ -11,9 +11,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import com.avaje.ebeaninternal.server.deploy.BeanDescriptor.EntityType;
 
+import fr.alphashadows77.dailychallenge.ItemsWithData;
 import fr.alphashadows77.dailychallenge.Stat;
 import fr.alphashadows77.dailychallenge.Utils;
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
@@ -44,6 +46,8 @@ public class AdminsCommands implements CommandExecutor {
 					return false;
 				
 				Utils.changePeriodicChallenge(frequency, challengeName);
+				
+				sender.sendMessage(Utils.getMessage("change-" + frequency + "-challenge-success"));
 				
 				return true;
 				
@@ -228,6 +232,102 @@ public class AdminsCommands implements CommandExecutor {
 								
 			}
 			
+			else if (args.length == 2 && args[0].equalsIgnoreCase("list")){
+				
+				String frequency = args[1].toLowerCase();
+				String answer = "";
+				
+				for (String challengeName : Utils.getCustomConfig("challenges").getConfigurationSection(frequency).getKeys(false)){
+					answer += challengeName + ", ";
+				}
+				
+				answer = answer.substring(0, answer.length() - 2);
+				
+				player.sendMessage(frequency + ": " + answer);
+				
+			}
+			
+			else if (args.length >= 3 && args[0].equalsIgnoreCase("info")){
+				
+				String frequency = args[1].toLowerCase();
+				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]});
+				
+				Challenge challenge = (Challenge) Utils.getCustomConfig("challenges").get(frequency + "." + challengeName);
+				
+				if (!challenge.getNeed().isEmpty()){
+				
+					String needAnswer = "Need: ";
+					
+					if (challenge instanceof ItemChallenge){
+					
+						for (ItemStack item : (Set<ItemStack>) challenge.getNeed()){
+							
+							String itemName = item.getDurability() == 0 ? Utils.makesBeautiful(item.getType().toString()) : Utils.makesBeautiful(ItemsWithData.getValue(item.getType(), item.getDurability()).toString());
+							int amount = item.getAmount();
+							
+							needAnswer += itemName + "(" + amount + ")" + ", ";
+							
+						}
+					
+					}
+					
+					else {
+						
+						for (Stat stat : (Set<Stat>) challenge.getNeed()){
+							
+							String statName = Utils.makesBeautiful(stat.getStat().toString());
+							int amount = stat.getAmount();
+							
+							if (!stat.getStat().getType().equals(Type.UNTYPED)){
+								
+								statName += "_" + stat.getData().toString();
+								
+							}
+							
+							needAnswer += statName + "(" + amount + ")" + ", ";
+							
+						}
+						
+					}
+					
+					needAnswer = needAnswer.substring(0, needAnswer.length() - 2);
+					
+					player.sendMessage(needAnswer);
+				
+				}
+				
+				if (!challenge.getGift().getItemList().isEmpty()){
+				
+					String giftAnswer = "";
+					
+					for (ItemStack item : challenge.getGift().getItemList()){
+						
+						String itemName = item.getDurability() == 0 ? Utils.makesBeautiful(item.getType().toString()) : Utils.makesBeautiful(ItemsWithData.getValue(item.getType(), item.getDurability()).toString());
+						int amount = item.getAmount();
+						
+						giftAnswer += itemName + "(" + amount + ")" + ", ";
+						
+					}
+					
+					giftAnswer = giftAnswer.substring(0, giftAnswer.length() - 2);
+				
+				}
+				
+				player.sendMessage("Uniz: " + challenge.getGift().getMoney());
+				player.sendMessage("Xp: " + challenge.getGift().getXp());
+				
+			}
+			
+			else if (args.length >= 3 && args[0].equalsIgnoreCase("remove")){
+				
+				String frequency = args[1].toLowerCase();
+				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]});
+				
+				Utils.getCustomConfig("challenges").set(frequency + "." + challengeName, null);
+				Utils.saveCustomConfig("challenges");
+				
+			}
+			
 			// Permet de choisir le nom du challenge une fois que ce qui est nécessaire et les récompenses ont été définis				
 			else if (args.length >= 5 && args[0].equalsIgnoreCase("add")){
 				
@@ -262,6 +362,8 @@ public class AdminsCommands implements CommandExecutor {
 					challenge.setName(name);
 					
 					Utils.setChallengeInConfig(challenge);
+					Utils.removePlayerChallenge(player);
+					Utils.resetNeed(player);
 					
 					player.sendMessage(Utils.getMessage("challenge-added"));
 					

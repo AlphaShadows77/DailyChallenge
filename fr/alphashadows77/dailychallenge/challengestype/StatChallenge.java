@@ -27,7 +27,7 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 		
 		if (serializedMap.containsKey("need")){
 		
-			for (Map<String, Object> serializedStat : (Map<String, Object>[]) serializedMap.get("need")){
+			for (Map<String, Object> serializedStat : (List<Map<String, Object>>) serializedMap.get("need")){
 				this.need.add(new Stat(serializedStat));
 			}
 		
@@ -53,13 +53,13 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 	
 		if (!need.isEmpty()){
 		
-			List<Map<String, Object>> serializedStatSet = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> serializedStatList = new ArrayList<Map<String, Object>>();
 			
 			for (Stat tmpStat : need){
-				serializedStatSet.add(tmpStat.serialize());
+				serializedStatList.add(tmpStat.serialize());
 			}
 			
-			serializedMap.put("need", serializedStatSet.toArray(new Map[serializedStatSet.size()]));
+			serializedMap.put("need", serializedStatList);
 		
 		}
 		

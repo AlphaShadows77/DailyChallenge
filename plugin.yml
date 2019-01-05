@@ -2,6 +2,7 @@ name: DailyChallenge
 version: 1.0
 author: AlphaShadows77
 main: fr.alphashadows77.dailychallenge.Main
+depend: [Vault]
 commands:
   dailychallenge:
     description: Commande principale du plugin Daily Challenge
@@ -10,7 +11,7 @@ commands:
     description: Permet de gérer les challenges
     permission: dailychallenge.modifychallenge
     aliases: mc
-    usage: "§cUsage: /mc additem|addstats §fou §c/mc add <daily|weekly|monthly> <money> <xp> <nom>"
+    usage: "§cUsage: /mc additems|addstats §fou §c/mc add <daily|weekly|monthly> <money> <xp> <nom>"
   allowdailychallenge:
     description: Permet d'activer ou de désactiver la commande /dailychallenge
     permission: dailychallenge.allowdailychallenge

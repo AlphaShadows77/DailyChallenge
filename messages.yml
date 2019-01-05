@@ -23,6 +23,10 @@ lore-stats-challenge:
 - "§6Argent reçu: §a%uniz%"
 - "§6Expérience reçu: §a%xp%"
 
+end-lore-items-daily-challenge: "§eClique ici pour compléter le challenge du jour"
+end-lore-items-weekly-challenge: "§eClique ici pour compléter le challenge de la semaine"
+end-lore-items-monthly-challenge: "§eClique ici pour compléter le challenge du mois"
+
 lore-nothing-gift: "§aAucun"
 lore-nothing-need: "§aAucun"
 success-number: "%number% joueurs ont réussi ce challenge !"
@@ -40,6 +44,9 @@ congratulation-monthly-challenge-message: "§aFélicitation ! Tu viens de termin
 congratulation-weekly-challenge-broadcast: "§7[§bCHALLENGE§7] §e%player% §3a réussi le challenge de la semaine"
 congratulation-monthly-challenge-broadcast: "§7[§bCHALLENGE§7] §e%player% §3a réussi le challenge du mois"
 stat-added: "§aLa statistique a été ajouté !"
+change-daily-challenge-success: "§aLe challenge du jour a bien été modifié !"
+change-weekly-challenge-success: "§aLe challenge de la semaine a bien été modifé !"
+change-monthly-challenge-success: "§aLe challenge du mois a bien été modifé !"
 
 #Erreurs
 error-dailychallenge-disabled: "§4Tu ne peux pas faire de daily, weekly ou monthly challenge pour le moment !"
@@ -52,8 +59,8 @@ addstats-syntax: "§cUsage: /mc addstats <[add <stat> <amount> [data]]|[remove <
 stat-exists: "§cLa statistique renseignée est déjà présente dans la liste des statistiques nécessaires !"
 no-need: "§cAucune statistique nécessaire n'a été renseigné !"
 already-did-challenge: "§cTu as déjà effectué ce challenge ! Reviens quand il aura changé."
-dont-have-items-message: "§cIl te manque: §c%item%§4pour compléter ce challenge !"
-dont-have-stats-message: "§cTes statistiques §c%stat%n'ont pas assez augmenté !"
+dont-have-items-message: "§cIl te manque: §4%item% §cpour compléter ce challenge !"
+dont-have-stats-message: "§cTes statistiques §4%stat% §cn'ont pas assez augmenté !"
 
 #Nom des statistiques
 stat-animals_bread: "Nourir un animal"
