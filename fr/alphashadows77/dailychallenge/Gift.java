@@ -13,11 +13,11 @@ import org.bukkit.inventory.ItemStack;
 public class Gift implements ConfigurationSerializable{
 
 	//Variables
-	private Set<ItemStack> itemList;
+	private ItemStack[] itemList;
 	private short xp;
 	private double money;
 	
-	public Gift(Set<ItemStack> pItemList){
+	public Gift(ItemStack[] pItemList){
 		this.itemList = pItemList;
 		this.xp = 0;
 		this.money = 0.0;
@@ -41,13 +41,13 @@ public class Gift implements ConfigurationSerializable{
 		
 		}
 		
-		this.itemList = itemList;
+		this.itemList = itemList.toArray(new ItemStack[itemList.size()]);
 		
 	}
 	
 	
-	public Set<ItemStack> getItemList(){
-		return this.itemList;
+	public ItemStack[] getItemList(){
+		return this.itemList.clone();
 	}
 	
 	
@@ -87,7 +87,7 @@ public class Gift implements ConfigurationSerializable{
 		serializerMap.put("xp", xp);
 		serializerMap.put("money", money);
 		
-		if (!itemList.isEmpty()){
+		if (itemList.length != 0){
 		
 			List<Map<String, Object>> itemsSerialized = new ArrayList<Map<String, Object>>();
 			

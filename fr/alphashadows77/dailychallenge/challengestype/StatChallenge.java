@@ -1,6 +1,7 @@
 package fr.alphashadows77.dailychallenge.challengestype;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +16,7 @@ import fr.alphashadows77.dailychallenge.Stat;
 public class StatChallenge extends Challenge implements ConfigurationSerializable{
 
 	// Variables
-	private Set<Stat> need = new HashSet<Stat>();
+	private Stat[] need;
 	
 	public StatChallenge(){
 		super();
@@ -24,26 +25,29 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 	@SuppressWarnings("unchecked")
 	public StatChallenge(Map<String, Object> serializedMap){
 		super.deserialize(this, serializedMap);
-		
+				
 		if (serializedMap.containsKey("need")){
 		
+			Set<Stat> needSet = new HashSet<Stat>();
+			
 			for (Map<String, Object> serializedStat : (List<Map<String, Object>>) serializedMap.get("need")){
-				this.need.add(new Stat(serializedStat));
+				needSet.add(new Stat(serializedStat));
 			}
+			
+			need = needSet.toArray(new Stat[needSet.size()]);
 		
 		}
 		
 	}
 	
 	@Override
-	public Set<?> getNeed() {
-		return this.need;
+	public Object[] getNeed() {
+		return this.need.clone();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void setNeed(Set<?> pNeed) {
-		this.need = (Set<Stat>) pNeed;
+	public void setNeed(Object[] pNeed) {
+		this.need = (Stat[]) pNeed;
 	}
 	
 	@Override
@@ -51,7 +55,7 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 		
 		Map<String, Object> serializedMap = super.serialize();
 	
-		if (!need.isEmpty()){
+		if (need.length != 0){
 		
 			List<Map<String, Object>> serializedStatList = new ArrayList<Map<String, Object>>();
 			
@@ -68,16 +72,22 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 	}
 	
 	public void clearNeed(){
-		this.need = new HashSet<Stat>();
+		this.need = new Stat[0];
 	}
 	
 	public void addNeededStat(Stat stat){
-		need.add(stat);
+		Set<Stat> needSet = new HashSet<Stat>();
+		needSet.addAll(Arrays.asList(this.need));
+		needSet.add(stat);
+		this.need = needSet.toArray(new Stat[needSet.size()]);
 	}
 	
 	public void removeNeededStat(Statistic stat){
 		
-		Iterator<Stat> it = need.iterator();
+		Set<Stat> needSet = new HashSet<Stat>();
+		needSet.addAll(Arrays.asList(need));
+		
+		Iterator<Stat> it = needSet.iterator();
 		
 		while (it.hasNext()){
 			Stat challengeStat = it.next();
@@ -88,11 +98,16 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 			}
 		}
 		
+		this.need = needSet.toArray(new Stat[needSet.size()]);
+		
 	}
 	
 	public void removeNeededStat(Statistic stat, String data){
 		
-		Iterator<Stat> it = need.iterator();
+		Set<Stat> needSet = new HashSet<Stat>();
+		needSet.addAll(Arrays.asList(need));
+		
+		Iterator<Stat> it = needSet.iterator();
 		
 		while (it.hasNext()){
 			Stat challengeStat = it.next();
@@ -102,6 +117,8 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 				break;
 			}
 		}
+		
+		this.need = needSet.toArray(new Stat[needSet.size()]);
 		
 	}
 	
@@ -134,11 +151,9 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 	public String[] needToString(){
 		
 		Set<String> needToString = new HashSet<String>();
-		Iterator<Stat> it = need.iterator();
 		
-		while (it.hasNext()){
-			Stat iteratedStat = it.next();
-			needToString.add(iteratedStat.toString());
+		for (Stat tmpStat : need){
+			needToString.add(tmpStat.toString());
 		}
 		
 		return needToString.toArray(new String[needToString.size()]);

@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 public class ItemChallenge extends Challenge implements ConfigurationSerializable{
 	
 	//Variables
-	private Set<ItemStack> need;
+	private ItemStack[] need;
 	
 	public ItemChallenge(){
 		super();
@@ -35,20 +35,19 @@ public class ItemChallenge extends Challenge implements ConfigurationSerializabl
 		
 		}
 		
-		this.need = needSet;
+		this.need = needSet.toArray(new ItemStack[needSet.size()]);
 		
 	}
 
 	/**
 	 * Permet de définir ce qui est nécessaire
 	 */
-	@SuppressWarnings("unchecked")
-	public void setNeed(Set<?> pNeed){
-		this.need = (Set<ItemStack>) pNeed;
+	public void setNeed(Object[] pNeed){
+		this.need = (ItemStack[]) pNeed;
 	}
 
-	public Set<?> getNeed(){
-		return this.need;
+	public Object[] getNeed(){
+		return this.need.clone();
 	}
 
 	@Override
@@ -56,7 +55,7 @@ public class ItemChallenge extends Challenge implements ConfigurationSerializabl
 		
 		Map<String, Object> serializedMap = super.serialize();
 		
-		if (!need.isEmpty()){
+		if (need.length != 0){
 		
 			List<Map<String, Object>> needSerializedMap = new ArrayList<Map<String, Object>>();
 			

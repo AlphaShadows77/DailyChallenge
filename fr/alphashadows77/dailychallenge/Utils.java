@@ -49,7 +49,7 @@ public class Utils {
 	
 	public static void toGift(Player pPlayer, ItemStack[] pItemList){
 		
-		Set<ItemStack> sortedItemList = sortItems(pItemList);
+		ItemStack[] sortedItemList = sortItems(pItemList);
 		challenges.get(pPlayer).setNeed(sortedItemList);
 		giftInventory(pPlayer);
 		
@@ -80,7 +80,7 @@ public class Utils {
 	
 	public static void addChallenge(Player pPlayer, ItemStack[] pItemList){
 		
-		Set<ItemStack> sortedItemList = sortItems(pItemList);
+		ItemStack[] sortedItemList = sortItems(pItemList);
 		challenges.get(pPlayer).setGift(new Gift(sortedItemList));
 		
 		pPlayer.sendMessage(Utils.getMessage("need-challenge-name"));
@@ -144,7 +144,7 @@ public class Utils {
 		
 	}
 	
-	public static Set<ItemStack> sortItems(ItemStack[] pItemList){
+	public static ItemStack[] sortItems(ItemStack[] pItemList){
 		
 		final Set<ItemStack> finalList = new HashSet<ItemStack>();
 		final List<ItemStack> itemList = new ArrayList<ItemStack>();
@@ -177,7 +177,7 @@ public class Utils {
 			
 		}
 		
-		return finalList;
+		return finalList.toArray(new ItemStack[finalList.size()]);
 		
 	}
 	

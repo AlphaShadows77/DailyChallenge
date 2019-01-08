@@ -61,6 +61,8 @@ no-need: "§cAucune statistique nécessaire n'a été renseigné !"
 already-did-challenge: "§cTu as déjà effectué ce challenge ! Reviens quand il aura changé."
 dont-have-items-message: "§cIl te manque: §4%item% §cpour compléter ce challenge !"
 dont-have-stats-message: "§cTes statistiques §4%stat% §cn'ont pas assez augmenté !"
+no-frequency-challenge: "§cIl n'y a pas de challenges pour la fréquence choisi !"
+challenge-not-found: "§cLe challenge n'a pas été trouvé !"
 
 #Nom des statistiques
 stat-animals_bread: "Nourir un animal"

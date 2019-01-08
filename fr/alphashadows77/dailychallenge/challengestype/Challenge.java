@@ -2,7 +2,6 @@ package fr.alphashadows77.dailychallenge.challengestype;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
@@ -15,8 +14,8 @@ public abstract class Challenge implements ConfigurationSerializable{
 	private String name;
 	private ChallengeFrequency frequency;
 	
-	public abstract Set<?> getNeed();
-	public abstract void setNeed(Set<?> pNeed);
+	public abstract Object[] getNeed();
+	public abstract void setNeed(Object[] pNeed);
 	
 	public void setGift(Gift pGift){
 		this.gift = pGift;

@@ -1,6 +1,5 @@
 package fr.alphashadows77.dailychallenge.commands;
 
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -9,6 +8,7 @@ import org.bukkit.Statistic.Type;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +25,6 @@ import fr.alphashadows77.dailychallenge.challengestype.StatChallenge;
 
 public class AdminsCommands implements CommandExecutor {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
@@ -214,7 +213,7 @@ public class AdminsCommands implements CommandExecutor {
 					break;
 				
 				case "list":
-					if (((Set<Stat>) challenge.getNeed()).isEmpty()){
+					if (challenge.getNeed().length != 0){
 						player.sendMessage(Utils.getMessage("no-need"));
 						return true;
 					}
@@ -236,14 +235,22 @@ public class AdminsCommands implements CommandExecutor {
 				
 				String frequency = args[1].toLowerCase();
 				String answer = "";
+				ConfigurationSection frequencySection = Utils.getCustomConfig("challenges").getConfigurationSection(frequency);
 				
-				for (String challengeName : Utils.getCustomConfig("challenges").getConfigurationSection(frequency).getKeys(false)){
-					answer += challengeName + ", ";
+				if (frequencySection != null){
+				
+					for (String challengeName : frequencySection.getKeys(false)){
+						answer += challengeName + ", ";
+					}
+					
+					answer = answer.substring(0, answer.length() - 2);
+					
+					player.sendMessage(frequency + ": " + answer);
+				
 				}
 				
-				answer = answer.substring(0, answer.length() - 2);
-				
-				player.sendMessage(frequency + ": " + answer);
+				else
+					player.sendMessage(Utils.getMessage("no-frequency-challenge"));
 				
 			}
 			
@@ -254,67 +261,74 @@ public class AdminsCommands implements CommandExecutor {
 				
 				Challenge challenge = (Challenge) Utils.getCustomConfig("challenges").get(frequency + "." + challengeName);
 				
-				if (!challenge.getNeed().isEmpty()){
+				if (challenge != null){
 				
-					String needAnswer = "Need: ";
+					if (challenge.getNeed().length != 0){
 					
-					if (challenge instanceof ItemChallenge){
+						String needAnswer = "Need: ";
+						
+						if (challenge instanceof ItemChallenge){
+						
+							for (ItemStack item : (ItemStack[]) challenge.getNeed()){
+								
+								String itemName = item.getDurability() == 0 ? Utils.makesBeautiful(item.getType().toString()) : Utils.makesBeautiful(ItemsWithData.getValue(item.getType(), item.getDurability()).toString());
+								int amount = item.getAmount();
+								
+								needAnswer += itemName + "(" + amount + ")" + ", ";
+								
+							}
+						
+						}
+						
+						else {
+							
+							for (Stat stat : (Stat[]) challenge.getNeed()){
+								
+								String statName = Utils.makesBeautiful(stat.getStat().toString());
+								int amount = stat.getAmount();
+								
+								if (!stat.getStat().getType().equals(Type.UNTYPED)){
+									
+									statName += "_" + stat.getData().toString();
+									
+								}
+								
+								needAnswer += statName + "(" + amount + ")" + ", ";
+								
+							}
+							
+						}
+						
+						needAnswer = needAnswer.substring(0, needAnswer.length() - 2);
+						
+						player.sendMessage(needAnswer);
 					
-						for (ItemStack item : (Set<ItemStack>) challenge.getNeed()){
+					}
+					
+					if (challenge.getGift().getItemList().length != 0){
+					
+						String giftAnswer = "";
+						
+						for (ItemStack item : challenge.getGift().getItemList()){
 							
 							String itemName = item.getDurability() == 0 ? Utils.makesBeautiful(item.getType().toString()) : Utils.makesBeautiful(ItemsWithData.getValue(item.getType(), item.getDurability()).toString());
 							int amount = item.getAmount();
 							
-							needAnswer += itemName + "(" + amount + ")" + ", ";
-							
-						}
-					
-					}
-					
-					else {
-						
-						for (Stat stat : (Set<Stat>) challenge.getNeed()){
-							
-							String statName = Utils.makesBeautiful(stat.getStat().toString());
-							int amount = stat.getAmount();
-							
-							if (!stat.getStat().getType().equals(Type.UNTYPED)){
-								
-								statName += "_" + stat.getData().toString();
-								
-							}
-							
-							needAnswer += statName + "(" + amount + ")" + ", ";
+							giftAnswer += itemName + "(" + amount + ")" + ", ";
 							
 						}
 						
+						giftAnswer = giftAnswer.substring(0, giftAnswer.length() - 2);
+					
 					}
 					
-					needAnswer = needAnswer.substring(0, needAnswer.length() - 2);
-					
-					player.sendMessage(needAnswer);
+					player.sendMessage("Uniz: " + challenge.getGift().getMoney());
+					player.sendMessage("Xp: " + challenge.getGift().getXp());
 				
 				}
 				
-				if (!challenge.getGift().getItemList().isEmpty()){
-				
-					String giftAnswer = "";
-					
-					for (ItemStack item : challenge.getGift().getItemList()){
-						
-						String itemName = item.getDurability() == 0 ? Utils.makesBeautiful(item.getType().toString()) : Utils.makesBeautiful(ItemsWithData.getValue(item.getType(), item.getDurability()).toString());
-						int amount = item.getAmount();
-						
-						giftAnswer += itemName + "(" + amount + ")" + ", ";
-						
-					}
-					
-					giftAnswer = giftAnswer.substring(0, giftAnswer.length() - 2);
-				
-				}
-				
-				player.sendMessage("Uniz: " + challenge.getGift().getMoney());
-				player.sendMessage("Xp: " + challenge.getGift().getXp());
+				else
+					player.sendMessage(Utils.getMessage("challenge-not-found"));
 				
 			}
 			

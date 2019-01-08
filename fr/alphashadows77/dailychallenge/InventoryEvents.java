@@ -2,7 +2,6 @@ package fr.alphashadows77.dailychallenge;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -49,7 +48,6 @@ public class InventoryEvents implements Listener {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	@EventHandler
 	public void onClick(InventoryClickEvent e){
 		
@@ -95,19 +93,16 @@ public class InventoryEvents implements Listener {
 					
 					ItemChallenge itemChallenge = (ItemChallenge) challenge;
 					
-					if (!itemChallenge.getNeed().isEmpty()){
+					if (itemChallenge.getNeed().length != 0){
 					
 						//Vérification pour savoir si les items nécessaires sont présents dans l'inventaire du joueur
-						for (ItemStack need : (Set<ItemStack>) itemChallenge.getNeed()){
+						for (ItemStack need : (ItemStack[]) itemChallenge.getNeed()){
 							
 							nombreItem = 0;
 							Material needType = need.getType();
 							short needDamage = need.getDurability();
 						
 							for (ItemStack item : player.getInventory().getContents()){
-								
-								System.out.println(item != null ? item.toString() : "Empty !");
-								System.out.println(need.toString());
 								
 								if (item == null)
 									continue;
@@ -133,10 +128,10 @@ public class InventoryEvents implements Listener {
 					
 					if (dontHave.equals("")){
 						
-						if (!itemChallenge.getNeed().isEmpty()){
+						if (itemChallenge.getNeed() != null){
 						
 							//Récupération des items nécessaires
-							for (ItemStack need : (Set<ItemStack>) itemChallenge.getNeed()){
+							for (ItemStack need : (ItemStack[]) itemChallenge.getNeed()){
 								
 								nombreItem = need.getAmount();
 								for (int slot = 0; slot < inventory.getContents().length; slot++){
@@ -180,11 +175,11 @@ public class InventoryEvents implements Listener {
 				else{
 					
 					StatChallenge statChallenge = (StatChallenge) challenge;
-					Set<Stat> need = (Set<Stat>) statChallenge.getNeed();
+					Stat[] need = (Stat[]) statChallenge.getNeed();
 					
 					if (challengesConfig.get(frequency + "playersstats." + player.getName()) == null){
 						
-						if (!need.isEmpty()){
+						if (need.length != 0){
 						
 							for (Stat tmpNeed : need){
 								
@@ -207,9 +202,7 @@ public class InventoryEvents implements Listener {
 									statName = stat.toString() + "_" + needData.toString();
 									playerStat = player.getStatistic(stat, (Material) needData);
 								}
-								
-								System.out.println("playerStat = " + playerStat);
-															
+																							
 								challengesConfig.set(frequency + "playersstats." + player.getName() + "." + statName, playerStat);
 								
 							}
@@ -262,7 +255,7 @@ public class InventoryEvents implements Listener {
 					Gift gifts = challenge.getGift();
 					
 					//Vérification pour savoir si il y a une récompense d'items à la clé et ajout dans l'inventaire du joueur si c'est le cas
-					if (!challenge.getGift().getItemList().isEmpty()){
+					if (challenge.getGift().getItemList().length != 0){
 						
 						for (ItemStack gift : challenge.getGift().getItemList()){
 							player.getInventory().addItem(gift);
