@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Statistic;
+import org.bukkit.Statistic.Type;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import fr.alphashadows77.dailychallenge.Stat;
@@ -42,7 +43,12 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 	
 	@Override
 	public Object[] getNeed() {
-		return this.need.clone();
+		
+		if (this.need == null)
+			return null;
+				
+		return Arrays.copyOf(this.need, this.need.length);
+		
 	}
 
 	@Override
@@ -77,52 +83,69 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 	
 	public void addNeededStat(Stat stat){
 		Set<Stat> needSet = new HashSet<Stat>();
-		needSet.addAll(Arrays.asList(this.need));
+		
+		if (this.need != null)
+			needSet.addAll(Arrays.asList(this.need));
+		
 		needSet.add(stat);
 		this.need = needSet.toArray(new Stat[needSet.size()]);
 	}
 	
 	public void removeNeededStat(Statistic stat){
 		
-		Set<Stat> needSet = new HashSet<Stat>();
-		needSet.addAll(Arrays.asList(need));
+		if (need != null && need.length != 0){
 		
-		Iterator<Stat> it = needSet.iterator();
-		
-		while (it.hasNext()){
-			Stat challengeStat = it.next();
+			Set<Stat> needSet = new HashSet<Stat>();
+			needSet.addAll(Arrays.asList(need));
 			
-			if (challengeStat.getStat() == stat){
-				it.remove();
-				break;
+			Iterator<Stat> it = needSet.iterator();
+			
+			while (it.hasNext()){
+				Stat challengeStat = it.next();
+				
+				if (challengeStat.getStat() == stat){
+					
+					it.remove();
+					if (challengeStat.getStat().getType() == Type.UNTYPED)
+						break;
+					
+				}
 			}
-		}
+			
+			this.need = needSet.toArray(new Stat[needSet.size()]);
 		
-		this.need = needSet.toArray(new Stat[needSet.size()]);
+		}
 		
 	}
 	
 	public void removeNeededStat(Statistic stat, String data){
 		
-		Set<Stat> needSet = new HashSet<Stat>();
-		needSet.addAll(Arrays.asList(need));
+		if (need != null && need.length != 0){
 		
-		Iterator<Stat> it = needSet.iterator();
-		
-		while (it.hasNext()){
-			Stat challengeStat = it.next();
+			Set<Stat> needSet = new HashSet<Stat>();
+			needSet.addAll(Arrays.asList(need));
 			
-			if (challengeStat.getStat() == stat && challengeStat.getData() == data){
-				it.remove();
-				break;
+			Iterator<Stat> it = needSet.iterator();
+			
+			while (it.hasNext()){
+				Stat challengeStat = it.next();
+				
+				if (challengeStat.getStat() == stat && challengeStat.getData() == data){
+					it.remove();
+					break;
+				}
 			}
-		}
+			
+			this.need = needSet.toArray(new Stat[needSet.size()]);
 		
-		this.need = needSet.toArray(new Stat[needSet.size()]);
+		}
 		
 	}
 	
 	public boolean containsStat(Statistic stat){
+		
+		if (need == null)
+			return false;
 		
 		for (Stat tmpStat : need){
 			
@@ -137,9 +160,12 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 	
 	public boolean containsStat(Statistic stat, String data){
 		
+		if (need == null)
+			return false;
+		
 		for (Stat tmpStat : need){
 			
-			if (tmpStat.getStat().equals(stat) && tmpStat.getData().equals(data))
+			if (tmpStat.getStat().equals(stat) && tmpStat.getData().toString().equals(data.toUpperCase()))
 				return true;
 			
 		}

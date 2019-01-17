@@ -1,6 +1,7 @@
 package fr.alphashadows77.dailychallenge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -47,7 +48,7 @@ public class Gift implements ConfigurationSerializable{
 	
 	
 	public ItemStack[] getItemList(){
-		return this.itemList.clone();
+		return Arrays.copyOf(this.itemList, this.itemList.length);
 	}
 	
 	

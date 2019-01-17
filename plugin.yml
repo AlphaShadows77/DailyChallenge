@@ -11,7 +11,7 @@ commands:
     description: Permet de gérer les challenges
     permission: dailychallenge.modifychallenge
     aliases: mc
-    usage: "§cUsage: /mc additems|addstats §fou §c/mc list <frequence> §cou §c/mc info <frequence> <challenge> §fou §c/mc add <daily|weekly|monthly> <money> <xp> <nom>"
+    usage: "§cUsage: /mc additems|addstats §fou §c/mc list <frequence> §cou §c/mc info <frequence> <challenge> §fou §c/mc add <daily|weekly|monthly> <money> <xp> <nom> §fou §c/mc remove <frequence> <challenge>"
   allowdailychallenge:
     description: Permet d'activer ou de désactiver la commande /dailychallenge
     permission: dailychallenge.allowdailychallenge

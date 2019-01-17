@@ -28,7 +28,7 @@ public class InventoryEvents implements Listener {
 
 	@EventHandler
 	public void onClose(InventoryCloseEvent e){
-		
+				
 		Inventory inventory = e.getInventory();
 		String inventoryTitle = inventory.getTitle();
 		String addChallengeTitle = Utils.getMessage("title-add_challenge_inventory");
@@ -134,15 +134,16 @@ public class InventoryEvents implements Listener {
 							for (ItemStack need : (ItemStack[]) itemChallenge.getNeed()){
 								
 								nombreItem = need.getAmount();
-								for (int slot = 0; slot < inventory.getContents().length; slot++){
+								Inventory playerInventory = player.getInventory();
+								for (int slot = 0; slot < playerInventory.getContents().length; slot++){
 									
-									ItemStack item = inventory.getItem(slot);
+									ItemStack item = playerInventory.getItem(slot);
 									
 									if (item == null)
 										continue;
 									
 									if (item.isSimilar(need)){
-										
+																				
 										if (item.getAmount() <= nombreItem){
 											nombreItem -= item.getAmount();
 											player.getInventory().removeItem(item);
@@ -160,9 +161,9 @@ public class InventoryEvents implements Listener {
 									}
 									
 								}
-								
+																
 							}
-						
+													
 						}
 						
 					}
@@ -183,7 +184,7 @@ public class InventoryEvents implements Listener {
 						
 							for (Stat tmpNeed : need){
 								
-								int playerStat;
+								int playerStat = 0;
 								Statistic stat = tmpNeed.getStat();
 								Object needData = tmpNeed.getData();
 								String statName;
@@ -194,8 +195,12 @@ public class InventoryEvents implements Listener {
 								}
 								
 								else if (needData instanceof EntityType){
+									
+									EntityType entityType = (EntityType) needData;
 									statName = stat.toString() + "_" + needData.toString();
-									playerStat = player.getStatistic(stat, (EntityType) needData);
+									
+									playerStat = Utils.getEntityPlayerStat(player, stat, entityType);
+																		
 								}
 								
 								else{
@@ -209,6 +214,8 @@ public class InventoryEvents implements Listener {
 							
 							Utils.saveCustomConfig("challenges");
 							player.sendMessage(Utils.getMessage("start-challenge-stat-message"));
+							
+							return;
 						
 						}
 						
@@ -229,8 +236,12 @@ public class InventoryEvents implements Listener {
 							}
 							
 							else if (needData instanceof EntityType){
+								
+								EntityType entityType = (EntityType) needData;
 								statName = stat.toString() + "_" + needData.toString();
-								playerStat = player.getStatistic(stat, (EntityType) needData);
+								
+								playerStat = Utils.getEntityPlayerStat(player, stat, entityType);
+
 							}
 							
 							else{
@@ -238,8 +249,10 @@ public class InventoryEvents implements Listener {
 								playerStat = player.getStatistic(stat, (Material) needData);
 							}
 							
-							if (challengesConfig.getInt(frequency + "playersstats." + player.getName() + "." + statName) + tmpNeed.getAmount() >= playerStat)
-								dontHave += statName;
+							if (challengesConfig.getInt(frequency + "playersstats." + player.getName() + "." + statName) + tmpNeed.getAmount() > playerStat){
+								String name = StatsWithItem.getValue(stat).getNom();
+								dontHave += (name.contains("%data%") ? name.replaceAll("%data%", Utils.makesBeautiful(needData.toString())) : name) + ", ";
+							}
 							
 						}
 						

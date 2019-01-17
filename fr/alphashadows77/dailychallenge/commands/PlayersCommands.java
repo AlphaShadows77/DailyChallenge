@@ -86,7 +86,10 @@ public class PlayersCommands implements CommandExecutor {
 										else{
 											Stat stat = (Stat) need;
 											String tempLineLoreNeed = lineLore.replaceAll("%amount%", Integer.toString(stat.getAmount()));
-											String statName = Utils.makesBeautiful(stat.getStat().toString());
+											String statName = StatsWithItem.getValue(stat.getStat()).getNom();
+											if (stat.getData() != null)
+												statName = statName.replaceAll("%data%", stat.getData().toString());
+											statName = Utils.makesBeautiful(statName);
 											tempLineLoreNeed = tempLineLoreNeed.replaceAll("%need%", statName);
 											lore.add(tempLineLoreNeed);
 										}
@@ -131,7 +134,21 @@ public class PlayersCommands implements CommandExecutor {
 							
 						}
 						lore.add(Utils.getMessage("end-lore-items-" + tempFrequency + "-challenge"));
-						ItemStack item = nowType == "items" ? (ItemStack) challenge.getNeed()[0] : StatsWithItem.getValue(((Stat) challenge.getNeed()[0]).getStat()).getItem();
+						ItemStack item;
+						
+						if (nowType == "items"){
+							
+							if (challenge.getNeed().length != 0)
+								item = (ItemStack) challenge.getNeed()[0];
+							
+							else
+								item = new ItemStack(Material.BARRIER);
+							
+						}
+						
+						else
+							item = StatsWithItem.getValue(((Stat) challenge.getNeed()[0]).getStat()).getItem();
+						
 						// Place l'item représentant le challenge dans le menu
 						menu.setItem(2 + 9 * index, modifyForGui(item, "§a" + challenge.getName(), false, lore));
 						List<String> playerSuccess = challengesConfig.getStringList(tempFrequency + "success");
@@ -139,7 +156,7 @@ public class PlayersCommands implements CommandExecutor {
 						// Place l'item montrant le nombre de joueurs ayant réussi le challenge dans le menu
 						menu.setItem(8 + 9 * index, modifyForGui(new ItemStack(Material.SKULL_ITEM, 1, (short) 3), Utils.getMessage("success-number").replaceAll("%number%", Integer.toString(playerSuccessNumber)), false));
 						index++;
-						System.out.println(((ItemStack) challenge.getNeed()[0]).hasItemMeta());
+						
 					}
 					
 					player.openInventory(menu);

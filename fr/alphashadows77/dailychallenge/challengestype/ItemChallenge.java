@@ -9,6 +9,8 @@ import java.util.Set;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 
+import fr.alphashadows77.dailychallenge.Utils;
+
 public class ItemChallenge extends Challenge implements ConfigurationSerializable{
 	
 	//Variables
@@ -47,7 +49,13 @@ public class ItemChallenge extends Challenge implements ConfigurationSerializabl
 	}
 
 	public Object[] getNeed(){
-		return this.need.clone();
+		
+		if (this.need == null){
+			return null;
+		}
+		
+		return Utils.deepCopy(this.need);
+		
 	}
 
 	@Override

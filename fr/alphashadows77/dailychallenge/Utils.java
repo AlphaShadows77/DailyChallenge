@@ -2,6 +2,7 @@ package fr.alphashadows77.dailychallenge;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,7 +13,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Statistic;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +31,10 @@ public class Utils {
 	
 	protected static void setMain(Main pMain){
 		main = pMain;
+	}
+	
+	public static Main getMain(){
+		return main;
 	}
 	
 	public static void setPlayerChallenge(Player pPlayer, Challenge pChallenge){
@@ -93,9 +100,22 @@ public class Utils {
 		FileConfiguration challengesConfig = main.getCustomConfig("challenges");
 		String frequency = pChallenge.getFrequency().toString().toLowerCase();
 
-		challengesConfig.set(frequency + "." + pChallenge.getName().replaceAll("_", " "), pChallenge);
+		challengesConfig.set(frequency + "." + pChallenge.getName().toLowerCase().replaceAll(" ", "_"), pChallenge);
 		
 		saveCustomConfig("challenges");
+		
+	}
+	
+	public static boolean challengeExists(Challenge pChallenge){
+		
+		for (String tmpChallengeName : main.getCustomConfig("challenges").getConfigurationSection(pChallenge.getFrequency().toString().toLowerCase()).getKeys(false)){
+			
+			if (pChallenge.getName().toLowerCase().replaceAll(" ", "_").equals(tmpChallengeName))
+				return true;
+			
+		}
+		
+		return false;
 		
 	}
 	
@@ -256,4 +276,66 @@ public class Utils {
 		return name.replaceAll("_", " ");
 		
 	}
+	
+	/**
+	 * Crée une copie du tableau d'ItemStack donné en paramètre en changeant les références
+	 * @param original Tableau à copier
+	 * @return Tableau copié
+	 */
+	public static ItemStack[] deepCopy(ItemStack[] original){
+		
+		Set<ItemStack> itemSet = new HashSet<ItemStack>();
+		
+		for (ItemStack tmpItem : original){
+			itemSet.add(tmpItem.clone());
+		}
+		
+		return itemSet.toArray(new ItemStack[itemSet.size()]);
+		
+	}
+	public static int getEntityPlayerStat(Player player, Statistic stat, EntityType entityType){
+				
+		String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+		
+		try {
+			
+			Class<?> entityTypesClass = Class.forName("net.minecraft.server." + version + ".EntityTypes");
+			Map<?, ?> eggInfo = (Map<?, ?>) entityTypesClass.getField("eggInfo").get(null);
+			@SuppressWarnings("deprecation")
+			Object monsterEggInfo = eggInfo.get(Integer.valueOf(entityType.getTypeId()));
+			Object statistic;
+													
+			if (stat.equals(Statistic.KILL_ENTITY))
+				statistic = monsterEggInfo.getClass().getField("killEntityStatistic").get(monsterEggInfo);
+			
+			else
+				statistic = monsterEggInfo.getClass().getField("e").get(monsterEggInfo);	
+			
+			Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
+			Object handle = craftPlayerClass.getMethod("getHandle").invoke(player);
+			Object statisticManager = handle.getClass().getMethod("getStatisticManager").invoke(handle);
+			return (int) statisticManager.getClass().getMethod("getStatisticValue", statistic.getClass()).invoke(statisticManager, statistic);
+			
+		} 
+		
+		catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IllegalArgumentException e1) {
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			e1.printStackTrace();
+		} catch (NoSuchFieldException e1) {
+			e1.printStackTrace();
+		} catch (SecurityException e1) {
+			e1.printStackTrace();
+		} catch (InvocationTargetException e1) {
+			e1.printStackTrace();
+		} catch (NoSuchMethodException e1) {
+			e1.printStackTrace();
+		}
+		
+		return 0;
+		
+	}
+	
 }

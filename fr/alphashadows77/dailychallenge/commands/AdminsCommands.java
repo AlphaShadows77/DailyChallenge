@@ -1,6 +1,5 @@
 package fr.alphashadows77.dailychallenge.commands;
 
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -9,11 +8,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import com.avaje.ebeaninternal.server.deploy.BeanDescriptor.EntityType;
 
 import fr.alphashadows77.dailychallenge.ItemsWithData;
 import fr.alphashadows77.dailychallenge.Stat;
@@ -155,7 +153,31 @@ public class AdminsCommands implements CommandExecutor {
 								return true;
 							}
 							
-							Object data = (stat.getType().equals(Type.BLOCK) || stat.getType().equals(Type.ITEM)) ? Material.valueOf(args[4].toUpperCase()) : EntityType.valueOf(args[4].toUpperCase());
+							Object data;
+							
+							if (stat.getType().equals(Type.BLOCK) || stat.getType().equals(Type.ITEM)){
+																																
+								if (Material.matchMaterial(args[4].toUpperCase()) != null)
+									data = Material.valueOf(args[4].toUpperCase());
+								
+								else{
+									player.sendMessage(Utils.getMessage("data-not-found"));
+									return true;
+								}
+								
+							}
+							
+							else{
+								
+								try{
+									data = EntityType.valueOf(args[4].toUpperCase());
+								} catch (IllegalArgumentException e){
+									player.sendMessage(Utils.getMessage("data-not-found"));
+									return true;
+								}
+								
+							}
+							
 							Stat challengeStat = new Stat(stat, data, amount);
 							challenge.addNeededStat(challengeStat);
 							
@@ -177,13 +199,15 @@ public class AdminsCommands implements CommandExecutor {
 						Statistic stat;
 						
 						try{
-							stat = Statistic.valueOf(args[2]);
+							stat = Statistic.valueOf(args[2].toUpperCase());
 						} catch(IllegalArgumentException e){
 							player.sendMessage(Utils.getMessage("stat-not-found"));
 							return true;
 						}
 						
 						challenge.removeNeededStat(stat);
+						
+						player.sendMessage(Utils.getMessage("delete-stat-success"));
 						
 					}
 					
@@ -193,7 +217,7 @@ public class AdminsCommands implements CommandExecutor {
 						Statistic stat;
 						
 						try{
-							stat = Statistic.valueOf(args[2]);
+							stat = Statistic.valueOf(args[2].toUpperCase());
 						} catch(IllegalArgumentException e){
 							player.sendMessage(Utils.getMessage("stat-not-found"));
 							return true;
@@ -201,11 +225,14 @@ public class AdminsCommands implements CommandExecutor {
 						
 						challenge.removeNeededStat(stat, args[2]);
 						
+						player.sendMessage(Utils.getMessage("delete-stat-success"));
+						
 					}
 					break;
 					
 				case "clearneed":
 					challenge.clearNeed();
+					player.sendMessage(Utils.getMessage("clear-need-success"));
 					break;
 					
 				case "gift":
@@ -213,10 +240,11 @@ public class AdminsCommands implements CommandExecutor {
 					break;
 				
 				case "list":
-					if (challenge.getNeed().length != 0){
+					if (challenge.getNeed() == null || challenge.getNeed().length == 0){
 						player.sendMessage(Utils.getMessage("no-need"));
 						return true;
 					}
+					
 					for (String needLine : challenge.needToString()){
 						player.sendMessage(needLine);
 					}
@@ -237,7 +265,7 @@ public class AdminsCommands implements CommandExecutor {
 				String answer = "";
 				ConfigurationSection frequencySection = Utils.getCustomConfig("challenges").getConfigurationSection(frequency);
 				
-				if (frequencySection != null){
+				if (frequencySection != null && !frequencySection.getKeys(false).isEmpty()){
 				
 					for (String challengeName : frequencySection.getKeys(false)){
 						answer += challengeName + ", ";
@@ -335,10 +363,23 @@ public class AdminsCommands implements CommandExecutor {
 			else if (args.length >= 3 && args[0].equalsIgnoreCase("remove")){
 				
 				String frequency = args[1].toLowerCase();
-				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]});
+				
+				if (!frequency.equals("daily") && !frequency.equals("weekly") && !frequency.equals("monthly")){
+					player.sendMessage(Utils.getMessage("frequency-not-found"));
+					return true;
+				}
+				
+				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]}).toLowerCase().replaceAll(" ", "_");
+				
+				if (Utils.getCustomConfig("challenges").getString(frequency + "now").equals(challengeName)){
+					player.sendMessage(Utils.getMessage("challenge-used"));
+					return true;
+				}
 				
 				Utils.getCustomConfig("challenges").set(frequency + "." + challengeName, null);
 				Utils.saveCustomConfig("challenges");
+				
+				player.sendMessage(Utils.getMessage("delete-challenge-success"));
 				
 			}
 			
@@ -374,6 +415,11 @@ public class AdminsCommands implements CommandExecutor {
 					
 					String name = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1], args[2], args[3]});
 					challenge.setName(name);
+					
+					if (Utils.challengeExists(challenge)){
+						player.sendMessage(Utils.getMessage("challenge-exists"));
+						return true;
+					}
 					
 					Utils.setChallengeInConfig(challenge);
 					Utils.removePlayerChallenge(player);

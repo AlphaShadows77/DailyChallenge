@@ -54,7 +54,13 @@ public enum StatsWithItem {
 	TRADED_WITH_VILLAGER(Statistic.TRADED_WITH_VILLAGER, new ItemStack(Material.EMERALD, 1), Utils.getMessage("stat-traded_with_villager")),
 	TRAPPED_CHEST_TRIGGERED(Statistic.TRAPPED_CHEST_TRIGGERED, new ItemStack(Material.TRAPPED_CHEST, 1), Utils.getMessage("stat-trapped_chest_triggered")),
 	TREASURE_FISHED(Statistic.TREASURE_FISHED, new ItemStack(Material.FISHING_ROD, 1), Utils.getMessage("stat-treasure_fished")),
-	WALK_ONE_CM(Statistic.WALK_ONE_CM, new ItemStack(Material.GOLD_BOOTS, 1), Utils.getMessage("stat-walk_one_cm"));
+	WALK_ONE_CM(Statistic.WALK_ONE_CM, new ItemStack(Material.GOLD_BOOTS, 1), Utils.getMessage("stat-walk_one_cm")),
+	MINE_BLOCK(Statistic.MINE_BLOCK, new ItemStack(Material.WOOD_PICKAXE, 1), Utils.getMessage("stat-mine_block")),
+	USE_ITEM(Statistic.USE_ITEM, new ItemStack(Material.FLINT_AND_STEEL, 1), Utils.getMessage("stat-use_item")),
+	BREAK_ITEM(Statistic.BREAK_ITEM, new ItemStack(Material.ANVIL, 1, (byte) 2), Utils.getMessage("stat-break_item")),
+	CRAFT_ITEM(Statistic.CRAFT_ITEM, new ItemStack(Material.WORKBENCH, 1), Utils.getMessage("stat-craft_item")),
+	KILL_ENTITY(Statistic.KILL_ENTITY, new ItemStack(Material.DIAMOND_SWORD, 1), Utils.getMessage("stat-kill_entity")),
+	ENTITY_KILLED_BY(Statistic.ENTITY_KILLED_BY, new ItemStack(Material.SKULL_ITEM, 1, (byte) 3), Utils.getMessage("stat-entity_killed_by"));
 	
 	//Variables
 	private Statistic stat;
