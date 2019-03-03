@@ -62,199 +62,212 @@ public class AdminsCommands implements CommandExecutor {
 		if (Utils.isCommand(label, "modifychallenge")){
 			
 			if (args.length == 1){
-			
-				// Si on veut ajouter un challenge nécessitant des items
-				if (args[0].equalsIgnoreCase("additems")){
-					
-					Utils.setPlayerChallenge(player, new ItemChallenge());
-					final byte inventorySize = 36;
-					final String inventoryTitle = Utils.getMessage("title-add_challenge_inventory");
-					Utils.resetNeed(player);
-					
-					final Inventory itemsAddInventory = Bukkit.createInventory(null, inventorySize, inventoryTitle);
-					
-					player.sendMessage(Utils.getMessage("inventory-opened-need-item"));
-					player.openInventory(itemsAddInventory);
-					
-				}
 				
-				else if (args[0].equalsIgnoreCase("addstats"))
+				if (args[0].equalsIgnoreCase("addstats"))
 					player.sendMessage(Utils.getMessage("addstats-syntax"));
 				
-				else
-					return false;
+				else if (args[0].equalsIgnoreCase("additems"))
+					player.sendMessage(Utils.getMessage("additems-syntax"));
 			
 			}
 			
 			// Si on veut ajouter un challenge nécessitant des stats
-			else if (args.length >= 2 && args[0].equalsIgnoreCase("addstats")){
+			else if (args.length >= 2 && (args[0].equalsIgnoreCase("additems") || args[0].equalsIgnoreCase("addstats"))){
 				
-				Challenge tmpChallenge = Utils.getPlayerChallenge(player);
-				StatChallenge challenge;
-				if (tmpChallenge == null || !(tmpChallenge instanceof StatChallenge)){
-					challenge = new StatChallenge();
-					Utils.setPlayerChallenge(player, challenge);
-				}
-				
-				else
-					challenge = (StatChallenge) tmpChallenge;
-				
-				switch (args[1].toLowerCase()){
-				case "add":
+				// Si on veut ajouter un challenge nécessitant des items
+				if (args[0].equalsIgnoreCase("additems")){
 					
-					if (args.length >= 4){
+					if (args[1].equalsIgnoreCase("need")) {
+						Utils.setPlayerChallenge(player, new ItemChallenge());
+						final byte inventorySize = 36;
+						final String inventoryTitle = Utils.getMessage("title-add_challenge_inventory");
+						Utils.resetNeed(player);
 						
-						//Récupération de la stat et de la quantité
-						Statistic stat;
-						int amount;
+						final Inventory itemsAddInventory = Bukkit.createInventory(null, inventorySize, inventoryTitle);
 						
-						try{
-							stat = Statistic.valueOf(args[2].toUpperCase());
-						} catch(IllegalArgumentException e){
-							player.sendMessage(Utils.getMessage("stat-not-found"));
-							return true;
-						}
-						
-						try{
-							amount = Integer.parseInt(args[3]);
-						} catch (NumberFormatException e){
-							player.sendMessage(Utils.getMessage("not-a-number"));
-							return true;
-						}
-																		
-						if (args.length == 4){
-							
-							if (!stat.getType().equals(Type.UNTYPED)){
-								player.sendMessage(Utils.getMessage("data-required"));
-								return true;
-							}
-							
-							if (challenge.containsStat(stat)){
-								player.sendMessage(Utils.getMessage("stat-exists"));
-								return true;
-							}
-							
-							Stat challengeStat = new Stat(stat, amount);
-							challenge.addNeededStat(challengeStat);
-							
-							player.sendMessage(Utils.getMessage("stat-added"));
-														
-						}
-						
-						else if (args.length == 5){
-							
-							if (stat.getType().equals(Type.UNTYPED)){
-								player.sendMessage(Utils.getMessage("data-not-required"));
-								return true;
-							}
-							
-							if (challenge.containsStat(stat, args[4])){
-								player.sendMessage(Utils.getMessage("stat-exists"));
-								return true;
-							}
-							
-							Object data;
-							
-							if (stat.getType().equals(Type.BLOCK) || stat.getType().equals(Type.ITEM)){
-																																
-								if (Material.matchMaterial(args[4].toUpperCase()) != null)
-									data = Material.valueOf(args[4].toUpperCase());
-								
-								else{
-									player.sendMessage(Utils.getMessage("data-not-found"));
-									return true;
-								}
-								
-							}
-							
-							else{
-								
-								try{
-									data = EntityType.valueOf(args[4].toUpperCase());
-								} catch (IllegalArgumentException e){
-									player.sendMessage(Utils.getMessage("data-not-found"));
-									return true;
-								}
-								
-							}
-							
-							Stat challengeStat = new Stat(stat, data, amount);
-							challenge.addNeededStat(challengeStat);
-							
-							player.sendMessage(Utils.getMessage("stat-added"));
-							
-						}
-												
+						player.sendMessage(Utils.getMessage("inventory-opened-need-item"));
+						player.openInventory(itemsAddInventory);
+					}
+					
+					else if (args[1].equalsIgnoreCase("gift")) {
+						Utils.giftInventory(player);
 					}
 					
 					else
+						player.sendMessage(Utils.getMessage("additems-syntax"));
+					
+				}
+				
+				else if (args[0].equalsIgnoreCase("addstats")) {
+					
+					Challenge tmpChallenge = Utils.getPlayerChallenge(player);
+					StatChallenge challenge;
+					if (tmpChallenge == null || !(tmpChallenge instanceof StatChallenge)){
+						challenge = new StatChallenge();
+						Utils.setPlayerChallenge(player, challenge);
+					}
+					
+					else
+						challenge = (StatChallenge) tmpChallenge;
+					
+					switch (args[1].toLowerCase()){
+					case "add":
+						
+						if (args.length >= 4){
+							
+							//Récupération de la stat et de la quantité
+							Statistic stat;
+							int amount;
+							
+							try{
+								stat = Statistic.valueOf(args[2].toUpperCase());
+							} catch(IllegalArgumentException e){
+								player.sendMessage(Utils.getMessage("stat-not-found"));
+								return true;
+							}
+							
+							try{
+								amount = Integer.parseInt(args[3]);
+							} catch (NumberFormatException e){
+								player.sendMessage(Utils.getMessage("not-a-number"));
+								return true;
+							}
+																			
+							if (args.length == 4){
+								
+								if (!stat.getType().equals(Type.UNTYPED)){
+									player.sendMessage(Utils.getMessage("data-required"));
+									return true;
+								}
+								
+								if (challenge.containsStat(stat)){
+									player.sendMessage(Utils.getMessage("stat-exists"));
+									return true;
+								}
+								
+								Stat challengeStat = new Stat(stat, amount);
+								challenge.addNeededStat(challengeStat);
+								
+								player.sendMessage(Utils.getMessage("stat-added"));
+															
+							}
+							
+							else if (args.length == 5){
+								
+								if (stat.getType().equals(Type.UNTYPED)){
+									player.sendMessage(Utils.getMessage("data-not-required"));
+									return true;
+								}
+								
+								if (challenge.containsStat(stat, args[4])){
+									player.sendMessage(Utils.getMessage("stat-exists"));
+									return true;
+								}
+								
+								Object data;
+								
+								if (stat.getType().equals(Type.BLOCK) || stat.getType().equals(Type.ITEM)){
+																																	
+									if (Material.matchMaterial(args[4].toUpperCase()) != null)
+										data = Material.valueOf(args[4].toUpperCase());
+									
+									else{
+										player.sendMessage(Utils.getMessage("data-not-found"));
+										return true;
+									}
+									
+								}
+								
+								else{
+									
+									try{
+										data = EntityType.valueOf(args[4].toUpperCase());
+									} catch (IllegalArgumentException e){
+										player.sendMessage(Utils.getMessage("data-not-found"));
+										return true;
+									}
+									
+								}
+								
+								Stat challengeStat = new Stat(stat, data, amount);
+								challenge.addNeededStat(challengeStat);
+								
+								player.sendMessage(Utils.getMessage("stat-added"));
+								
+							}
+													
+						}
+						
+						else
+							player.sendMessage(Utils.getMessage("addstats-syntax"));
+						
+						break;
+					
+					case "remove":
+						if (args.length == 3){
+							
+							//Récupération de la stat
+							Statistic stat;
+							
+							try{
+								stat = Statistic.valueOf(args[2].toUpperCase());
+							} catch(IllegalArgumentException e){
+								player.sendMessage(Utils.getMessage("stat-not-found"));
+								return true;
+							}
+							
+							challenge.removeNeededStat(stat);
+							
+							player.sendMessage(Utils.getMessage("delete-stat-success"));
+							
+						}
+						
+						else if (args.length == 4){
+							
+							//Récupération de la stat
+							Statistic stat;
+							
+							try{
+								stat = Statistic.valueOf(args[2].toUpperCase());
+							} catch(IllegalArgumentException e){
+								player.sendMessage(Utils.getMessage("stat-not-found"));
+								return true;
+							}
+							
+							challenge.removeNeededStat(stat, args[2]);
+							
+							player.sendMessage(Utils.getMessage("delete-stat-success"));
+							
+						}
+						break;
+						
+					case "clearneed":
+						challenge.clearNeed();
+						player.sendMessage(Utils.getMessage("clear-need-success"));
+						break;
+						
+					case "gift":
+						Utils.toGift(player);
+						break;
+					
+					case "list":
+						if (challenge.getNeed() == null || challenge.getNeed().length == 0){
+							player.sendMessage(Utils.getMessage("no-need"));
+							return true;
+						}
+						
+						for (String needLine : challenge.needToString()){
+							player.sendMessage(needLine);
+						}
+	
+						break;
+						
+					default:
 						player.sendMessage(Utils.getMessage("addstats-syntax"));
-					
-					break;
+						break;
+						
+					}
 				
-				case "remove":
-					if (args.length == 3){
-						
-						//Récupération de la stat
-						Statistic stat;
-						
-						try{
-							stat = Statistic.valueOf(args[2].toUpperCase());
-						} catch(IllegalArgumentException e){
-							player.sendMessage(Utils.getMessage("stat-not-found"));
-							return true;
-						}
-						
-						challenge.removeNeededStat(stat);
-						
-						player.sendMessage(Utils.getMessage("delete-stat-success"));
-						
-					}
-					
-					else if (args.length == 4){
-						
-						//Récupération de la stat
-						Statistic stat;
-						
-						try{
-							stat = Statistic.valueOf(args[2].toUpperCase());
-						} catch(IllegalArgumentException e){
-							player.sendMessage(Utils.getMessage("stat-not-found"));
-							return true;
-						}
-						
-						challenge.removeNeededStat(stat, args[2]);
-						
-						player.sendMessage(Utils.getMessage("delete-stat-success"));
-						
-					}
-					break;
-					
-				case "clearneed":
-					challenge.clearNeed();
-					player.sendMessage(Utils.getMessage("clear-need-success"));
-					break;
-					
-				case "gift":
-					Utils.toGift(player);
-					break;
-				
-				case "list":
-					if (challenge.getNeed() == null || challenge.getNeed().length == 0){
-						player.sendMessage(Utils.getMessage("no-need"));
-						return true;
-					}
-					
-					for (String needLine : challenge.needToString()){
-						player.sendMessage(needLine);
-					}
-
-					break;
-					
-				default:
-					player.sendMessage(Utils.getMessage("addstats-syntax"));
-					break;
-					
 				}
 								
 			}
@@ -285,11 +298,13 @@ public class AdminsCommands implements CommandExecutor {
 			else if (args.length >= 3 && args[0].equalsIgnoreCase("info")){
 				
 				String frequency = args[1].toLowerCase();
-				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]});
+				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]}).toLowerCase().replaceAll(" ", "_");
 				
 				Challenge challenge = (Challenge) Utils.getCustomConfig("challenges").get(frequency + "." + challengeName);
 				
 				if (challenge != null){
+					
+					player.sendMessage("Name: " + challenge.getName());
 				
 					if (challenge.getNeed().length != 0){
 					
@@ -329,6 +344,8 @@ public class AdminsCommands implements CommandExecutor {
 						
 						needAnswer = needAnswer.substring(0, needAnswer.length() - 2);
 						
+						
+						
 						player.sendMessage(needAnswer);
 					
 					}
@@ -347,6 +364,7 @@ public class AdminsCommands implements CommandExecutor {
 						}
 						
 						giftAnswer = giftAnswer.substring(0, giftAnswer.length() - 2);
+						player.sendMessage("Gift: " + giftAnswer);
 					
 					}
 					
@@ -426,6 +444,10 @@ public class AdminsCommands implements CommandExecutor {
 					Utils.resetNeed(player);
 					
 					player.sendMessage(Utils.getMessage("challenge-added"));
+					
+				}
+				
+				else {
 					
 				}
 				

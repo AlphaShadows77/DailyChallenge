@@ -24,8 +24,6 @@ import net.milkbowl.vault.economy.Economy;
 
 public class InventoryEvents implements Listener {
 	
-	private static long lastStepTime;
-
 	@EventHandler
 	public void onClose(InventoryCloseEvent e){
 				
@@ -33,12 +31,12 @@ public class InventoryEvents implements Listener {
 		String inventoryTitle = inventory.getTitle();
 		String addChallengeTitle = Utils.getMessage("title-add_challenge_inventory");
 		
-		if (inventory.getHolder() == null && inventoryTitle.equalsIgnoreCase(addChallengeTitle) && System.currentTimeMillis() - 200 > lastStepTime){
+		if (inventory.getHolder() == null && inventoryTitle.equalsIgnoreCase(addChallengeTitle)){
 			
-			lastStepTime = System.currentTimeMillis();
 			Player player = (Player) e.getPlayer();
+			Challenge playerChallenge = Utils.getPlayerChallenge(player);
 			
-			if (Utils.getPlayerChallenge(player).getNeed() == null && Utils.getPlayerChallenge(player) instanceof ItemChallenge)
+			if (playerChallenge.getNeed() == null && playerChallenge instanceof ItemChallenge)
 				Utils.toGift(player, inventory.getContents());
 			
 			else
@@ -54,7 +52,7 @@ public class InventoryEvents implements Listener {
 		Inventory inventory = e.getClickedInventory();
 		
 		//Menu principal des challenges
-		if (inventory.getHolder() == null && e.getClickedInventory().getTitle().equalsIgnoreCase(Utils.getMessage("challenge-title"))){
+		if (inventory != null && inventory.getHolder() == null && inventory.getTitle().equalsIgnoreCase(Utils.getMessage("challenge-title"))){
 			
 			e.setCancelled(true);
 			

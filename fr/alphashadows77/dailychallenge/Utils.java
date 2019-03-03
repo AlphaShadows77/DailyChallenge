@@ -55,11 +55,9 @@ public class Utils {
 	}
 	
 	public static void toGift(Player pPlayer, ItemStack[] pItemList){
-		
 		ItemStack[] sortedItemList = sortItems(pItemList);
 		challenges.get(pPlayer).setNeed(sortedItemList);
-		giftInventory(pPlayer);
-		
+		pPlayer.sendMessage(Utils.getMessage("save-need-need-gift"));
 	}
 	
 	public static void toGift(Player pPlayer){
@@ -72,16 +70,8 @@ public class Utils {
 		final String inventoryTitle = Utils.getMessage("title-add_challenge_inventory");
 		
 		final Inventory itemsAddInventory = Bukkit.createInventory(null, inventorySize, inventoryTitle);
-		
+		pPlayer.openInventory(itemsAddInventory);
 		pPlayer.sendMessage(Utils.getMessage("inventory-opened-need-item"));
-		Bukkit.getScheduler().runTaskLater(main, new Runnable(){
-
-			@Override
-			public void run() {
-				pPlayer.openInventory(itemsAddInventory);
-			}
-			
-		}, 1L);
 		
 	}
 	
@@ -108,6 +98,12 @@ public class Utils {
 	
 	public static boolean challengeExists(Challenge pChallenge){
 		
+		FileConfiguration challengesConfig = main.getCustomConfig("challenges");
+		
+		if (challengesConfig.getConfigurationSection(pChallenge.getFrequency().toString().toLowerCase()) == null) {
+			return false;
+		}
+		
 		for (String tmpChallengeName : main.getCustomConfig("challenges").getConfigurationSection(pChallenge.getFrequency().toString().toLowerCase()).getKeys(false)){
 			
 			if (pChallenge.getName().toLowerCase().replaceAll(" ", "_").equals(tmpChallengeName))
@@ -123,7 +119,7 @@ public class Utils {
 		
 		FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
 		
-		challengesConfig.set(frequency + "now", challengeName);
+		challengesConfig.set(frequency + "now", challengeName.toLowerCase());
 		challengesConfig.set(frequency + "success", null); //Mise à zéro des joueurs ayant réussi le challenge actuel
 		challengesConfig.set(frequency + "playersstats", null); //Mise à zéro des stats enregistrées des joueurs pour les challenges statistiques
 		
