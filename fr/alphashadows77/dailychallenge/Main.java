@@ -3,6 +3,7 @@ package fr.alphashadows77.dailychallenge;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -110,7 +111,7 @@ public class Main extends JavaPlugin {
 				
 				try{
 					customFile.createNewFile();
-					customConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getResource(pKey + ".yml")));
+					customConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getResource(pKey + ".yml"), StandardCharsets.UTF_8));
 					customConfig.save(customFile);
 				}
 				
