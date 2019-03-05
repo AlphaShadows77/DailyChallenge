@@ -1,6 +1,8 @@
 package fr.alphashadows77.dailychallenge;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -124,7 +126,17 @@ public class Main extends JavaPlugin {
 		}
 		
 		else{
-			customConfig = YamlConfiguration.loadConfiguration(customFile);
+			
+			try {
+				FileInputStream fis = new FileInputStream(customFile);
+				InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+				customConfig = YamlConfiguration.loadConfiguration(isr);
+			}
+			
+			catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			
 		}
 		
 		customConfigs.put(pKey, customConfig);
