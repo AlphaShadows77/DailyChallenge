@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -96,7 +97,7 @@ public class Utils {
 
 		challengesConfig.set(frequency + "." + pChallenge.getName().toLowerCase().replaceAll(" ", "_"), pChallenge);
 		
-		saveCustomConfig("challenges");
+		saveCustomConfig("challenges", StandardCharsets.UTF_8);
 		
 	}
 	
@@ -127,7 +128,7 @@ public class Utils {
 		challengesConfig.set(frequency + "success", null); //Mise à zéro des joueurs ayant réussi le challenge actuel
 		challengesConfig.set(frequency + "playersstats", null); //Mise à zéro des stats enregistrées des joueurs pour les challenges statistiques
 		
-		Utils.saveCustomConfig("challenges");
+		Utils.saveCustomConfig("challenges", StandardCharsets.UTF_8);
 		
 	}
 	

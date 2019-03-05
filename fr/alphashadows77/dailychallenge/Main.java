@@ -67,11 +67,8 @@ public class Main extends JavaPlugin {
 			}
 			
 		}
-		try {
-			challengesConfig.save(new File(getDataFolder(), "challenges.yml"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		Utils.saveCustomConfig("challenges", StandardCharsets.UTF_8);
 		
 	}
 	
@@ -114,7 +111,7 @@ public class Main extends JavaPlugin {
 				try{
 					customFile.createNewFile();
 					customConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getResource(pKey + ".yml"), StandardCharsets.UTF_8));
-					customConfig.save(customFile);
+					Utils.saveCustomConfig(pKey, StandardCharsets.UTF_8);
 				}
 				
 				catch (IOException e) {
