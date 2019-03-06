@@ -97,7 +97,7 @@ public class Utils {
 
 		challengesConfig.set(frequency + "." + pChallenge.getName().toLowerCase().replaceAll(" ", "_"), pChallenge);
 		
-		saveCustomConfig("challenges", StandardCharsets.UTF_8);
+		saveCustomConfig(Utils.getCustomConfig("challenges"), new File(main.getDataFolder(), "challenges.yml"), StandardCharsets.UTF_8);
 		
 	}
 	
@@ -128,7 +128,7 @@ public class Utils {
 		challengesConfig.set(frequency + "success", null); //Mise à zéro des joueurs ayant réussi le challenge actuel
 		challengesConfig.set(frequency + "playersstats", null); //Mise à zéro des stats enregistrées des joueurs pour les challenges statistiques
 		
-		Utils.saveCustomConfig("challenges", StandardCharsets.UTF_8);
+		Utils.saveCustomConfig(Utils.getCustomConfig("challenges"), new File(main.getDataFolder(), "challenges.yml"), StandardCharsets.UTF_8);
 		
 	}
 	
@@ -241,21 +241,19 @@ public class Utils {
 	
 	/**
 	 * Sauvegarde la config custom en utilisant l'encodage donné
-	 * @param key Key associated to a config
+	 * @param config Key associated to a config
 	 * @param charset Charset to use
 	 */
-	public static void saveCustomConfig(String key, Charset charset) {
+	public static void saveCustomConfig(FileConfiguration config, File configFile, Charset charset) {
 		
-		FileConfiguration config = main.getCustomConfig(key);
 		String configToString = config.saveToString();
-		
-		File configFile = new File(main.getDataFolder(), key + ".yml");
+				
 		OutputStreamWriter osw = null;
 		try {
 			
 			FileOutputStream fis = new FileOutputStream(configFile);
 			osw = new OutputStreamWriter(fis, charset);
-			
+						
 			osw.write(configToString);
 			
 		}

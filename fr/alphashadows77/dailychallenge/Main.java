@@ -30,12 +30,12 @@ public class Main extends JavaPlugin {
 		
 	@Override
 	public void onEnable() {
-
-		//Config Loading
-		loadConfig();
 		
 		//Main setting
 		Utils.setMain(this);
+
+		//Config Loading
+		loadConfig();
 		
 		//Commands Registering
 		getCommand("modifychallenge").setExecutor(new AdminsCommands());
@@ -68,7 +68,7 @@ public class Main extends JavaPlugin {
 			
 		}
 		
-		Utils.saveCustomConfig("challenges", StandardCharsets.UTF_8);
+		Utils.saveCustomConfig(Utils.getCustomConfig("challenges"), new File(getDataFolder(), "challenges.yml"), StandardCharsets.UTF_8);
 		
 	}
 	
@@ -111,7 +111,7 @@ public class Main extends JavaPlugin {
 				try{
 					customFile.createNewFile();
 					customConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getResource(pKey + ".yml"), StandardCharsets.UTF_8));
-					Utils.saveCustomConfig(pKey, StandardCharsets.UTF_8);
+					Utils.saveCustomConfig(customConfig, customFile, StandardCharsets.UTF_8);
 				}
 				
 				catch (IOException e) {
@@ -137,7 +137,7 @@ public class Main extends JavaPlugin {
 		}
 		
 		customConfigs.put(pKey, customConfig);
-		
+				
 	}
 	
 	protected FileConfiguration getCustomConfig(String pKey){
