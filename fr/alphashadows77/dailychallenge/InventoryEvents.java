@@ -46,6 +46,7 @@ public class InventoryEvents implements Listener {
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onClick(InventoryClickEvent e){
 		
@@ -281,7 +282,7 @@ public class InventoryEvents implements Listener {
 					
 					if (rsp != null){
 						Economy eco = rsp.getProvider();
-						eco.bankDeposit(player.getName(), gifts.getMoney());
+						eco.depositPlayer(Bukkit.getOfflinePlayer(player.getName()), gifts.getMoney());
 					}
 					
 					player.sendMessage(Utils.getMessage("congratulation-" + frequency + "-challenge-message"));
