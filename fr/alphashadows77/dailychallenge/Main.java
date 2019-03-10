@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -47,27 +48,32 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
 		
 		// Sélection aléatoire des challenges périodiques
-		FileConfiguration challengesConfig = getCustomConfig("challenges");
 		Calendar calendar = Calendar.getInstance();
-		for (String tempFrequency : new String[] {"daily", "weekly", "monthly"}){
+		FileConfiguration challengesConfig = getCustomConfig("challenges");
 			
-			// Vérification si c'est bien un reload quotidien et non ponctuel ou qu'aucun challenge journalier n'est défini
-			if ((calendar.get(Calendar.HOUR_OF_DAY) == 5 || calendar.get(Calendar.HOUR_OF_DAY) == 6 || challengesConfig.get(tempFrequency + "now") == null) && challengesConfig.getConfigurationSection(tempFrequency) != null && !challengesConfig.getConfigurationSection(tempFrequency).getValues(false).isEmpty()){
-				
-				Set<String> challenges = new HashSet<String>();
-				//Ajout de tous les challenges dans une liste
-				for (String challenge : challengesConfig.getConfigurationSection(tempFrequency).getValues(false).keySet()){
-					challenges.add(challenge);
-				}
-				
-				//Choix aléatoire d'un challenge et assignation comme challenge périodique
-				int random = (int) (Math.random() * challenges.size());
-				Utils.changePeriodicChallenge(tempFrequency, challenges.toArray(new String[challenges.size()])[random]);
+		// Vérification si c'est bien un reload quotidien et non ponctuel ou qu'aucun challenge journalier n'est défini
+		if (calendar.get(Calendar.HOUR_OF_DAY) == 5 || calendar.get(Calendar.HOUR_OF_DAY) == 6){
 			
+			ConfigurationSection dailyConfig = challengesConfig.getConfigurationSection("daily");
+			
+			if (dailyConfig != null && !dailyConfig.getValues(false).isEmpty()) {
+				randomNewChallenge("daily");
 			}
 			
-		}
+			ConfigurationSection weeklyConfig = challengesConfig.getConfigurationSection("weekly");
+			
+			if (weeklyConfig != null && !weeklyConfig.getValues(false).isEmpty() && calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+				randomNewChallenge("weekly");
+			}
+			
+			ConfigurationSection monthlyConfig = challengesConfig.getConfigurationSection("monthly");
+			
+			if (monthlyConfig != null && !monthlyConfig.getValues(false).isEmpty() && calendar.get(Calendar.DAY_OF_MONTH) == 1) {
+				randomNewChallenge("monthly");
+			}
 		
+		}
+					
 		Utils.saveCustomConfig(Utils.getCustomConfig("challenges"), new File(getDataFolder(), "challenges.yml"), StandardCharsets.UTF_8);
 		
 	}
@@ -142,6 +148,19 @@ public class Main extends JavaPlugin {
 	
 	protected FileConfiguration getCustomConfig(String pKey){
 		return customConfigs.get(pKey);
+	}
+	
+	private void randomNewChallenge(String frequency) {
+		FileConfiguration challengesConfig = getCustomConfig("challenges");
+		Set<String> challenges = new HashSet<String>();
+		//Ajout de tous les challenges dans une liste
+		for (String challenge : challengesConfig.getConfigurationSection(frequency).getValues(false).keySet()){
+			challenges.add(challenge);
+		}
+		
+		//Choix aléatoire d'un challenge et assignation comme challenge périodique
+		int random = (int) (Math.random() * challenges.size());
+			Utils.changePeriodicChallenge(frequency, challenges.toArray(new String[challenges.size()])[random]);
 	}
 	
 }
