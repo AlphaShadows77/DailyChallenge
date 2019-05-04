@@ -113,6 +113,9 @@ public class InventoryEvents implements Listener {
 							
 							if (nombreItem < need.getAmount()){
 								
+								int diff = need.getAmount() - nombreItem;
+								dontHave += ", " + Integer.toString(diff) + " ";
+								
 								if (needDamage != 0)
 									dontHave += Utils.makesBeautiful(ItemsWithData.getValue(need.getType(), needDamage).toString());
 								
@@ -248,8 +251,11 @@ public class InventoryEvents implements Listener {
 								playerStat = player.getStatistic(stat, (Material) needData);
 							}
 							
-							if (challengesConfig.getInt(frequency + "playersstats." + player.getName() + "." + statName) + tmpNeed.getAmount() > playerStat){
+							int needAmount = challengesConfig.getInt(frequency + "playersstats." + player.getName() + "." + statName) + tmpNeed.getAmount();
+							if (needAmount > playerStat){
 								String name = StatsWithItem.getValue(stat).getNom();
+								int diff = needAmount - playerStat;
+								dontHave += ", " + Integer.toString(diff) + " ";
 								dontHave += (name.contains("%data%") ? name.replaceAll("%data%", Utils.makesBeautiful(needData.toString())) : name) + ", ";
 							}
 							
