@@ -255,6 +255,17 @@ public class InventoryEvents implements Listener {
 							if (needAmount > playerStat){
 								String name = StatsWithItem.getValue(stat).getNom();
 								int diff = needAmount - playerStat;
+								if (StatsWithItem.getValue(stat).getUnit() != null){
+									switch (StatsWithItem.getValue(stat).getUnit()) {
+									case DISTANCE_CM:
+										diff /= 100;
+										break;
+									
+									case TIME_TICK:
+										diff /= 20;
+										break;
+									}
+								}
 								dontHave += " " + Integer.toString(diff) + " ";
 								dontHave += (name.contains("%data%") ? name.replaceAll("%data%", Utils.makesBeautiful(needData.toString())) : name);
 							}
