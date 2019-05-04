@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.alphashadows77.dailychallenge.ItemsWithData;
 import fr.alphashadows77.dailychallenge.Stat;
+import fr.alphashadows77.dailychallenge.StatsWithItem;
 import fr.alphashadows77.dailychallenge.Utils;
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
 import fr.alphashadows77.dailychallenge.challengestype.ChallengeFrequency;
@@ -143,6 +144,16 @@ public class AdminsCommands implements CommandExecutor {
 								if (challenge.containsStat(stat)){
 									player.sendMessage(Utils.getMessage("stat-exists"));
 									return true;
+								}
+								
+								switch (StatsWithItem.getValue(stat).getUnit()) {
+								case DISTANCE_CM:
+									amount *= 100; // Conversion blocs => Centi-blocs
+									break;
+								
+								case TIME_TICK:
+									amount *= 20; // Conversion secondes => ticks
+									break;
 								}
 								
 								Stat challengeStat = new Stat(stat, amount);
