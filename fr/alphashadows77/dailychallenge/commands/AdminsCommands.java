@@ -146,14 +146,18 @@ public class AdminsCommands implements CommandExecutor {
 									return true;
 								}
 								
-								switch (StatsWithItem.getValue(stat).getUnit()) {
-								case DISTANCE_CM:
-									amount *= 100; // Conversion blocs => Centi-blocs
-									break;
+								if (StatsWithItem.getValue(stat).getUnit() != null) {
 								
-								case TIME_TICK:
-									amount *= 20; // Conversion secondes => ticks
-									break;
+									switch (StatsWithItem.getValue(stat).getUnit()) {
+									case DISTANCE_CM:
+										amount *= 100; // Conversion blocs => Centi-blocs
+										break;
+									
+									case TIME_TICK:
+										amount *= 20; // Conversion secondes => ticks
+										break;
+									}
+								
 								}
 								
 								Stat challengeStat = new Stat(stat, amount);

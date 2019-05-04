@@ -87,14 +87,18 @@ public class PlayersCommands implements CommandExecutor {
 											Stat stat = (Stat) need;
 											int amount = stat.getAmount();
 											
-											switch (StatsWithItem.getValue(stat.getStat()).getUnit()) {
-											case DISTANCE_CM:
-												amount /= 100; // Conversion centi-blocs => blocs
-												break;
-											
-											case TIME_TICK:
-												amount /= 20; // Conversion ticks => secondes
-												break;
+											if (StatsWithItem.getValue(stat.getStat()).getUnit() != null) {
+												
+												switch (StatsWithItem.getValue(stat.getStat()).getUnit()) {
+												case DISTANCE_CM:
+													amount /= 100; // Conversion centi-blocs => blocs
+													break;
+												
+												case TIME_TICK:
+													amount /= 20; // Conversion ticks => secondes
+													break;
+												}
+												
 											}
 											
 											String tempLineLoreNeed = lineLore.replaceAll("%amount%", Integer.toString(amount));

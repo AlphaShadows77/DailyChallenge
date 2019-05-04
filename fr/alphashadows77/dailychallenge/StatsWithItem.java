@@ -80,6 +80,7 @@ public enum StatsWithItem {
 	}
 	
 	private StatsWithItem(Statistic pStat, ItemStack pItem, String pNom, UnitType pUnit) {
+		this(pStat, pItem, pNom);
 		this.unit = pUnit;
 	}
 	
