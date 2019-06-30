@@ -103,7 +103,7 @@ public enum StatsWithItem {
 	
 	//Récupération de l'item correspondant à une entrée de l'énumération
 	public ItemStack getItem(){
-		return this.item;
+		return new ItemStack(this.item);
 	}
 	
 	//Récupération du nom correspondant à une entrée de l'énumération
