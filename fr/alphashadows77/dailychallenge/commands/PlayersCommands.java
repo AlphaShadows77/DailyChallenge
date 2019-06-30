@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -190,7 +191,7 @@ public class PlayersCommands implements CommandExecutor {
 		
 	// Permet de modifier un item pour lui ajouter un nom et un effet d'enchantement si besoin
 	private ItemStack modifyForGui(ItemStack pItem, String pName, boolean pEnchant){
-		ItemMeta itemMeta = pItem.getItemMeta();
+		ItemMeta itemMeta = pItem.hasItemMeta() ? pItem.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(pItem.getType());
 		itemMeta.setDisplayName("§r" + pName);
 		if (pEnchant){
 			itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
