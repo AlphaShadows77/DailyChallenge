@@ -43,6 +43,15 @@ public class AdminsCommands implements CommandExecutor {
 				if (!(frequency.equals("daily") || frequency.equals("weekly") || frequency.equals("monthly")))
 					return false;
 				
+				Challenge tmpChallenge = new ItemChallenge();
+				tmpChallenge.setFrequency(ChallengeFrequency.valueOf(frequency.toUpperCase()));
+				tmpChallenge.setName(challengeName);
+				
+				if (!Utils.challengeExists(tmpChallenge)) {
+					sender.sendMessage(Utils.getMessage("challenge-not-found"));
+					return true;
+				}
+				
 				Utils.changePeriodicChallenge(frequency, challengeName);
 				
 				sender.sendMessage(Utils.getMessage("change-" + frequency + "-challenge-success"));
