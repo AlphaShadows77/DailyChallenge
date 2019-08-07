@@ -28,7 +28,7 @@ public class PlayersCommands implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
+		
 		if (sender instanceof Player){
 			Player player = (Player) sender;	
 			
@@ -65,7 +65,7 @@ public class PlayersCommands implements CommandExecutor {
 						
 						ArrayList<String> lore = new ArrayList<String>();
 						List<String> loreConfig = Utils.getMessageList("lore-" + nowType + "-challenge");
-						//Modifie les données modifiables (%need%, %gift%, ...) du lore de la config
+						// Modifie les données modifiables (%need%, %gift%, ...) du lore de la config
 						for (String lineLore : loreConfig){
 														
 							if (lineLore.contains("%need%")){
@@ -156,7 +156,7 @@ public class PlayersCommands implements CommandExecutor {
 						if (nowType == "items"){
 							
 							if (challenge.getNeed().length != 0)
-								item = (ItemStack) challenge.getNeed()[0];
+								item = new ItemStack((ItemStack) challenge.getNeed()[0]);
 							
 							else
 								item = new ItemStack(Material.BARRIER);
@@ -167,6 +167,8 @@ public class PlayersCommands implements CommandExecutor {
 							item = StatsWithItem.getValue(((Stat) challenge.getNeed()[0]).getStat()).getItem();
 						
 						// Place l'item représentant le challenge dans le menu
+						System.out.println(challenge.getNeed());
+						System.out.println(item);
 						menu.setItem(2 + 9 * index, modifyForGui(item, "§a" + challenge.getName(), false, lore));
 						List<String> playerSuccess = challengesConfig.getStringList(tempFrequency + "success");
 						int playerSuccessNumber = (playerSuccess == null ? 0 : playerSuccess.size());
@@ -191,7 +193,7 @@ public class PlayersCommands implements CommandExecutor {
 		
 	// Permet de modifier un item pour lui ajouter un nom et un effet d'enchantement si besoin
 	private ItemStack modifyForGui(ItemStack pItem, String pName, boolean pEnchant){
-		ItemMeta itemMeta = pItem.hasItemMeta() ? pItem.getItemMeta() : Bukkit.getServer().getItemFactory().getItemMeta(pItem.getType());
+		ItemMeta itemMeta = pItem.hasItemMeta() ? pItem.getItemMeta() : Bukkit.getItemFactory().getItemMeta(pItem.getType());
 		itemMeta.setDisplayName("§r" + pName);
 		if (pEnchant){
 			itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
@@ -207,6 +209,7 @@ public class PlayersCommands implements CommandExecutor {
 		ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setLore(pLore);
 		item.setItemMeta(itemMeta);
+		System.out.println(item.serialize());
 		return item;
 	}
 

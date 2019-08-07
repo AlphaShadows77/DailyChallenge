@@ -38,7 +38,7 @@ public class AdminsCommands implements CommandExecutor {
 			if (args.length >= 2){
 				
 				String frequency = args[0].toLowerCase();
-				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0]});
+				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0]}).toLowerCase().replaceAll(" ", "_");
 				
 				if (!(frequency.equals("daily") || frequency.equals("weekly") || frequency.equals("monthly")))
 					return false;

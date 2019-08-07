@@ -1,6 +1,7 @@
 package fr.alphashadows77.dailychallenge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -95,8 +96,9 @@ public class InventoryEvents implements Listener {
 					if (itemChallenge.getNeed().length != 0){
 					
 						//Vérification pour savoir si les items nécessaires sont présents dans l'inventaire du joueur
+						System.out.println(Arrays.toString((ItemStack[]) itemChallenge.getNeed()));
 						for (ItemStack need : (ItemStack[]) itemChallenge.getNeed()){
-							
+														
 							nombreItem = 0;
 							Material needType = need.getType();
 							short needDamage = need.getDurability();
@@ -115,12 +117,13 @@ public class InventoryEvents implements Listener {
 								
 								int diff = need.getAmount() - nombreItem;
 								dontHave += " " + Integer.toString(diff);
+								System.out.println(need.toString() + " " + needType.toString() + " " + needDamage);
 								
 								if (needDamage != 0)
-									dontHave += Utils.makesBeautiful(ItemsWithData.getValue(need.getType(), needDamage).toString());
+									dontHave += " " + Utils.makesBeautiful(ItemsWithData.getValue(needType, needDamage).toString());
 								
 								else
-									dontHave += Utils.makesBeautiful(needType.toString());
+									dontHave += " " + Utils.makesBeautiful(needType.toString());
 								
 							}
 															
