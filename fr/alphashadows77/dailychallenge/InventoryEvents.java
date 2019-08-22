@@ -125,6 +125,8 @@ public class InventoryEvents implements Listener {
 								else
 									dontHave += " " + Utils.makesBeautiful(needType.toString());
 								
+								dontHave += ", ";
+								
 							}
 															
 						}
@@ -173,9 +175,12 @@ public class InventoryEvents implements Listener {
 						
 					}
 					
-					else
-						player.sendMessage(Utils.getMessage("dont-have-items-message").replaceAll("%item%", dontHave));
-					
+					else {
+						dontHave = dontHave.substring(0, dontHave.length() - 2); // Allows to remove the last ", "
+						String missingItemsMessage = Utils.getMessage("dont-have-items-message");
+						missingItemsMessage = missingItemsMessage.replaceAll("%item%", dontHave);
+						player.sendMessage(missingItemsMessage);
+					}
 				}
 				
 				else{
@@ -270,14 +275,17 @@ public class InventoryEvents implements Listener {
 									}
 								}
 								dontHave += " " + Integer.toString(diff) + " ";
-								dontHave += (name.contains("%data%") ? name.replaceAll("%data%", Utils.makesBeautiful(needData.toString())) : name);
+								dontHave += (name.contains("%data%") ? name.replaceAll("%data%", Utils.makesBeautiful(needData.toString())) : name) + ", ";
 							}
 							
 						}
 						
-						if (dontHave != "")
-							player.sendMessage(Utils.getMessage("dont-have-stats-message").replaceAll("%stat%", dontHave));
-						
+						if (dontHave != "") {
+							dontHave = dontHave.substring(0, dontHave.length() - 2); // Allows to remove the last ", "
+							String missingStatsMessage = Utils.getMessage("dont-have-stats-message");
+							missingStatsMessage = missingStatsMessage.replaceAll("%stats%", dontHave);
+							player.sendMessage(missingStatsMessage);
+						}
 					}
 					
 				}
