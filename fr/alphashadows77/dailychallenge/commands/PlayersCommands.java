@@ -2,10 +2,11 @@ package fr.alphashadows77.dailychallenge.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,8 +16,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import fr.alphashadows77.dailychallenge.EnchantmentsName;
 import fr.alphashadows77.dailychallenge.ItemsWithData;
 import fr.alphashadows77.dailychallenge.Stat;
 import fr.alphashadows77.dailychallenge.StatsWithItem;
@@ -77,8 +80,28 @@ public class PlayersCommands implements CommandExecutor {
 										if (nowType == "items"){
 											ItemStack item = (ItemStack) need;
 											String tempLineLoreNeed = lineLore.replaceAll("%amount%", Integer.toString(item.getAmount()));
-											ItemsWithData itemWithData = ItemsWithData.getValue(item.getType(), item.getDurability());
+											ItemsWithData itemWithData = ItemsWithData.getValue(item.getType(), item.getDurability());											
 											String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(item.getType().toString());
+											
+											if (item.getType() == Material.ENCHANTED_BOOK) {
+												if (item.hasItemMeta()) {
+													ItemMeta meta = item.getItemMeta();
+													if (meta instanceof EnchantmentStorageMeta) {
+														EnchantmentStorageMeta enchantmentMeta = (EnchantmentStorageMeta) meta;
+														if (enchantmentMeta.hasStoredEnchants()) {
+															itemName += " (";
+															Map<Enchantment, Integer> enchants = enchantmentMeta.getStoredEnchants();
+															for (Entry<Enchantment, Integer> tmp : enchants.entrySet()) {
+																itemName += EnchantmentsName.getName(tmp.getKey()) + tmp.getValue().toString() + ", ";
+															}
+															
+															itemName = itemName.substring(0, itemName.length() - 2);
+															itemName += ")";
+														}
+													}
+												}
+											}
+											
 											tempLineLoreNeed = tempLineLoreNeed.replaceAll("%need%", itemName);
 											
 											lore.add(tempLineLoreNeed);
