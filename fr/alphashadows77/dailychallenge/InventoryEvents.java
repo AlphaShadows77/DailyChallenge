@@ -283,7 +283,7 @@ public class InventoryEvents implements Listener {
 						if (dontHave != "") {
 							dontHave = dontHave.substring(0, dontHave.length() - 2); // Allows to remove the last ", "
 							String missingStatsMessage = Utils.getMessage("dont-have-stats-message");
-							missingStatsMessage = missingStatsMessage.replaceAll("%stats%", dontHave);
+							missingStatsMessage = missingStatsMessage.replaceAll("%stat%", dontHave);
 							player.sendMessage(missingStatsMessage);
 						}
 					}
