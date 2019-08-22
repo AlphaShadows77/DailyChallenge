@@ -125,7 +125,7 @@ public class InventoryEvents implements Listener {
 								else
 									dontHave += " " + Utils.makesBeautiful(needType.toString());
 								
-								dontHave += ", ";
+								dontHave += ",";
 								
 							}
 															
@@ -275,7 +275,7 @@ public class InventoryEvents implements Listener {
 									}
 								}
 								dontHave += " " + Integer.toString(diff) + " ";
-								dontHave += (name.contains("%data%") ? name.replaceAll("%data%", Utils.makesBeautiful(needData.toString())) : name) + ", ";
+								dontHave += (name.contains("%data%") ? name.replaceAll("%data%", Utils.makesBeautiful(needData.toString())) : name) + ",";
 							}
 							
 						}
