@@ -207,9 +207,11 @@ public class PlayersCommands implements CommandExecutor {
 	private ItemStack modifyForGui(ItemStack pItem, String pName, boolean pEnchant){
 		ItemMeta itemMeta = pItem.hasItemMeta() ? pItem.getItemMeta() : Bukkit.getItemFactory().getItemMeta(pItem.getType());
 		itemMeta.setDisplayName("§r" + pName);
+		itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_ENCHANTS,
+							  ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_POTION_EFFECTS,
+							  ItemFlag.HIDE_UNBREAKABLE);
 		if (pEnchant){
 			itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-			itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		}
 		pItem.setItemMeta(itemMeta);
 		pItem.setAmount(1);
