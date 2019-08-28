@@ -415,7 +415,7 @@ public class AdminsCommands implements CommandExecutor {
 				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]}).toLowerCase().replaceAll(" ", "_");
 				FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
 				
-				if (!challengesConfig.isConfigurationSection(frequency + "." + challengeName)) {
+				if (!challengesConfig.contains(frequency + "." + challengeName)) {
 					player.sendMessage(Utils.getMessage("challenge-not-found"));
 					return true;
 				}
