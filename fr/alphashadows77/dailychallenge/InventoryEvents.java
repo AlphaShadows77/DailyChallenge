@@ -130,24 +130,11 @@ public class InventoryEvents implements Listener {
 								else {
 									dontHave += " " + Utils.makesBeautiful(needType.toString());
 									
-									if (needType == Material.ENCHANTED_BOOK) {
-										if (need.hasItemMeta()) {
-											ItemMeta meta = need.getItemMeta();
-											if (meta instanceof EnchantmentStorageMeta) {
-												EnchantmentStorageMeta enchantmentMeta = (EnchantmentStorageMeta) meta;
-												if (enchantmentMeta.hasStoredEnchants()) {
-													dontHave += " (";
-													Map<Enchantment, Integer> enchants = enchantmentMeta.getStoredEnchants();
-													for (Entry<Enchantment, Integer> tmp : enchants.entrySet()) {
-														dontHave += EnchantmentsName.getName(tmp.getKey()) + " " + tmp.getValue().toString() + ", ";
-													}
-													
-													dontHave = dontHave.substring(0, dontHave.length() - 2);
-													dontHave += ")";
-												}
-											}
-										}
+									String enchantmentsName = EnchantmentsName.getEnchantsNames(need);
+									if (enchantmentsName != null) {
+										dontHave += " (" + enchantmentsName + ")";
 									}
+									
 								}
 								
 								dontHave += ",";

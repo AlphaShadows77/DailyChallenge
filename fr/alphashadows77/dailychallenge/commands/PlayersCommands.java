@@ -2,8 +2,6 @@ package fr.alphashadows77.dailychallenge.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.alphashadows77.dailychallenge.EnchantmentsName;
@@ -83,23 +80,9 @@ public class PlayersCommands implements CommandExecutor {
 											ItemsWithData itemWithData = ItemsWithData.getValue(item.getType(), item.getDurability());											
 											String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(item.getType().toString());
 											
-											if (item.getType() == Material.ENCHANTED_BOOK) {
-												if (item.hasItemMeta()) {
-													ItemMeta meta = item.getItemMeta();
-													if (meta instanceof EnchantmentStorageMeta) {
-														EnchantmentStorageMeta enchantmentMeta = (EnchantmentStorageMeta) meta;
-														if (enchantmentMeta.hasStoredEnchants()) {
-															itemName += " (";
-															Map<Enchantment, Integer> enchants = enchantmentMeta.getStoredEnchants();
-															for (Entry<Enchantment, Integer> tmp : enchants.entrySet()) {
-																itemName += EnchantmentsName.getName(tmp.getKey()) + tmp.getValue().toString() + ", ";
-															}
-															
-															itemName = itemName.substring(0, itemName.length() - 2);
-															itemName += ")";
-														}
-													}
-												}
+											String enchantsName = EnchantmentsName.getEnchantsNames(item);
+											if (enchantsName != null) {
+												itemName += " (" + enchantsName + ")";
 											}
 											
 											tempLineLoreNeed = tempLineLoreNeed.replaceAll("%need%", itemName);
