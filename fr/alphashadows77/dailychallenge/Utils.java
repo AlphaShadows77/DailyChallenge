@@ -21,6 +21,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
 
@@ -127,6 +129,31 @@ public class Utils {
 		
 		Utils.saveCustomConfig(Utils.getCustomConfig("challenges"), new File(main.getDataFolder(), "challenges.yml"), StandardCharsets.UTF_8);
 		
+	}
+	
+	/**
+	 * Allows to get the long name of a potion
+	 * @param potion Potion to get the name
+	 * @return The long name of a potion, an empty String if there is no potion effect
+	 */
+	public static String getPotionName(ItemStack potion) {
+		String potionName = "";
+		
+		if (potion.hasItemMeta() && potion.getItemMeta() instanceof PotionMeta) {
+			PotionMeta meta = (PotionMeta) potion.getItemMeta();
+			PotionData potionData = meta.getBasePotionData();
+			potionName = Utils.makesBeautiful(potionData.getType().toString());
+			if (potionData.isUpgraded()) {
+				potionName += " II";
+			}
+			
+			if (potionData.isExtended()) {
+				potionName += " (Extended)";
+			}
+						
+		}
+		
+		return potionName;
 	}
 	
 	public static void resetNeed(Player pPlayer){

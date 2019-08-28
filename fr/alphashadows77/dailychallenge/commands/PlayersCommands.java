@@ -83,24 +83,8 @@ public class PlayersCommands implements CommandExecutor {
 											String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(item.getType().toString());
 											
 											String potionName = "";
-											if (item.hasItemMeta() && item.getItemMeta() instanceof PotionMeta) {
-												PotionMeta meta = (PotionMeta) item.getItemMeta();
-												PotionData potionData = meta.getBasePotionData();
-												potionName = Utils.makesBeautiful(potionData.getType().toString());
-												if (potionData.isUpgraded()) {
-													potionName += " II";
-												}
-												
-												if (potionData.isExtended()) {
-													potionName += " (Extended)";
-												}
-												
-												itemName += " (" + potionName + ")";
-												
-											}
-											
-											
-											
+											itemName += " (" + potionName + ")";
+
 											String enchantsName = EnchantmentsName.getEnchantsNames(item);
 											if (enchantsName != null) {
 												itemName += " (" + enchantsName + ")";
