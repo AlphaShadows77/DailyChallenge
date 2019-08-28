@@ -183,7 +183,7 @@ public class InventoryEvents implements Listener {
 					}
 					
 					else {
-						dontHave = dontHave.substring(0, dontHave.length() - 2); // Allows to remove the last ", "
+						dontHave = dontHave.substring(0, dontHave.length() - 1); // Allows to remove the last ","
 						String missingItemsMessage = Utils.getMessage("dont-have-items-message");
 						missingItemsMessage = missingItemsMessage.replaceAll("%item%", dontHave);
 						player.sendMessage(missingItemsMessage);
@@ -288,7 +288,7 @@ public class InventoryEvents implements Listener {
 						}
 						
 						if (dontHave != "") {
-							dontHave = dontHave.substring(0, dontHave.length() - 2); // Allows to remove the last ", "
+							dontHave = dontHave.substring(0, dontHave.length() - 1); // Allows to remove the last ","
 							String missingStatsMessage = Utils.getMessage("dont-have-stats-message");
 							missingStatsMessage = missingStatsMessage.replaceAll("%stat%", dontHave);
 							player.sendMessage(missingStatsMessage);
