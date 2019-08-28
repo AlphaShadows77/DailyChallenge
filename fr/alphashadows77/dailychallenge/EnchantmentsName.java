@@ -1,6 +1,12 @@
 package fr.alphashadows77.dailychallenge;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public enum EnchantmentsName {
 
@@ -48,6 +54,40 @@ public enum EnchantmentsName {
 		for (EnchantmentsName tmpEnch : EnchantmentsName.values()) {
 			if (tmpEnch.ench.getName().equals(enchName)) {
 				return tmpEnch.name;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Get the enchants names of an enchanted book or an enchanted item
+	 * @param item The enchanted book/item
+	 * @return List of the enchants names of the book/item
+	 */
+	public static String getEnchantsNames(ItemStack item) {
+		String enchantsName = "";
+		
+		if (item.hasItemMeta()) {
+			ItemMeta meta = item.getItemMeta();
+			Map<Enchantment, Integer> enchants = null;
+			if (meta instanceof EnchantmentStorageMeta) {
+				EnchantmentStorageMeta enchantmentMeta = (EnchantmentStorageMeta) meta;
+				if (enchantmentMeta.hasStoredEnchants()) {
+					enchants = enchantmentMeta.getStoredEnchants();
+				}
+			}
+			
+			else if (meta.hasEnchants()){
+				enchants = meta.getEnchants();
+			}
+			
+			if (enchants != null) {
+				for (Entry<Enchantment, Integer> tmp : enchants.entrySet()) {
+					enchantsName += getName(tmp.getKey()) + tmp.getValue().toString() + ", ";
+				}
+						
+				enchantsName = enchantsName.substring(0, enchantsName.length() - 2);
 			}
 		}
 		
