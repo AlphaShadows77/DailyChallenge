@@ -17,7 +17,7 @@ lore-items-challenge:
 - "§6Expérience reçu: §a%xp%"
 lore-stats-challenge:
 - "§ePour faire ce challenge tu dois augmenter ces statistiques:"
-- "§r\"%need%\" de §7%amount%"
+- "§r§7\"%need%\" de §r%amount%"
 - "§6Items reçu:"
 - "§a%amount% %gift%"
 - "§6Argent reçu: §a%uniz%"
