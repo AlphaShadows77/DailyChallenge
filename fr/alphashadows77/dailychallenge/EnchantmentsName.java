@@ -84,7 +84,7 @@ public enum EnchantmentsName {
 			
 			if (enchants != null) {
 				for (Entry<Enchantment, Integer> tmp : enchants.entrySet()) {
-					enchantsName += getName(tmp.getKey()) + tmp.getValue().toString() + ", ";
+					enchantsName += getName(tmp.getKey()) + " " + tmp.getValue().toString() + ", ";
 				}
 						
 				enchantsName = enchantsName.substring(0, enchantsName.length() - 2);
