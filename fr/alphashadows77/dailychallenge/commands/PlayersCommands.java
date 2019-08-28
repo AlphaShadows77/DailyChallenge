@@ -15,6 +15,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 
 import fr.alphashadows77.dailychallenge.EnchantmentsName;
 import fr.alphashadows77.dailychallenge.ItemsWithData;
@@ -79,6 +81,25 @@ public class PlayersCommands implements CommandExecutor {
 											String tempLineLoreNeed = lineLore.replaceAll("%amount%", Integer.toString(item.getAmount()));
 											ItemsWithData itemWithData = ItemsWithData.getValue(item.getType(), item.getDurability());											
 											String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(item.getType().toString());
+											
+											String potionName = "";
+											if (item.hasItemMeta() && item.getItemMeta() instanceof PotionMeta) {
+												PotionMeta meta = (PotionMeta) item.getItemMeta();
+												PotionData potionData = meta.getBasePotionData();
+												potionName = Utils.makesBeautiful(potionData.getType().toString());
+												if (potionData.isUpgraded()) {
+													potionName += " II";
+												}
+												
+												if (potionData.isExtended()) {
+													potionName += " (Extended)";
+												}
+												
+												itemName += " (" + potionName + ")";
+												
+											}
+											
+											
 											
 											String enchantsName = EnchantmentsName.getEnchantsNames(item);
 											if (enchantsName != null) {
