@@ -137,6 +137,12 @@ public class PlayersCommands implements CommandExecutor {
 										String tempLineLoreGift = lineLore.replaceAll("%amount%", Integer.toString(tmpGift.getAmount()));
 										ItemsWithData itemWithData = ItemsWithData.getValue(tmpGift.getType(), tmpGift.getDurability());
 										String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(tmpGift.getType().toString());
+										
+										String enchantsName = EnchantmentsName.getEnchantsNames(tmpGift);
+										if (enchantsName != null) {
+											itemName += " (" + enchantsName + ")";
+										}
+										
 										tempLineLoreGift = tempLineLoreGift.replaceAll("%gift%", itemName);
 										lore.add(tempLineLoreGift);
 									}
