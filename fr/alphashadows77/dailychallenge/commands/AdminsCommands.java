@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.alphashadows77.dailychallenge.ItemsWithData;
 import fr.alphashadows77.dailychallenge.Stat;
 import fr.alphashadows77.dailychallenge.StatsWithItem;
 import fr.alphashadows77.dailychallenge.Utils;
@@ -339,10 +338,7 @@ public class AdminsCommands implements CommandExecutor {
 						
 							for (ItemStack item : (ItemStack[]) challenge.getNeed()){
 								
-								String itemName = item.getDurability() == 0 ? Utils.makesBeautiful(item.getType().toString()) : Utils.makesBeautiful(ItemsWithData.getValue(item.getType(), item.getDurability()).toString());
-								int amount = item.getAmount();
-								
-								needAnswer += itemName + "(" + amount + ")" + ", ";
+								needAnswer += item.toString() + ", ";
 								
 							}
 						
@@ -381,10 +377,7 @@ public class AdminsCommands implements CommandExecutor {
 						
 						for (ItemStack item : challenge.getGift().getItemList()){
 							
-							String itemName = item.getDurability() == 0 ? Utils.makesBeautiful(item.getType().toString()) : Utils.makesBeautiful(ItemsWithData.getValue(item.getType(), item.getDurability()).toString());
-							int amount = item.getAmount();
-							
-							giftAnswer += itemName + "(" + amount + ")" + ", ";
+							giftAnswer += item.toString() + ", ";
 							
 						}
 						
