@@ -63,7 +63,7 @@ public enum EnchantmentsName {
 	/**
 	 * Get the enchants names of an enchanted book or an enchanted item
 	 * @param item The enchanted book/item
-	 * @return List of the enchants names of the book/item
+	 * @return List of the enchants names of the book/item. Null if there is no enchants.
 	 */
 	public static String getEnchantsNames(ItemStack item) {
 		String enchantsName = "";
