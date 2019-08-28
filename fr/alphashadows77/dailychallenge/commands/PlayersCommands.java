@@ -212,6 +212,7 @@ public class PlayersCommands implements CommandExecutor {
 			itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		}
 		pItem.setItemMeta(itemMeta);
+		pItem.setAmount(1);
 		return pItem;
 	}
 		
