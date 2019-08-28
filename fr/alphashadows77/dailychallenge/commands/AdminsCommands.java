@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -412,8 +413,14 @@ public class AdminsCommands implements CommandExecutor {
 				}
 				
 				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]}).toLowerCase().replaceAll(" ", "_");
+				FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
 				
-				if (Utils.getCustomConfig("challenges").getString(frequency + "now").equals(challengeName)){
+				if (!challengesConfig.isConfigurationSection(frequency + "." + challengeName)) {
+					player.sendMessage(Utils.getMessage("challenge-not-found"));
+					return true;
+				}
+				
+				if (challengesConfig.getString(frequency + "now").equals(challengeName)){
 					player.sendMessage(Utils.getMessage("challenge-used"));
 					return true;
 				}
