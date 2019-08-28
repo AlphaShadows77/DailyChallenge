@@ -225,7 +225,7 @@ public class Utils {
 	}
 	
 	public static FileConfiguration getCustomConfig(String pConfig){
-		return main.getCustomConfig("challenges");
+		return main.getCustomConfig(pConfig);
 	}
 	
 	public static void saveMainConfig(){
