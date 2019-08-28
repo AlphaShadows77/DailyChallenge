@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -18,12 +17,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Statistic;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
 
@@ -132,6 +131,31 @@ public class Utils {
 		
 	}
 	
+	/**
+	 * Allows to get the long name of a potion
+	 * @param potion Potion to get the name
+	 * @return The long name of a potion, an empty String if there is no potion effect
+	 */
+	public static String getPotionName(ItemStack potion) {
+		String potionName = "";
+		
+		if (potion.hasItemMeta() && potion.getItemMeta() instanceof PotionMeta) {
+			PotionMeta meta = (PotionMeta) potion.getItemMeta();
+			PotionData potionData = meta.getBasePotionData();
+			potionName = Utils.makesBeautiful(potionData.getType().toString());
+			if (potionData.isUpgraded()) {
+				potionName += " II";
+			}
+			
+			if (potionData.isExtended()) {
+				potionName += " (Extended)";
+			}
+						
+		}
+		
+		return potionName;
+	}
+	
 	public static void resetNeed(Player pPlayer){
 		needName.remove(pPlayer);
 	}
@@ -225,7 +249,7 @@ public class Utils {
 	}
 	
 	public static FileConfiguration getCustomConfig(String pConfig){
-		return main.getCustomConfig("challenges");
+		return main.getCustomConfig(pConfig);
 	}
 	
 	public static void saveMainConfig(){
@@ -333,50 +357,6 @@ public class Utils {
 		}
 		
 		return itemSet.toArray(new ItemStack[itemSet.size()]);
-		
-	}
-	public static int getEntityPlayerStat(Player player, Statistic stat, EntityType entityType){
-				
-		String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-		
-		try {
-			
-			Class<?> entityTypesClass = Class.forName("net.minecraft.server." + version + ".EntityTypes");
-			Map<?, ?> eggInfo = (Map<?, ?>) entityTypesClass.getField("eggInfo").get(null);
-			@SuppressWarnings("deprecation")
-			Object monsterEggInfo = eggInfo.get(Integer.valueOf(entityType.getTypeId()));
-			Object statistic;
-													
-			if (stat.equals(Statistic.KILL_ENTITY))
-				statistic = monsterEggInfo.getClass().getField("killEntityStatistic").get(monsterEggInfo);
-			
-			else
-				statistic = monsterEggInfo.getClass().getField("e").get(monsterEggInfo);	
-			
-			Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + version + ".entity.CraftPlayer");
-			Object handle = craftPlayerClass.getMethod("getHandle").invoke(player);
-			Object statisticManager = handle.getClass().getMethod("getStatisticManager").invoke(handle);
-			return (int) statisticManager.getClass().getMethod("getStatisticValue", statistic.getClass()).invoke(statisticManager, statistic);
-			
-		} 
-		
-		catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IllegalArgumentException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		} catch (NoSuchFieldException e1) {
-			e1.printStackTrace();
-		} catch (SecurityException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			e1.printStackTrace();
-		} catch (NoSuchMethodException e1) {
-			e1.printStackTrace();
-		}
-		
-		return 0;
 		
 	}
 	

@@ -8,12 +8,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.alphashadows77.dailychallenge.ItemsWithData;
 import fr.alphashadows77.dailychallenge.Stat;
 import fr.alphashadows77.dailychallenge.StatsWithItem;
 import fr.alphashadows77.dailychallenge.Utils;
@@ -38,10 +38,19 @@ public class AdminsCommands implements CommandExecutor {
 			if (args.length >= 2){
 				
 				String frequency = args[0].toLowerCase();
-				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0]});
+				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0]}).toLowerCase().replaceAll(" ", "_");
 				
 				if (!(frequency.equals("daily") || frequency.equals("weekly") || frequency.equals("monthly")))
 					return false;
+				
+				Challenge tmpChallenge = new ItemChallenge();
+				tmpChallenge.setFrequency(ChallengeFrequency.valueOf(frequency.toUpperCase()));
+				tmpChallenge.setName(challengeName);
+				
+				if (!Utils.challengeExists(tmpChallenge)) {
+					sender.sendMessage(Utils.getMessage("challenge-not-found"));
+					return true;
+				}
 				
 				Utils.changePeriodicChallenge(frequency, challengeName);
 				
@@ -329,10 +338,7 @@ public class AdminsCommands implements CommandExecutor {
 						
 							for (ItemStack item : (ItemStack[]) challenge.getNeed()){
 								
-								String itemName = item.getDurability() == 0 ? Utils.makesBeautiful(item.getType().toString()) : Utils.makesBeautiful(ItemsWithData.getValue(item.getType(), item.getDurability()).toString());
-								int amount = item.getAmount();
-								
-								needAnswer += itemName + "(" + amount + ")" + ", ";
+								needAnswer += item.toString() + ", ";
 								
 							}
 						
@@ -371,10 +377,7 @@ public class AdminsCommands implements CommandExecutor {
 						
 						for (ItemStack item : challenge.getGift().getItemList()){
 							
-							String itemName = item.getDurability() == 0 ? Utils.makesBeautiful(item.getType().toString()) : Utils.makesBeautiful(ItemsWithData.getValue(item.getType(), item.getDurability()).toString());
-							int amount = item.getAmount();
-							
-							giftAnswer += itemName + "(" + amount + ")" + ", ";
+							giftAnswer += item.toString() + ", ";
 							
 						}
 						
@@ -403,8 +406,14 @@ public class AdminsCommands implements CommandExecutor {
 				}
 				
 				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]}).toLowerCase().replaceAll(" ", "_");
+				FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
 				
-				if (Utils.getCustomConfig("challenges").getString(frequency + "now").equals(challengeName)){
+				if (!challengesConfig.contains(frequency + "." + challengeName)) {
+					player.sendMessage(Utils.getMessage("challenge-not-found"));
+					return true;
+				}
+				
+				if (challengesConfig.getString(frequency + "now").equals(challengeName)){
 					player.sendMessage(Utils.getMessage("challenge-used"));
 					return true;
 				}

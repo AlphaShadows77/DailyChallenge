@@ -1,6 +1,7 @@
 package fr.alphashadows77.dailychallenge;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -96,7 +97,7 @@ public class InventoryEvents implements Listener {
 					
 						//Vérification pour savoir si les items nécessaires sont présents dans l'inventaire du joueur
 						for (ItemStack need : (ItemStack[]) itemChallenge.getNeed()){
-							
+														
 							nombreItem = 0;
 							Material needType = need.getType();
 							short needDamage = need.getDurability();
@@ -117,10 +118,24 @@ public class InventoryEvents implements Listener {
 								dontHave += " " + Integer.toString(diff);
 								
 								if (needDamage != 0)
-									dontHave += Utils.makesBeautiful(ItemsWithData.getValue(need.getType(), needDamage).toString());
+									dontHave += " " + Utils.makesBeautiful(ItemsWithData.getValue(needType, needDamage).toString());
 								
-								else
-									dontHave += Utils.makesBeautiful(needType.toString());
+								else {
+									dontHave += " " + Utils.makesBeautiful(needType.toString());
+									
+									String potionName = Utils.getPotionName(need);
+									if (!potionName.equals("")) {
+										dontHave += " (" + potionName + ")";
+									}
+									
+									String enchantmentsName = EnchantmentsName.getEnchantsNames(need);
+									if (enchantmentsName != null) {
+										dontHave += " (" + enchantmentsName + ")";
+									}
+									
+								}
+								
+								dontHave += ",";
 								
 							}
 															
@@ -170,9 +185,12 @@ public class InventoryEvents implements Listener {
 						
 					}
 					
-					else
-						player.sendMessage(Utils.getMessage("dont-have-items-message").replaceAll("%item%", dontHave));
-					
+					else {
+						dontHave = dontHave.substring(0, dontHave.length() - 1); // Allows to remove the last ","
+						String missingItemsMessage = Utils.getMessage("dont-have-items-message");
+						missingItemsMessage = missingItemsMessage.replaceAll("%item%", dontHave);
+						player.sendMessage(missingItemsMessage);
+					}
 				}
 				
 				else{
@@ -201,7 +219,7 @@ public class InventoryEvents implements Listener {
 									EntityType entityType = (EntityType) needData;
 									statName = stat.toString() + "_" + needData.toString();
 									
-									playerStat = Utils.getEntityPlayerStat(player, stat, entityType);
+									playerStat = player.getStatistic(stat, entityType);
 																		
 								}
 								
@@ -242,7 +260,7 @@ public class InventoryEvents implements Listener {
 								EntityType entityType = (EntityType) needData;
 								statName = stat.toString() + "_" + needData.toString();
 								
-								playerStat = Utils.getEntityPlayerStat(player, stat, entityType);
+								playerStat = player.getStatistic(stat, entityType);
 
 							}
 							
@@ -267,14 +285,17 @@ public class InventoryEvents implements Listener {
 									}
 								}
 								dontHave += " " + Integer.toString(diff) + " ";
-								dontHave += (name.contains("%data%") ? name.replaceAll("%data%", Utils.makesBeautiful(needData.toString())) : name);
+								dontHave += (name.contains("%data%") ? name.replaceAll("%data%", Utils.makesBeautiful(needData.toString())) : name) + ",";
 							}
 							
 						}
 						
-						if (dontHave != "")
-							player.sendMessage(Utils.getMessage("dont-have-stats-message").replaceAll("%stat%", dontHave));
-						
+						if (dontHave != "") {
+							dontHave = dontHave.substring(0, dontHave.length() - 1); // Allows to remove the last ","
+							String missingStatsMessage = Utils.getMessage("dont-have-stats-message");
+							missingStatsMessage = missingStatsMessage.replaceAll("%stat%", dontHave);
+							player.sendMessage(missingStatsMessage);
+						}
 					}
 					
 				}

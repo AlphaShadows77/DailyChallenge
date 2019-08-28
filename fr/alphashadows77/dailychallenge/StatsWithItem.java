@@ -1,10 +1,13 @@
 package fr.alphashadows77.dailychallenge;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 
 //Association d'une statistique avec un nom et un item
 public enum StatsWithItem {
@@ -52,7 +55,7 @@ public enum StatsWithItem {
 	SKULKER_BOX_OPENED(Statistic.SHULKER_BOX_OPENED, new ItemStack(Material.PURPLE_SHULKER_BOX, 1), Utils.getMessage("stat-shulker_box_opened")),
 	SLEEP_IN_BED(Statistic.SLEEP_IN_BED, new ItemStack(Material.BED, 1), Utils.getMessage("stat-sleep_in_bed")),
 	SNEAK_TIME(Statistic.SNEAK_TIME, new ItemStack(Material.SOUL_SAND, 1), Utils.getMessage("stat-sneak_time"), UnitType.TIME_TICK),
-	SPRINT_ONE_CM(Statistic.SPRINT_ONE_CM, removePotionLore(new ItemStack(Material.POTION, 1, (short) 8194)), Utils.getMessage("stat-sprint_one_cm"), UnitType.DISTANCE_CM),
+	SPRINT_ONE_CM(Statistic.SPRINT_ONE_CM, getPotion(new PotionData(PotionType.SPEED)), Utils.getMessage("stat-sprint_one_cm"), UnitType.DISTANCE_CM),
 	SWIM_ONE_CM(Statistic.SWIM_ONE_CM, new ItemStack(Material.WATER_BUCKET, 1), Utils.getMessage("stat-swim_one_cm"), UnitType.DISTANCE_CM),
 	TALKED_TO_VILLAGER(Statistic.TALKED_TO_VILLAGER, new ItemStack(Material.EMERALD, 1), Utils.getMessage("stat-talked_to_villager")),
 	TIME_SINCE_DEATH(Statistic.TIME_SINCE_DEATH, new ItemStack(Material.WATCH, 1), Utils.getMessage("stat-time_since_death")),
@@ -84,12 +87,14 @@ public enum StatsWithItem {
 		this.unit = pUnit;
 	}
 	
-	//Retrait du Lore présent sur les potions
-	private static ItemStack removePotionLore(ItemStack pItem){
-		ItemMeta tempMeta = pItem.getItemMeta();
-		tempMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-		pItem.setItemMeta(tempMeta);
-		return pItem;
+	private static ItemStack getPotion(PotionData potionData){
+		ItemStack potion = new ItemStack(Material.POTION, 1);
+		PotionMeta meta = (PotionMeta) Bukkit.getItemFactory().getItemMeta(Material.POTION);
+		meta.setBasePotionData(potionData);
+		meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+		potion.setItemMeta(meta);
+
+		return potion;
 	}
 	
 	public static StatsWithItem getValue(Statistic stat){
@@ -103,7 +108,7 @@ public enum StatsWithItem {
 	
 	//Récupération de l'item correspondant à une entrée de l'énumération
 	public ItemStack getItem(){
-		return this.item;
+		return new ItemStack(this.item);
 	}
 	
 	//Récupération du nom correspondant à une entrée de l'énumération

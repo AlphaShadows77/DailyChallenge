@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import fr.alphashadows77.dailychallenge.EnchantmentsName;
 import fr.alphashadows77.dailychallenge.ItemsWithData;
 import fr.alphashadows77.dailychallenge.Stat;
 import fr.alphashadows77.dailychallenge.StatsWithItem;
@@ -27,7 +28,7 @@ public class PlayersCommands implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
+		
 		if (sender instanceof Player){
 			Player player = (Player) sender;	
 			
@@ -64,7 +65,7 @@ public class PlayersCommands implements CommandExecutor {
 						
 						ArrayList<String> lore = new ArrayList<String>();
 						List<String> loreConfig = Utils.getMessageList("lore-" + nowType + "-challenge");
-						//Modifie les données modifiables (%need%, %gift%, ...) du lore de la config
+						// Modifie les données modifiables (%need%, %gift%, ...) du lore de la config
 						for (String lineLore : loreConfig){
 														
 							if (lineLore.contains("%need%")){
@@ -76,8 +77,19 @@ public class PlayersCommands implements CommandExecutor {
 										if (nowType == "items"){
 											ItemStack item = (ItemStack) need;
 											String tempLineLoreNeed = lineLore.replaceAll("%amount%", Integer.toString(item.getAmount()));
-											ItemsWithData itemWithData = ItemsWithData.getValue(item.getType(), item.getDurability());
+											ItemsWithData itemWithData = ItemsWithData.getValue(item.getType(), item.getDurability());											
 											String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(item.getType().toString());
+											
+											String potionName = Utils.getPotionName(item);
+											if (!potionName.equals("")) {
+												itemName += " (" + potionName + ")";
+											}
+
+											String enchantsName = EnchantmentsName.getEnchantsNames(item);
+											if (enchantsName != null) {
+												itemName += " (" + enchantsName + ")";
+											}
+											
 											tempLineLoreNeed = tempLineLoreNeed.replaceAll("%need%", itemName);
 											
 											lore.add(tempLineLoreNeed);
@@ -130,6 +142,17 @@ public class PlayersCommands implements CommandExecutor {
 										String tempLineLoreGift = lineLore.replaceAll("%amount%", Integer.toString(tmpGift.getAmount()));
 										ItemsWithData itemWithData = ItemsWithData.getValue(tmpGift.getType(), tmpGift.getDurability());
 										String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(tmpGift.getType().toString());
+										
+										String potionName = Utils.getPotionName(tmpGift);
+										if (!potionName.equals("")) {
+											itemName += " (" + potionName + ")";
+										}
+										
+										String enchantsName = EnchantmentsName.getEnchantsNames(tmpGift);
+										if (enchantsName != null) {
+											itemName += " (" + enchantsName + ")";
+										}
+										
 										tempLineLoreGift = tempLineLoreGift.replaceAll("%gift%", itemName);
 										lore.add(tempLineLoreGift);
 									}
@@ -155,7 +178,7 @@ public class PlayersCommands implements CommandExecutor {
 						if (nowType == "items"){
 							
 							if (challenge.getNeed().length != 0)
-								item = (ItemStack) challenge.getNeed()[0];
+								item = new ItemStack((ItemStack) challenge.getNeed()[0]);
 							
 							else
 								item = new ItemStack(Material.BARRIER);
@@ -190,13 +213,16 @@ public class PlayersCommands implements CommandExecutor {
 		
 	// Permet de modifier un item pour lui ajouter un nom et un effet d'enchantement si besoin
 	private ItemStack modifyForGui(ItemStack pItem, String pName, boolean pEnchant){
-		ItemMeta itemMeta = pItem.getItemMeta();
+		ItemMeta itemMeta = pItem.hasItemMeta() ? pItem.getItemMeta() : Bukkit.getItemFactory().getItemMeta(pItem.getType());
 		itemMeta.setDisplayName("§r" + pName);
+		itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_ENCHANTS,
+							  ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_POTION_EFFECTS,
+							  ItemFlag.HIDE_UNBREAKABLE);
 		if (pEnchant){
 			itemMeta.addEnchant(Enchantment.ARROW_DAMAGE, 1, true);
-			itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		}
 		pItem.setItemMeta(itemMeta);
+		pItem.setAmount(1);
 		return pItem;
 	}
 		
