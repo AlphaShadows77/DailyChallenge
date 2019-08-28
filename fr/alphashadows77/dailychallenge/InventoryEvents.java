@@ -125,6 +125,11 @@ public class InventoryEvents implements Listener {
 								else {
 									dontHave += " " + Utils.makesBeautiful(needType.toString());
 									
+									String potionName = Utils.getPotionName(need);
+									if (!potionName.equals("")) {
+										dontHave += " (" + potionName + ")";
+									}
+									
 									String enchantmentsName = EnchantmentsName.getEnchantsNames(need);
 									if (enchantmentsName != null) {
 										dontHave += " (" + enchantmentsName + ")";
