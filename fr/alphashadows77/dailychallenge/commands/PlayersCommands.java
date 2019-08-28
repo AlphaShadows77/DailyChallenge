@@ -80,8 +80,10 @@ public class PlayersCommands implements CommandExecutor {
 											ItemsWithData itemWithData = ItemsWithData.getValue(item.getType(), item.getDurability());											
 											String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(item.getType().toString());
 											
-											String potionName = "";
-											itemName += " (" + potionName + ")";
+											String potionName = Utils.getPotionName(item);
+											if (!potionName.equals("")) {
+												itemName += " (" + potionName + ")";
+											}
 
 											String enchantsName = EnchantmentsName.getEnchantsNames(item);
 											if (enchantsName != null) {
@@ -140,6 +142,11 @@ public class PlayersCommands implements CommandExecutor {
 										String tempLineLoreGift = lineLore.replaceAll("%amount%", Integer.toString(tmpGift.getAmount()));
 										ItemsWithData itemWithData = ItemsWithData.getValue(tmpGift.getType(), tmpGift.getDurability());
 										String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(tmpGift.getType().toString());
+										
+										String potionName = Utils.getPotionName(tmpGift);
+										if (!potionName.equals("")) {
+											itemName += " (" + potionName + ")";
+										}
 										
 										String enchantsName = EnchantmentsName.getEnchantsNames(tmpGift);
 										if (enchantsName != null) {
