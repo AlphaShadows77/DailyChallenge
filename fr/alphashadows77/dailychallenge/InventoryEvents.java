@@ -96,7 +96,6 @@ public class InventoryEvents implements Listener {
 					if (itemChallenge.getNeed().length != 0){
 					
 						//Vérification pour savoir si les items nécessaires sont présents dans l'inventaire du joueur
-						System.out.println(Arrays.toString((ItemStack[]) itemChallenge.getNeed()));
 						for (ItemStack need : (ItemStack[]) itemChallenge.getNeed()){
 														
 							nombreItem = 0;
@@ -117,7 +116,6 @@ public class InventoryEvents implements Listener {
 								
 								int diff = need.getAmount() - nombreItem;
 								dontHave += " " + Integer.toString(diff);
-								System.out.println(need.toString() + " " + needType.toString() + " " + needDamage);
 								
 								if (needDamage != 0)
 									dontHave += " " + Utils.makesBeautiful(ItemsWithData.getValue(needType, needDamage).toString());

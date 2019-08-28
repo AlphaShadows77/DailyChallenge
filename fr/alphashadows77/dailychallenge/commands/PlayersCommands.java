@@ -189,8 +189,6 @@ public class PlayersCommands implements CommandExecutor {
 							item = StatsWithItem.getValue(((Stat) challenge.getNeed()[0]).getStat()).getItem();
 						
 						// Place l'item représentant le challenge dans le menu
-						System.out.println(challenge.getNeed());
-						System.out.println(item);
 						menu.setItem(2 + 9 * index, modifyForGui(item, "§a" + challenge.getName(), false, lore));
 						List<String> playerSuccess = challengesConfig.getStringList(tempFrequency + "success");
 						int playerSuccessNumber = (playerSuccess == null ? 0 : playerSuccess.size());
@@ -234,7 +232,6 @@ public class PlayersCommands implements CommandExecutor {
 		ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setLore(pLore);
 		item.setItemMeta(itemMeta);
-		System.out.println(item.serialize());
 		return item;
 	}
 

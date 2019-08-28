@@ -380,9 +380,7 @@ public enum ItemsWithData {
 			if (tempItem.getMaterial().equals(pMaterial) && tempItem.getData() == pData)
 				return tempItem;
 		}
-		
-		System.out.println("Coucou");
-		
+				
 		return null;
 	}
 	
