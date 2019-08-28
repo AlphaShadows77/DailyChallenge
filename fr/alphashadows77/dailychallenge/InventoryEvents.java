@@ -216,7 +216,7 @@ public class InventoryEvents implements Listener {
 									EntityType entityType = (EntityType) needData;
 									statName = stat.toString() + "_" + needData.toString();
 									
-									playerStat = Utils.getEntityPlayerStat(player, stat, entityType);
+									playerStat = player.getStatistic(stat, entityType);
 																		
 								}
 								
@@ -257,7 +257,7 @@ public class InventoryEvents implements Listener {
 								EntityType entityType = (EntityType) needData;
 								statName = stat.toString() + "_" + needData.toString();
 								
-								playerStat = Utils.getEntityPlayerStat(player, stat, entityType);
+								playerStat = player.getStatistic(stat, entityType);
 
 							}
 							
