@@ -66,7 +66,7 @@ stat-exists: "§cLa statistique renseignée est déjà présente dans la liste d
 no-need: "§cAucune statistique nécessaire n'a été renseigné !"
 already-did-challenge: "§cTu as déjà effectué ce challenge ! Reviens quand il aura changé."
 dont-have-items-message: "§cIl te manque:§4%item% §cpour compléter ce challenge !"
-dont-have-stats-message: "§cTes statistiques§4%stat% §cn'ont pas assez augmenté !"
+dont-have-stats-message: "§cTu dois encore faire§4%stat% §cpour compléter ce challenge !"
 no-frequency-challenge: "§cIl n'y a pas de challenges pour la fréquence choisi !"
 challenge-not-found: "§cLe challenge n'a pas été trouvé !"
 frequency-not-found: "§cCette fréquence n'est pas utilisable ! Il faut utiliser \"daily\" \"weekly\" ou \"monthly\" !"
