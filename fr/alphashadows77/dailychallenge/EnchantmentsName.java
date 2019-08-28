@@ -88,6 +88,8 @@ public enum EnchantmentsName {
 				}
 						
 				enchantsName = enchantsName.substring(0, enchantsName.length() - 2);
+				
+				return enchantsName;
 			}
 		}
 		
