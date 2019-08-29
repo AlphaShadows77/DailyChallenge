@@ -94,7 +94,7 @@ public class Utils {
 		FileConfiguration challengesConfig = main.getCustomConfig("challenges");
 		String frequency = pChallenge.getFrequency().toString().toLowerCase();
 
-		challengesConfig.set(frequency + "." + pChallenge.getName().toLowerCase().replaceAll(" ", "_"), pChallenge);
+		challengesConfig.set(frequency + "." + pChallenge.getName().toLowerCase().replaceAll(" ", "_").replaceAll("[^a-zA-Z0-9_]+", ""), pChallenge);
 		
 		saveCustomConfig(Utils.getCustomConfig("challenges"), new File(main.getDataFolder(), "challenges.yml"), StandardCharsets.UTF_8);
 		
@@ -110,7 +110,7 @@ public class Utils {
 		
 		for (String tmpChallengeName : main.getCustomConfig("challenges").getConfigurationSection(pChallenge.getFrequency().toString().toLowerCase()).getKeys(false)){
 			
-			if (pChallenge.getName().toLowerCase().replaceAll(" ", "_").equals(tmpChallengeName))
+			if (pChallenge.getName().toLowerCase().replaceAll(" ", "_").replaceAll("[^a-zA-Z0-9_]+", "").equals(tmpChallengeName))
 				return true;
 			
 		}

@@ -38,7 +38,9 @@ public class AdminsCommands implements CommandExecutor {
 			if (args.length >= 2){
 				
 				String frequency = args[0].toLowerCase();
-				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0]}).toLowerCase().replaceAll(" ", "_");
+				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0]})
+														.toLowerCase().replaceAll(" ", "_")
+														.replaceAll("[^a-zA-Z0-9_]+", "");
 				
 				if (!(frequency.equals("daily") || frequency.equals("weekly") || frequency.equals("monthly")))
 					return false;
@@ -322,7 +324,9 @@ public class AdminsCommands implements CommandExecutor {
 			else if (args.length >= 3 && args[0].equalsIgnoreCase("info")){
 				
 				String frequency = args[1].toLowerCase();
-				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]}).toLowerCase().replaceAll(" ", "_");
+				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]})
+														.toLowerCase().replaceAll(" ", "_")
+														.replaceAll("[^a-zA-Z0-9_]+", "");
 				
 				Challenge challenge = (Challenge) Utils.getCustomConfig("challenges").get(frequency + "." + challengeName);
 				
@@ -405,7 +409,10 @@ public class AdminsCommands implements CommandExecutor {
 					return true;
 				}
 				
-				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]}).toLowerCase().replaceAll(" ", "_");
+				String challengeName = Utils.removeArgs(Utils.combineArgs(args), new String[] {args[0], args[1]})
+														.toLowerCase().replaceAll(" ", "_")
+														.replaceAll("[^a-zA-Z0-9_]+", "");
+
 				FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
 				
 				if (!challengesConfig.contains(frequency + "." + challengeName)) {
