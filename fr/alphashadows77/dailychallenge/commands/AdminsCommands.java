@@ -332,66 +332,7 @@ public class AdminsCommands implements CommandExecutor {
 				
 				if (challenge != null){
 					
-					player.sendMessage("Name: " + challenge.getName());
-				
-					if (challenge.getNeed().length != 0){
 					
-						String needAnswer = "Need: ";
-						
-						if (challenge instanceof ItemChallenge){
-						
-							for (ItemStack item : (ItemStack[]) challenge.getNeed()){
-								
-								needAnswer += item.toString() + ", ";
-								
-							}
-						
-						}
-						
-						else {
-							
-							for (Stat stat : (Stat[]) challenge.getNeed()){
-								
-								String statName = Utils.makesBeautiful(stat.getStat().toString());
-								int amount = stat.getAmount();
-								
-								if (!stat.getStat().getType().equals(Type.UNTYPED)){
-									
-									statName += "_" + stat.getData().toString();
-									
-								}
-								
-								needAnswer += statName + "(" + amount + ")" + ", ";
-								
-							}
-							
-						}
-						
-						needAnswer = needAnswer.substring(0, needAnswer.length() - 2);
-						
-						
-						
-						player.sendMessage(needAnswer);
-					
-					}
-					
-					if (challenge.getGift().getItemList().length != 0){
-					
-						String giftAnswer = "";
-						
-						for (ItemStack item : challenge.getGift().getItemList()){
-							
-							giftAnswer += item.toString() + ", ";
-							
-						}
-						
-						giftAnswer = giftAnswer.substring(0, giftAnswer.length() - 2);
-						player.sendMessage("Gift: " + giftAnswer);
-					
-					}
-					
-					player.sendMessage("Uniz: " + challenge.getGift().getMoney());
-					player.sendMessage("Xp: " + challenge.getGift().getXp());
 				
 				}
 				
