@@ -56,7 +56,7 @@ public class InventoryEvents implements Listener {
 		//Menu principal des challenges
 		if (inventory != null && inventory.getHolder() == null){
 			
-			if (inventory.getTitle().equalsIgnoreCase(Utils.getMessage("challenge-title"))) {
+			if (inventoryTitle.equalsIgnoreCase(Utils.getMessage("challenge-title"))) {
 			
 				e.setCancelled(true);
 				
