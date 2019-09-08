@@ -7,6 +7,10 @@ info-title: "§rInfos sur le challenge"
 daily-challenge-item: "Challenge Journalier"
 weekly-challenge-item: "Challenge Hebdomadaire"
 monthly-challenge-item: "Challenge Mensuel"
+info-need-item: "Items nécessaires"
+info-gift-item: "Récompense"
+info-money-item: "Gain de $: %money%"
+info-xp-item: "Gain d'xp: %xp"
 
 lore-items-challenge: 
 - "§ePour faire ce challenge tu as besoin de:"
