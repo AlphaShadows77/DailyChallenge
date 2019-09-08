@@ -1,6 +1,7 @@
 #Titres
 title-add_challenge_inventory: §rAjouter un challenge
 challenge-title: "§rDaily Challenge"
+info-title: "§rInfos sur le challenge"
 
 #Noms d'items
 daily-challenge-item: "Challenge Journalier"
