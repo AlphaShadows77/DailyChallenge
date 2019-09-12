@@ -17,10 +17,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 
@@ -131,6 +134,28 @@ public class Utils {
 		
 	}
 	
+	private static ItemStack createInfoItemMenu(String itemLabel, Object data) {
+		
+		Material mat = Material.getMaterial(getString("mc_info-item-" + itemLabel));
+		
+		ItemStack item = new ItemStack(mat, 1);
+
+		ItemFactory itemFactory = Bukkit.getItemFactory();
+		ItemMeta itemMeta = itemFactory.getItemMeta(mat);
+		
+		String dName = getMessage("info-" + itemLabel + "-item");
+		
+		if (data != null)
+			dName = dName.replaceAll("%" + itemLabel + "%", data.toString());
+		
+		itemMeta.setDisplayName(getMessage("info-" + itemLabel + "-item"));
+		
+		item.setItemMeta(itemMeta);
+		
+		return item;
+
+	}
+	
 	/**
 	 * Allows to get the long name of a potion
 	 * @param potion Potion to get the name
@@ -154,6 +179,25 @@ public class Utils {
 		}
 		
 		return potionName;
+	}
+	
+	public static Inventory getInfoMenu(Challenge challenge) {
+		
+		Inventory infoMenu = Bukkit.createInventory(null, 9, getMessage("info-title"));
+		Gift challengeGifts = challenge.getGift();
+		
+		ItemStack needItem = createInfoItemMenu("need", null);
+		ItemStack giftItem = createInfoItemMenu("gift", null);
+		ItemStack moneyItem = createInfoItemMenu("money", challengeGifts.getMoney());
+		ItemStack xpItem = createInfoItemMenu("xp", challengeGifts.getXp());
+		
+		infoMenu.setItem(0, needItem);
+		infoMenu.setItem(1, giftItem);
+		infoMenu.setItem(7, moneyItem);
+		infoMenu.setItem(8, xpItem);
+		
+		return infoMenu;
+		
 	}
 	
 	public static void resetNeed(Player pPlayer){
