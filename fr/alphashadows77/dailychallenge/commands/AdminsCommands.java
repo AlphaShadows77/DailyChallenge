@@ -13,6 +13,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import fr.alphashadows77.dailychallenge.Main;
 import fr.alphashadows77.dailychallenge.Stat;
 import fr.alphashadows77.dailychallenge.StatsWithItem;
 import fr.alphashadows77.dailychallenge.Utils;
@@ -332,6 +333,7 @@ public class AdminsCommands implements CommandExecutor {
 				if (challenge != null){
 					
 					Inventory menu = Utils.getInfoMenu(challenge);
+					Main.getPlayerInfos().addPlayer(player.getUniqueId(), challenge);
 					
 					player.openInventory(menu);
 				
