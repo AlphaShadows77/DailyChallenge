@@ -28,7 +28,8 @@ public class Main extends JavaPlugin {
 	
 	private static FileConfiguration mainConfig;
 	private static Map<String, FileConfiguration> customConfigs = new HashMap<String, FileConfiguration>();
-		
+	private static PlayerInfos playerInfos = new PlayerInfos();
+	
 	@Override
 	public void onEnable() {
 		
@@ -103,6 +104,10 @@ public class Main extends JavaPlugin {
 	
 	protected FileConfiguration getMainConfig(){
 		return mainConfig;
+	}
+	
+	public static PlayerInfos getPlayerInfos() {
+		return playerInfos;
 	}
 	
 	private void addCustomConfig(String pKey){
