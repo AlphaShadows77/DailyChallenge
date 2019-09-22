@@ -18,6 +18,10 @@ public class PlayerInfos {
 		usedChallenge.put(uuid, challenge);
 	}
 	
+	public void removePlayer(UUID uuid) {
+		usedChallenge.remove(uuid);
+	}
+
 	/**
 	 * Allows to get the currently modified challenge by the player
 	 * @param uuid UUID of the player
