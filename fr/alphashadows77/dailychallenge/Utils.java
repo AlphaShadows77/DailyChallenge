@@ -404,4 +404,16 @@ public class Utils {
 		
 	}
 	
+	public static Stat[] deepCopy(Stat[] original) {
+		
+		Stat[] copiedStat = new Stat[original.length];
+		
+		for (int i = 0; i < original.length; i++) {
+			copiedStat[i] = original[i].clone();
+		}
+		
+		return copiedStat;
+		
+	}
+	
 }
