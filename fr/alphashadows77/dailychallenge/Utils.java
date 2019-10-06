@@ -270,6 +270,40 @@ public class Utils {
 
 	}
 
+	public static ItemStack[] splitInStack(ItemStack[] itemList) {
+
+		Set<ItemStack> splittedSet = new HashSet<ItemStack>();
+
+		for (ItemStack tmpItem : itemList) {
+
+			ItemStack clonedItem = tmpItem.clone();
+			tmpItem = null;
+
+			int itemAmount = clonedItem.getAmount();
+			int maxStackSize = clonedItem.getMaxStackSize();
+
+			while (itemAmount > maxStackSize) {
+
+				ItemStack newStack = clonedItem.clone();
+				newStack.setAmount(maxStackSize);
+				splittedSet.add(newStack);
+				itemAmount -= maxStackSize;
+				clonedItem.setAmount(itemAmount);
+
+			}
+
+			if (itemAmount <= maxStackSize) {
+				splittedSet.add(clonedItem);
+			}
+
+		}
+
+		ItemStack[] splittedArray = splittedSet.toArray(new ItemStack[splittedSet.size()]);
+
+		return splittedArray;
+
+	}
+
 
 	//Configs
 	public static String getString(String pKey){
