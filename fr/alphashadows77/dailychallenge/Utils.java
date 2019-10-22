@@ -433,6 +433,14 @@ public class Utils {
 		return getSubInfoMenu(splitItems);
 	}
 
+	public static Inventory getGiftSubInfoMenu(Challenge challenge) {
+
+		ItemStack[] items = Utils.deepCopy(challenge.getGift().getItemList());
+		ItemStack[] splitItems = Utils.splitInStack(items);
+
+		return getSubInfoMenu(splitItems);
+	}
+
 	/**
 	 * Converti la chaine en minuscule, la première lettre en majuscule et transforme les underscore en espace
 	 * @param string Chaîne à convertir
