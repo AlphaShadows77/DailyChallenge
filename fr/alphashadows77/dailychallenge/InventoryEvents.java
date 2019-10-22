@@ -2,6 +2,7 @@ package fr.alphashadows77.dailychallenge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -344,6 +345,51 @@ public class InventoryEvents implements Listener {
 					
 				}
 			
+			}
+			
+			else if (inventoryTitle.equalsIgnoreCase(Utils.getMessage("info-title"))) {
+				
+				e.setCancelled(true);
+				
+				// Permet de vérifier si on est dans le menu permettant de choisir les sous-menus)
+				if (inventory.getSize() == 9) {
+					
+					ItemStack clickedItem = e.getCurrentItem();
+					Material type = clickedItem.getType();
+					
+					PlayerInfos playerInfos = Main.getPlayerInfos();
+					Player player = (Player) e.getWhoClicked();
+					UUID playerUUID = player.getUniqueId();
+					Challenge challenge = playerInfos.getChallenge(playerUUID);
+					
+					Material needType = Material.valueOf(Utils.getString("mc_info-item-need"));
+					Material giftType = Material.valueOf(Utils.getString("mc_info-item-gift"));
+					
+					Inventory subMenu = null;
+					
+					if (type == needType) {
+						
+						if (challenge instanceof ItemChallenge) {
+							ItemChallenge itemChallenge = (ItemChallenge) challenge;
+							subMenu = Utils.getNeedSubInfoMenu(itemChallenge);
+						}
+						
+						else if (challenge instanceof StatChallenge) {
+							StatChallenge statChallenge = (StatChallenge) challenge;
+							player.closeInventory();
+							Utils.showStats(player, statChallenge);
+						}
+						
+					}
+					
+					else if (type == giftType) {
+						subMenu = Utils.getGiftSubInfoMenu(challenge);
+					}
+					
+					player.openInventory(subMenu);
+					
+				}
+				
 			}
 		}
 		
