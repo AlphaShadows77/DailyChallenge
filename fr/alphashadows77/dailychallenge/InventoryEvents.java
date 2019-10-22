@@ -350,17 +350,16 @@ public class InventoryEvents implements Listener {
 			else if (inventoryTitle.equalsIgnoreCase(Utils.getMessage("info-title"))) {
 				
 				e.setCancelled(true);
+				ItemStack clickedItem = e.getCurrentItem();
+				Player player = (Player) e.getWhoClicked();
+				UUID playerUUID = player.getUniqueId();
+				PlayerInfos playerInfos = Main.getPlayerInfos();
+				Challenge challenge = playerInfos.getChallenge(playerUUID);
 				
 				// Permet de vérifier si on est dans le menu permettant de choisir les sous-menus)
 				if (inventory.getSize() == 9) {
 					
-					ItemStack clickedItem = e.getCurrentItem();
 					Material type = clickedItem.getType();
-					
-					PlayerInfos playerInfos = Main.getPlayerInfos();
-					Player player = (Player) e.getWhoClicked();
-					UUID playerUUID = player.getUniqueId();
-					Challenge challenge = playerInfos.getChallenge(playerUUID);
 					
 					Material needType = Material.valueOf(Utils.getString("mc_info-item-need"));
 					Material giftType = Material.valueOf(Utils.getString("mc_info-item-gift"));
@@ -389,7 +388,12 @@ public class InventoryEvents implements Listener {
 					player.openInventory(subMenu);
 					
 				}
-				
+
+				else if (clickedItem.getType() == Material.BARRIER){
+					Inventory menu = Utils.getInfoMenu(challenge);
+					player.openInventory(menu);
+				}
+
 			}
 		}
 		
