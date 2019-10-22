@@ -28,6 +28,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 
 import fr.alphashadows77.dailychallenge.challengestype.Challenge;
+import fr.alphashadows77.dailychallenge.challengestype.ItemChallenge;
+import fr.alphashadows77.dailychallenge.challengestype.StatChallenge;
 
 public class Utils {
 
@@ -404,6 +406,22 @@ public class Utils {
 		}
 
 		return false;
+	}
+
+	private static Inventory getSubInfoMenu(ItemStack[] items) {
+		String title = getMessage("info-title");
+		Inventory menu = Bukkit.createInventory(null, 45, title);
+
+		menu.addItem(items);
+		ItemStack filler = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 8);
+		for (int i = 36; i <= 43; i++) {
+			menu.setItem(i, filler);
+		}
+		ItemStack exitButton = new ItemStack(Material.BARRIER, 1);
+
+		menu.setItem(44, exitButton);
+
+		return menu;
 	}
 
 	/**
