@@ -235,6 +235,33 @@ public class Utils {
 
 	}
 
+	public static String getReadableStat(String readableStatPatern, Stat stat) {
+		int amount = stat.getAmount();
+
+		if (StatsWithItem.getValue(stat.getStat()).getUnit() != null) {
+
+			switch (StatsWithItem.getValue(stat.getStat()).getUnit()) {
+			case DISTANCE_CM:
+				amount /= 100; // Conversion centi-blocs => blocs
+				break;
+
+			case TIME_TICK:
+				amount /= 20; // Conversion ticks => secondes
+				break;
+			}
+
+		}
+
+		String tempLineLoreNeed = readableStatPatern.replaceAll("%amount%", Integer.toString(amount));
+		String statName = StatsWithItem.getValue(stat.getStat()).getNom();
+		if (stat.getData() != null)
+			statName = statName.replaceAll("%data%", stat.getData().toString());
+		statName = Utils.makesBeautiful(statName);
+		tempLineLoreNeed = tempLineLoreNeed.replaceAll("%need%", statName);
+
+		return tempLineLoreNeed;
+	}
+
 	public static ItemStack[] sortItems(ItemStack[] pItemList){
 
 		final Set<ItemStack> finalList = new HashSet<ItemStack>();
