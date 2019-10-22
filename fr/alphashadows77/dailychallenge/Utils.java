@@ -279,7 +279,9 @@ public class Utils {
 		for (ItemStack tmpItem : itemList) {
 
 			ItemStack clonedItem = tmpItem.clone();
-			tmpItem = null;
+			System.out.println("Avant = null : " + itemList.toString());
+			tmpItem = null; // IL FAUT TEST DE PRINT itemList POUR VOIR SI ÇA A CHANGÉ MÊME SI FAUT PAS
+			System.out.println("Après = null : " + itemList.toString());
 
 			int itemAmount = clonedItem.getAmount();
 			int maxStackSize = clonedItem.getMaxStackSize();
@@ -422,6 +424,13 @@ public class Utils {
 		menu.setItem(44, exitButton);
 
 		return menu;
+	}
+
+	public static Inventory getNeedSubInfoMenu(ItemChallenge challenge) {
+		ItemStack[] items = Utils.deepCopy((ItemStack[]) challenge.getNeed());
+		ItemStack[] splitItems = Utils.splitInStack(items);
+
+		return getSubInfoMenu(splitItems);
 	}
 
 	/**
