@@ -262,6 +262,23 @@ public class Utils {
 		return tempLineLoreNeed;
 	}
 
+	public static void showStats(Player player, StatChallenge challenge) {
+
+		String challengeName = challenge.getName();
+
+		String statsInfoTitle = Utils.getMessage("stats-info-title")
+									 .replaceAll("%challenge%", challengeName);
+
+		player.sendMessage(statsInfoTitle);
+
+		Stat[] stats = (Stat[]) challenge.getNeed();
+		String statPatern = Utils.getMessage("stats-info-line");
+		for (Stat stat : stats) {
+			String readableStat = getReadableStat(statPatern, stat);
+			player.sendMessage(readableStat);
+		}
+	}
+
 	public static ItemStack[] sortItems(ItemStack[] pItemList){
 
 		final Set<ItemStack> finalList = new HashSet<ItemStack>();
