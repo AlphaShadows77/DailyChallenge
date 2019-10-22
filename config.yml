@@ -1,6 +1,6 @@
 allow-dailychallenge: false
 # Les items ne peuvent pas être les mêmes
-mc_info-item-need: "ENDERCHEST"
+mc_info-item-need: "ENDER_CHEST"
 mc_info-item-gift: "CHEST"
 mc_info-item-money: "GOLD_NUGGET"
 mc_info-item-xp: "EXP_BOTTLE"
