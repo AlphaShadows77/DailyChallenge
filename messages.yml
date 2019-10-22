@@ -56,6 +56,8 @@ change-monthly-challenge-success: "§aLe challenge du mois a bien été modifé 
 delete-challenge-success: "§aLe challenge a bien été supprimé !"
 delete-stat-success: "§aLa stastistique renseignée a bien été supprimé !"
 clear-need-success: "§aToutes les statistiques renseignées ont été supprimé"
+stats-info-title: "§aStatistiques requises par %challenge%:"
+stats-info-line: "§r§7\"%need%\" de §r%amount%"
 
 #Erreurs
 error-dailychallenge-disabled: "§4Tu ne peux pas faire de daily, weekly ou monthly challenge pour le moment !"
