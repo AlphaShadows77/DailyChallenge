@@ -139,7 +139,6 @@ public class Utils {
 	private static ItemStack createInfoItemMenu(String itemLabel, Object data) {
 
 		Material mat = Material.getMaterial(getString("mc_info-item-" + itemLabel));
-
 		ItemStack item = new ItemStack(mat, 1);
 
 		ItemFactory itemFactory = Bukkit.getItemFactory();
@@ -150,7 +149,7 @@ public class Utils {
 		if (data != null)
 			dName = dName.replaceAll("%" + itemLabel + "%", data.toString());
 
-		itemMeta.setDisplayName(getMessage("info-" + itemLabel + "-item"));
+		itemMeta.setDisplayName(dName);
 
 		item.setItemMeta(itemMeta);
 
