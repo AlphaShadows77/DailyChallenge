@@ -385,7 +385,8 @@ public class InventoryEvents implements Listener {
 						subMenu = Utils.getGiftSubInfoMenu(challenge);
 					}
 					
-					player.openInventory(subMenu);
+					if (subMenu != null)
+						player.openInventory(subMenu);
 					
 				}
 
