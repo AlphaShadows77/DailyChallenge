@@ -317,7 +317,7 @@ public class Utils {
 
 	public static ItemStack[] splitInStack(ItemStack[] itemList) {
 
-		Set<ItemStack> splittedSet = new HashSet<ItemStack>();
+		List<ItemStack> splittedList = new ArrayList<ItemStack>();
 
 		for (ItemStack tmpItem : itemList) {
 
@@ -330,19 +330,19 @@ public class Utils {
 
 				ItemStack newStack = clonedItem.clone();
 				newStack.setAmount(maxStackSize);
-				splittedSet.add(newStack);
+				splittedList.add(newStack);
 				itemAmount -= maxStackSize;
 				clonedItem.setAmount(itemAmount);
 
 			}
 
 			if (itemAmount <= maxStackSize) {
-				splittedSet.add(clonedItem);
+				splittedList.add(clonedItem);
 			}
 
 		}
 
-		ItemStack[] splittedArray = splittedSet.toArray(new ItemStack[splittedSet.size()]);
+		ItemStack[] splittedArray = splittedList.toArray(new ItemStack[splittedList.size()]);
 
 		return splittedArray;
 
