@@ -13,6 +13,7 @@ import org.bukkit.Statistic.Type;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import fr.alphashadows77.dailychallenge.Stat;
+import fr.alphashadows77.dailychallenge.Utils;
 
 public class StatChallenge extends Challenge implements ConfigurationSerializable{
 
@@ -54,6 +55,16 @@ public class StatChallenge extends Challenge implements ConfigurationSerializabl
 	@Override
 	public void setNeed(Object[] pNeed) {
 		this.need = (Stat[]) pNeed;
+	}
+	
+	public Challenge _deepCopy() {
+		
+		Stat[] copiedStat = Utils.deepCopy(this.need);
+		Challenge copiedChallenge = new StatChallenge();
+		copiedChallenge.setNeed(copiedStat);
+		
+		return copiedChallenge;
+		
 	}
 	
 	@Override

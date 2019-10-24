@@ -16,6 +16,7 @@ public abstract class Challenge implements ConfigurationSerializable{
 	
 	public abstract Object[] getNeed();
 	public abstract void setNeed(Object[] pNeed);
+	abstract Challenge _deepCopy();
 	
 	public void setGift(Gift pGift){
 		this.gift = pGift;
@@ -40,6 +41,16 @@ public abstract class Challenge implements ConfigurationSerializable{
 	
 	public ChallengeFrequency getFrequency(){
 		return this.frequency;
+	}
+	
+	public Challenge deepCopy() {
+		
+		Challenge challenge = _deepCopy();
+		Gift copiedGift = this.gift.deepCopy();
+		challenge.gift = copiedGift;
+		
+		return challenge;
+		
 	}
 	
 	@Override

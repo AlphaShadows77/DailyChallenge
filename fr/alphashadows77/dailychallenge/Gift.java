@@ -69,6 +69,27 @@ public class Gift implements ConfigurationSerializable{
 		return this.money;
 	}
 	
+	public Gift deepCopy() {
+		
+		byte length = (byte) this.itemList.length;
+		
+		ItemStack[] itemListCopy = new ItemStack[length];
+		short clonedXp = Short.valueOf(xp);
+		double clonedMoney = Double.valueOf(money);
+		
+		for (int i = 0; i < length; i++) {
+			ItemStack clonedItem = itemList[i].clone();
+			itemListCopy[i] = clonedItem;
+		}
+		
+		Gift copiedGift = new Gift(itemListCopy);
+		copiedGift.money = clonedMoney;
+		copiedGift.xp = clonedXp;
+		
+		return copiedGift;
+		
+	}
+	
 	@Override
 	public String toString(){
 		

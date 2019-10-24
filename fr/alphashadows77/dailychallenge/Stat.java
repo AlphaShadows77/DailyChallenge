@@ -42,6 +42,13 @@ public class Stat implements ConfigurationSerializable{
 		return this.amount;
 	}
 	
+	public Stat clone() {
+		Stat clonedStat = new Stat(this.stat, this.amount);
+		clonedStat.data = this.data;
+		
+		return clonedStat;
+	}
+	
 	public String toString(){
 		String stringedStat = "[Stat: {" + this.stat.toString() + "}; "
 	+ (this.data == null ? "" : "Data: {" + this.data.toString() + "}; ")

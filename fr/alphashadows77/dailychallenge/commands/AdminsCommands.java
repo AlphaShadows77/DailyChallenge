@@ -14,8 +14,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
+import fr.alphashadows77.dailychallenge.Main;
 import fr.alphashadows77.dailychallenge.Stat;
 import fr.alphashadows77.dailychallenge.StatsWithItem;
 import fr.alphashadows77.dailychallenge.Utils;
@@ -350,66 +350,10 @@ public class AdminsCommands implements CommandExecutor {
 				
 				if (challenge != null){
 					
-					player.sendMessage("Name: " + challenge.getName());
-				
-					if (challenge.getNeed().length != 0){
+					Inventory menu = Utils.getInfoMenu(challenge);
+					Main.getPlayerInfos().addPlayer(player.getUniqueId(), challenge);
 					
-						String needAnswer = "Need: ";
-						
-						if (challenge instanceof ItemChallenge){
-						
-							for (ItemStack item : (ItemStack[]) challenge.getNeed()){
-								
-								needAnswer += item.toString() + ", ";
-								
-							}
-						
-						}
-						
-						else {
-							
-							for (Stat stat : (Stat[]) challenge.getNeed()){
-								
-								String statName = Utils.makesBeautiful(stat.getStat().toString());
-								int amount = stat.getAmount();
-								
-								if (!stat.getStat().getType().equals(Type.UNTYPED)){
-									
-									statName += "_" + stat.getData().toString();
-									
-								}
-								
-								needAnswer += statName + "(" + amount + ")" + ", ";
-								
-							}
-							
-						}
-						
-						needAnswer = needAnswer.substring(0, needAnswer.length() - 2);
-						
-						
-						
-						player.sendMessage(needAnswer);
-					
-					}
-					
-					if (challenge.getGift().getItemList().length != 0){
-					
-						String giftAnswer = "";
-						
-						for (ItemStack item : challenge.getGift().getItemList()){
-							
-							giftAnswer += item.toString() + ", ";
-							
-						}
-						
-						giftAnswer = giftAnswer.substring(0, giftAnswer.length() - 2);
-						player.sendMessage("Gift: " + giftAnswer);
-					
-					}
-					
-					player.sendMessage("Uniz: " + challenge.getGift().getMoney());
-					player.sendMessage("Xp: " + challenge.getGift().getXp());
+					player.openInventory(menu);
 				
 				}
 				

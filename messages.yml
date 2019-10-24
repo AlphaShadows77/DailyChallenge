@@ -1,11 +1,16 @@
 #Titres
 title-add_challenge_inventory: §rAjouter un challenge
 challenge-title: "§rDaily Challenge"
+info-title: "§rInfos sur le challenge"
 
 #Noms d'items
 daily-challenge-item: "Challenge Journalier"
 weekly-challenge-item: "Challenge Hebdomadaire"
 monthly-challenge-item: "Challenge Mensuel"
+info-need-item: "Items nécessaires"
+info-gift-item: "Récompense"
+info-money-item: "Gain de $: %money%"
+info-xp-item: "Gain d'xp: %xp"
 
 lore-items-challenge: 
 - "§ePour faire ce challenge tu as besoin de:"
@@ -51,6 +56,8 @@ change-monthly-challenge-success: "§aLe challenge du mois a bien été modifé 
 delete-challenge-success: "§aLe challenge a bien été supprimé !"
 delete-stat-success: "§aLa stastistique renseignée a bien été supprimé !"
 clear-need-success: "§aToutes les statistiques renseignées ont été supprimé"
+stats-info-title: "§aStatistiques requises par %challenge%:"
+stats-info-line: "§r§7\"%need%\" de §r%amount%"
 
 mc-list-header:
 - ""

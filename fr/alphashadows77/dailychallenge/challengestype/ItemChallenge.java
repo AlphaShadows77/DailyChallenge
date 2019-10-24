@@ -22,7 +22,7 @@ public class ItemChallenge extends Challenge implements ConfigurationSerializabl
 	
 	@SuppressWarnings("unchecked")
 	public ItemChallenge(Map<String, Object> serializedItemChallenge){
-		
+				
 		super.deserialize(this, serializedItemChallenge);
 		
 		Set<ItemStack> needSet = new HashSet<ItemStack>();
@@ -55,6 +55,19 @@ public class ItemChallenge extends Challenge implements ConfigurationSerializabl
 		}
 		
 		return Utils.deepCopy(this.need);
+		
+	}
+	
+	/**
+	 * Don't use this method, use {@link Challenge#deepCopy()} instead
+	 */
+	public Challenge _deepCopy() {
+		
+		ItemStack[] copiedItemStack = Utils.deepCopy(this.need);
+		Challenge copiedChallenge = new ItemChallenge();
+		copiedChallenge.setNeed(copiedItemStack);
+		
+		return copiedChallenge;
 		
 	}
 
