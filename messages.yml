@@ -52,6 +52,13 @@ delete-challenge-success: "§aLe challenge a bien été supprimé !"
 delete-stat-success: "§aLa stastistique renseignée a bien été supprimé !"
 clear-need-success: "§aToutes les statistiques renseignées ont été supprimé"
 
+mc-list-header:
+- ""
+- "§f§l%frequency%: "
+mc-list-first-color: "§e"
+mc-list-second-color: "§a"
+mc-list-footer: ""
+
 #Erreurs
 error-dailychallenge-disabled: "§4Tu ne peux pas faire de daily, weekly ou monthly challenge pour le moment !"
 can_not-add: "§cTu n'as pas de challenge en cours, fais /mc additem ou /mc addstats pour en ajouter un"

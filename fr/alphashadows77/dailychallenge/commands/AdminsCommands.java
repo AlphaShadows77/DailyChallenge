@@ -1,5 +1,7 @@
 package fr.alphashadows77.dailychallenge.commands;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -305,20 +307,36 @@ public class AdminsCommands implements CommandExecutor {
 				ConfigurationSection frequencySection = Utils.getCustomConfig("challenges").getConfigurationSection(frequency);
 				
 				if (frequencySection != null && !frequencySection.getKeys(false).isEmpty()){
-				
-					for (String challengeName : frequencySection.getKeys(false)){
-						answer += challengeName + ", ";
+
+					List<String> header = Utils.getMessageList("mc-list-header");
+					for (String line : header) {
+						line = line.replaceAll("%frequency%", Utils.makesBeautiful(frequency));
+						player.sendMessage(line);
 					}
 					
-					answer = answer.substring(0, answer.length() - 2);
+					String firstColor = Utils.getMessage("mc-list-first-color");
+					String secondColor = Utils.getMessage("mc-list-second-color");
 					
+					String[] colors = {firstColor, secondColor};
+					byte colorIndex = 0;
+
+					for (String challengeName : frequencySection.getKeys(false)){
+						answer += colors[colorIndex] + challengeName + ", ";
+						colorIndex *= -1 + 1;
+					}
+
+					answer = answer.substring(0, answer.length() - 2);
+
 					player.sendMessage(frequency + ": " + answer);
-				
+					
+					String footer = Utils.getMessage("mc-list-footer");
+					player.sendMessage(footer);
+
 				}
-				
+
 				else
 					player.sendMessage(Utils.getMessage("no-frequency-challenge"));
-				
+
 			}
 			
 			else if (args.length >= 3 && args[0].equalsIgnoreCase("info")){
