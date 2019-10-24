@@ -322,9 +322,6 @@ public class Utils {
 		for (ItemStack tmpItem : itemList) {
 
 			ItemStack clonedItem = tmpItem.clone();
-			System.out.println("Avant = null : " + itemList.toString());
-			tmpItem = null; // IL FAUT TEST DE PRINT itemList POUR VOIR SI ÇA A CHANGÉ MÊME SI FAUT PAS
-			System.out.println("Après = null : " + itemList.toString());
 
 			int itemAmount = clonedItem.getAmount();
 			int maxStackSize = clonedItem.getMaxStackSize();
