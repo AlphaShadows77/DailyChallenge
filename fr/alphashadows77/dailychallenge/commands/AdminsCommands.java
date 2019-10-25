@@ -322,7 +322,7 @@ public class AdminsCommands implements CommandExecutor {
 
 					for (String challengeName : frequencySection.getKeys(false)){
 						answer += colors[colorIndex] + challengeName + ", ";
-						colorIndex *= -1 + 1;
+						colorIndex = (byte) (colorIndex*-1 + 1);
 					}
 
 					answer = answer.substring(0, answer.length() - 2);
