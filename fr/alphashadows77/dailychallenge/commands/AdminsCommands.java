@@ -327,7 +327,7 @@ public class AdminsCommands implements CommandExecutor {
 
 					answer = answer.substring(0, answer.length() - 2);
 
-					player.sendMessage(frequency + ": " + answer);
+					player.sendMessage(answer);
 					
 					String footer = Utils.getMessage("mc-list-footer");
 					player.sendMessage(footer);
