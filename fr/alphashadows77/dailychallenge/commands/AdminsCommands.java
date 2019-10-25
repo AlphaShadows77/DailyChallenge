@@ -320,7 +320,9 @@ public class AdminsCommands implements CommandExecutor {
 					String[] colors = {firstColor, secondColor};
 					byte colorIndex = 0;
 
-					for (String challengeName : frequencySection.getKeys(false)){
+					for (String key : frequencySection.getKeys(false)){
+						Challenge challenge = (Challenge) frequencySection.get(key);
+						String challengeName = challenge.getName();
 						answer += colors[colorIndex] + challengeName + ", ";
 						colorIndex = (byte) (colorIndex*-1 + 1);
 					}
