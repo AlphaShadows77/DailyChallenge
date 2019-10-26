@@ -52,10 +52,11 @@ public class InventoryEvents implements Listener {
 	public void onClick(InventoryClickEvent e){
 		
 		Inventory inventory = e.getClickedInventory();
-		String inventoryTitle = inventory.getTitle();
 		
 		//Menu principal des challenges
 		if (inventory != null && inventory.getHolder() == null){
+			
+			String inventoryTitle = inventory.getTitle();
 			
 			if (inventoryTitle.equalsIgnoreCase(Utils.getMessage("challenge-title"))) {
 			
