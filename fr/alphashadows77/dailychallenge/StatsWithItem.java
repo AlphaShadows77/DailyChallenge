@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionType;
 
 //Association d'une statistique avec un nom et un item
 public enum StatsWithItem {
-	ANIMALS_BREAD(Statistic.ANIMALS_BRED, new ItemStack(Material.WHEAT, 1), Utils.getMessage("stat-animals_bread")),
+	ANIMALS_BRED(Statistic.ANIMALS_BRED, new ItemStack(Material.WHEAT, 1), Utils.getMessage("stat-animals_bread")),
 	ARMOR_CLEANED(Statistic.ARMOR_CLEANED, new ItemStack(Material.LEATHER_CHESTPLATE, 1), Utils.getMessage("stat-armor_cleaned")),
 	AVIATE_ONE_CM(Statistic.AVIATE_ONE_CM, new ItemStack(Material.ELYTRA, 1), Utils.getMessage("stat-aviate_one_cm"), UnitType.DISTANCE_CM),
 	BANNER_CLEANED(Statistic.BANNER_CLEANED, new ItemStack(Material.BANNER, 1), Utils.getMessage("stat-banner_cleaned")),
