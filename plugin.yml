@@ -1,5 +1,5 @@
 name: DailyChallenge
-version: 1.2.1
+version: 1.2.2
 author: AlphaShadows77
 main: fr.alphashadows77.dailychallenge.Main
 depend: [Vault]
