@@ -96,24 +96,24 @@ public class Utils {
 
 	public static void setChallengeInConfig(Challenge pChallenge){
 
-		FileConfiguration challengesConfig = main.getCustomConfig("challenges");
+		FileConfiguration challengesConfig = main.getCustomConfig("dailychallenges");
 		String frequency = pChallenge.getFrequency().toString().toLowerCase();
 
 		challengesConfig.set(frequency + "." + pChallenge.getName().toLowerCase().replaceAll(" ", "_").replaceAll("[^a-zA-Z0-9_]+", ""), pChallenge);
 
-		saveCustomConfig(Utils.getCustomConfig("challenges"), new File(main.getDataFolder(), "challenges.yml"), StandardCharsets.UTF_8);
+		saveCustomConfig(Utils.getCustomConfig("dailychallenges"), new File(main.getDataFolder(), "dailychallenges.yml"), StandardCharsets.UTF_8);
 
 	}
 
 	public static boolean challengeExists(Challenge pChallenge){
 
-		FileConfiguration challengesConfig = main.getCustomConfig("challenges");
+		FileConfiguration challengesConfig = main.getCustomConfig("dailychallenges");
 
 		if (challengesConfig.getConfigurationSection(pChallenge.getFrequency().toString().toLowerCase()) == null) {
 			return false;
 		}
 
-		for (String tmpChallengeName : main.getCustomConfig("challenges").getConfigurationSection(pChallenge.getFrequency().toString().toLowerCase()).getKeys(false)){
+		for (String tmpChallengeName : main.getCustomConfig("dailychallenges").getConfigurationSection(pChallenge.getFrequency().toString().toLowerCase()).getKeys(false)){
 
 			if (pChallenge.getName().toLowerCase().replaceAll(" ", "_").replaceAll("[^a-zA-Z0-9_]+", "").equals(tmpChallengeName))
 				return true;
@@ -126,13 +126,13 @@ public class Utils {
 
 	public static void changePeriodicChallenge(String frequency, String challengeName){
 
-		FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
+		FileConfiguration challengesConfig = Utils.getCustomConfig("dailychallenges");
 
 		challengesConfig.set(frequency + "now", challengeName.toLowerCase());
 		challengesConfig.set(frequency + "success", null); //Mise à zéro des joueurs ayant réussi le challenge actuel
 		challengesConfig.set(frequency + "playersstats", null); //Mise à zéro des stats enregistrées des joueurs pour les challenges statistiques
 
-		Utils.saveCustomConfig(Utils.getCustomConfig("challenges"), new File(main.getDataFolder(), "challenges.yml"), StandardCharsets.UTF_8);
+		Utils.saveCustomConfig(Utils.getCustomConfig("dailychallenges"), new File(main.getDataFolder(), "dailychallenges.yml"), StandardCharsets.UTF_8);
 
 	}
 

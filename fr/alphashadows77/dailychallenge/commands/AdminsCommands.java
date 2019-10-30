@@ -304,7 +304,7 @@ public class AdminsCommands implements CommandExecutor {
 				
 				String frequency = args[1].toLowerCase();
 				String answer = "";
-				ConfigurationSection frequencySection = Utils.getCustomConfig("challenges").getConfigurationSection(frequency);
+				ConfigurationSection frequencySection = Utils.getCustomConfig("dailychallenges").getConfigurationSection(frequency);
 				
 				if (frequencySection != null && !frequencySection.getKeys(false).isEmpty()){
 
@@ -348,7 +348,7 @@ public class AdminsCommands implements CommandExecutor {
 														.toLowerCase().replaceAll(" ", "_")
 														.replaceAll("[^a-zA-Z0-9_]+", "");
 				
-				Challenge challenge = (Challenge) Utils.getCustomConfig("challenges").get(frequency + "." + challengeName);
+				Challenge challenge = (Challenge) Utils.getCustomConfig("dailychallenges").get(frequency + "." + challengeName);
 				
 				if (challenge != null){
 					
@@ -377,7 +377,7 @@ public class AdminsCommands implements CommandExecutor {
 														.toLowerCase().replaceAll(" ", "_")
 														.replaceAll("[^a-zA-Z0-9_]+", "");
 
-				FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
+				FileConfiguration challengesConfig = Utils.getCustomConfig("dailychallenges");
 				
 				if (!challengesConfig.contains(frequency + "." + challengeName)) {
 					player.sendMessage(Utils.getMessage("challenge-not-found"));
@@ -389,8 +389,8 @@ public class AdminsCommands implements CommandExecutor {
 					return true;
 				}
 				
-				Utils.getCustomConfig("challenges").set(frequency + "." + challengeName, null);
-				Utils.saveCustomConfig("challenges");
+				Utils.getCustomConfig("dailychallenges").set(frequency + "." + challengeName, null);
+				Utils.saveCustomConfig("dailychallenges");
 				
 				player.sendMessage(Utils.getMessage("delete-challenge-success"));
 				

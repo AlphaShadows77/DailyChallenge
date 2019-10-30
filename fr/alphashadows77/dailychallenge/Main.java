@@ -50,7 +50,7 @@ public class Main extends JavaPlugin {
 		
 		// Sélection aléatoire des challenges périodiques
 		Calendar calendar = Calendar.getInstance();
-		FileConfiguration challengesConfig = getCustomConfig("challenges");
+		FileConfiguration challengesConfig = getCustomConfig("dailychallenges");
 			
 		// Vérification si c'est bien un reload quotidien et non ponctuel ou qu'aucun challenge journalier n'est défini
 		if (calendar.get(Calendar.HOUR_OF_DAY) == 5 || calendar.get(Calendar.HOUR_OF_DAY) == 6){
@@ -75,7 +75,7 @@ public class Main extends JavaPlugin {
 		
 		}
 					
-		Utils.saveCustomConfig(Utils.getCustomConfig("challenges"), new File(getDataFolder(), "challenges.yml"), StandardCharsets.UTF_8);
+		Utils.saveCustomConfig(Utils.getCustomConfig("dailychallenges"), new File(getDataFolder(), "dailychallenges.yml"), StandardCharsets.UTF_8);
 		
 	}
 	
@@ -98,7 +98,7 @@ public class Main extends JavaPlugin {
 
 		//Custom configs
 		addCustomConfig("messages");
-		addCustomConfig("challenges");
+		addCustomConfig("dailychallenges");
 		
 	}
 	
@@ -156,7 +156,7 @@ public class Main extends JavaPlugin {
 	}
 	
 	private void randomNewChallenge(String frequency) {
-		FileConfiguration challengesConfig = getCustomConfig("challenges");
+		FileConfiguration challengesConfig = getCustomConfig("dailychallenges");
 		Set<String> challenges = new HashSet<String>();
 		//Ajout de tous les challenges dans une liste
 		for (String challenge : challengesConfig.getConfigurationSection(frequency).getValues(false).keySet()){

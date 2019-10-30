@@ -63,7 +63,7 @@ public class InventoryEvents implements Listener {
 				e.setCancelled(true);
 				
 				Player player = (Player) e.getWhoClicked();
-				FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
+				FileConfiguration challengesConfig = Utils.getCustomConfig("dailychallenges");
 				int nombreItem = 0;
 				String frequency = "";
 				switch (e.getSlot()){
@@ -236,7 +236,7 @@ public class InventoryEvents implements Listener {
 									
 								}
 								
-								Utils.saveCustomConfig("challenges");
+								Utils.saveCustomConfig("dailychallenges");
 								player.sendMessage(Utils.getMessage("start-challenge-stat-message"));
 								
 								return;
@@ -340,7 +340,7 @@ public class InventoryEvents implements Listener {
 						playerSuccess.add(player.getName());
 						challengesConfig.set(frequency + "success", playerSuccess);
 						
-						Utils.saveCustomConfig("challenges");
+						Utils.saveCustomConfig("dailychallenges");
 						
 					}
 					

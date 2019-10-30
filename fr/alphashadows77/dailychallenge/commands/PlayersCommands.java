@@ -46,7 +46,7 @@ public class PlayersCommands implements CommandExecutor {
 					
 					byte index = 0;
 					
-					FileConfiguration challengesConfig = Utils.getCustomConfig("challenges");
+					FileConfiguration challengesConfig = Utils.getCustomConfig("dailychallenges");
 					
 					for (String tempFrequency : new String[] {"daily", "weekly", "monthly"}){
 						
