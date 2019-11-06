@@ -71,10 +71,11 @@ public class PlayersCommands implements CommandExecutor {
 							if (lineLore.contains("%need%")){
 								
 								if (challenge.getNeed().length != 0){
-								
-									for (Object need : challenge.getNeed()){
-										
-										if (nowType == "items"){
+									
+									if (nowType == "items") {
+										ItemStack[] neededItems = (ItemStack[]) challenge.getNeed();
+										ItemStack[] sortedItems = Utils.sortItems(neededItems);
+										for (ItemStack need : sortedItems) {
 											ItemStack item = (ItemStack) need;
 											String tempLineLoreNeed = lineLore.replaceAll("%amount%", Integer.toString(item.getAmount()));
 											ItemsWithData itemWithData = ItemsWithData.getValue(item.getType(), item.getDurability());											
@@ -94,13 +95,14 @@ public class PlayersCommands implements CommandExecutor {
 											
 											lore.add(tempLineLoreNeed);
 										}
-										
-										else{
-											Stat stat = (Stat) need;
+									}
+									
+									else {
+										Stat[] stats = (Stat[]) challenge.getNeed();
+										for (Stat stat : stats) {
 											String line = Utils.getReadableStat(lineLore, stat);
 											lore.add(line);
 										}
-										
 									}
 								
 								}
@@ -117,7 +119,10 @@ public class PlayersCommands implements CommandExecutor {
 								
 								else{
 									
-									for (ItemStack tmpGift : challenge.getGift().getItemList()){
+									ItemStack[] givenItems = challenge.getGift().getItemList();
+									ItemStack[] sortedItems = Utils.sortItems(givenItems);
+									
+									for (ItemStack tmpGift : sortedItems){
 										String tempLineLoreGift = lineLore.replaceAll("%amount%", Integer.toString(tmpGift.getAmount()));
 										ItemsWithData itemWithData = ItemsWithData.getValue(tmpGift.getType(), tmpGift.getDurability());
 										String itemName = itemWithData != null ? Utils.makesBeautiful(itemWithData.toString()) : Utils.makesBeautiful(tmpGift.getType().toString());
