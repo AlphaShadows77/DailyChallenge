@@ -64,7 +64,7 @@ public class Utils {
 	}
 
 	public static void toGift(Player pPlayer, ItemStack[] pItemList){
-		ItemStack[] cleanedItemList = (ItemStack[]) removeNullObjects(pItemList);
+		ItemStack[] cleanedItemList = removeNullObjects(pItemList);
 		challenges.get(pPlayer).setNeed(cleanedItemList);
 		pPlayer.sendMessage(Utils.getMessage("save-need-need-gift"));
 	}
@@ -86,7 +86,7 @@ public class Utils {
 
 	public static void addChallenge(Player pPlayer, ItemStack[] pItemList){
 		
-		ItemStack[] cleanedItemList = (ItemStack[]) removeNullObjects(pItemList);
+		ItemStack[] cleanedItemList = removeNullObjects(pItemList);
 		challenges.get(pPlayer).setGift(new Gift(cleanedItemList));
 
 		pPlayer.sendMessage(Utils.getMessage("need-challenge-name"));
