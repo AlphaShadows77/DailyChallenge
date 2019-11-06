@@ -514,7 +514,7 @@ public class Utils {
 	 */
 	public static ItemStack[] deepCopy(ItemStack[] original){
 
-		Set<ItemStack> itemSet = new HashSet<ItemStack>();
+		List<ItemStack> itemSet = new ArrayList<ItemStack>();
 
 		for (ItemStack tmpItem : original){
 			itemSet.add(tmpItem.clone());
