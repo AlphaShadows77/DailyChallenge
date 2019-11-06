@@ -466,17 +466,15 @@ public class Utils {
 
 	public static Inventory getNeedSubInfoMenu(ItemChallenge challenge) {
 		ItemStack[] items = Utils.deepCopy((ItemStack[]) challenge.getNeed());
-		ItemStack[] splitItems = Utils.splitInStack(items);
 
-		return getSubInfoMenu(splitItems);
+		return getSubInfoMenu(items);
 	}
 
 	public static Inventory getGiftSubInfoMenu(Challenge challenge) {
 
 		ItemStack[] items = Utils.deepCopy(challenge.getGift().getItemList());
-		ItemStack[] splitItems = Utils.splitInStack(items);
 
-		return getSubInfoMenu(splitItems);
+		return getSubInfoMenu(items);
 	}
 
 	/**
