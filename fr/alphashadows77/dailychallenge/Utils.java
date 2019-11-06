@@ -64,8 +64,7 @@ public class Utils {
 	}
 
 	public static void toGift(Player pPlayer, ItemStack[] pItemList){
-		ItemStack[] sortedItemList = sortItems(pItemList);
-		challenges.get(pPlayer).setNeed(sortedItemList);
+		challenges.get(pPlayer).setNeed(pItemList);
 		pPlayer.sendMessage(Utils.getMessage("save-need-need-gift"));
 	}
 
@@ -86,8 +85,7 @@ public class Utils {
 
 	public static void addChallenge(Player pPlayer, ItemStack[] pItemList){
 
-		ItemStack[] sortedItemList = sortItems(pItemList);
-		challenges.get(pPlayer).setGift(new Gift(sortedItemList));
+		challenges.get(pPlayer).setGift(new Gift(pItemList));
 
 		pPlayer.sendMessage(Utils.getMessage("need-challenge-name"));
 		needName.add(pPlayer);
