@@ -384,7 +384,7 @@ public class AdminsCommands implements CommandExecutor {
 					return true;
 				}
 				
-				if (challengesConfig.getString(frequency + "now").equals(challengeName)){
+				if (challengesConfig.getString(frequency + "now") != null && challengesConfig.getString(frequency + "now").equals(challengeName)){
 					player.sendMessage(Utils.getMessage("challenge-used"));
 					return true;
 				}
