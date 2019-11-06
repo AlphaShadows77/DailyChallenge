@@ -261,16 +261,16 @@ public class Utils {
 		return tempLineLoreNeed;
 	}
 	
-	public static Object[] removeNullObjects(Object[] array) {
+	public static ItemStack[] removeNullObjects(ItemStack[] array) {
 		
-		List<Object> cleanedList = new ArrayList<Object>();
-		for (Object elem : array) {
+		List<ItemStack> cleanedList = new ArrayList<ItemStack>();
+		for (ItemStack elem : array) {
 			if (elem != null) {
 				cleanedList.add(elem);
 			}
 		}
 		
-		return cleanedList.toArray(new Object[cleanedList.size()]);
+		return cleanedList.toArray(new ItemStack[cleanedList.size()]);
 		
 	}
 
