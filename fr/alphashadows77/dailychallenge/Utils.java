@@ -258,6 +258,19 @@ public class Utils {
 
 		return tempLineLoreNeed;
 	}
+	
+	public static Object[] removeNullObjects(Object[] array) {
+		
+		List<Object> cleanedList = new ArrayList<Object>();
+		for (Object elem : array) {
+			if (elem != null) {
+				cleanedList.add(elem);
+			}
+		}
+		
+		return cleanedList.toArray(new Object[cleanedList.size()]);
+		
+	}
 
 	public static void showStats(Player player, StatChallenge challenge) {
 
