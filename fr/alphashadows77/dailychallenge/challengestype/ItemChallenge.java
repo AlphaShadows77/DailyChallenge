@@ -1,10 +1,8 @@
 package fr.alphashadows77.dailychallenge.challengestype;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +23,7 @@ public class ItemChallenge extends Challenge implements ConfigurationSerializabl
 				
 		super.deserialize(this, serializedItemChallenge);
 		
-		Set<ItemStack> needSet = new HashSet<ItemStack>();
+		List<ItemStack> needSet = new ArrayList<ItemStack>();
 		
 		if (serializedItemChallenge.containsKey("need")){
 			
