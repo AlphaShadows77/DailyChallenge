@@ -1,12 +1,7 @@
 package fr.alphashadows77.dailychallenge;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -101,7 +96,7 @@ public class Utils {
 
 		challengesConfig.set(frequency + "." + pChallenge.getName().toLowerCase().replaceAll(" ", "_").replaceAll("[^a-zA-Z0-9_]+", ""), pChallenge);
 
-		saveCustomConfig(Utils.getCustomConfig("dailychallenges"), new File(main.getDataFolder(), "dailychallenges.yml"), StandardCharsets.UTF_8);
+		saveCustomConfig("dailychallenges");
 
 	}
 
@@ -132,7 +127,7 @@ public class Utils {
 		challengesConfig.set(frequency + "success", null); //Mise à zéro des joueurs ayant réussi le challenge actuel
 		challengesConfig.set(frequency + "playersstats", null); //Mise à zéro des stats enregistrées des joueurs pour les challenges statistiques
 
-		Utils.saveCustomConfig(Utils.getCustomConfig("dailychallenges"), new File(main.getDataFolder(), "dailychallenges.yml"), StandardCharsets.UTF_8);
+		Utils.saveCustomConfig("dailychallenges");
 
 	}
 
@@ -396,47 +391,6 @@ public class Utils {
 			main.getCustomConfig(pKey).save(new File(main.getDataFolder(), pKey + ".yml"));
 		}
 		catch (IOException e) {e.printStackTrace();}
-	}
-
-	/**
-	 * Sauvegarde la config custom en utilisant l'encodage donné
-	 * @param config Key associated to a config
-	 * @param charset Charset to use
-	 */
-	public static void saveCustomConfig(FileConfiguration config, File configFile, Charset charset) {
-
-		String configToString = config.saveToString();
-
-		OutputStreamWriter osw = null;
-		try {
-
-			FileOutputStream fis = new FileOutputStream(configFile);
-			osw = new OutputStreamWriter(fis, charset);
-
-			osw.write(configToString);
-
-		}
-
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		finally {
-
-			try {
-				osw.close();
-			}
-
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
-
-
 	}
 
 

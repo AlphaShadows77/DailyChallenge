@@ -1,11 +1,8 @@
 package fr.alphashadows77.dailychallenge;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,7 +72,7 @@ public class Main extends JavaPlugin {
 		
 		}
 					
-		Utils.saveCustomConfig(Utils.getCustomConfig("dailychallenges"), new File(getDataFolder(), "dailychallenges.yml"), StandardCharsets.UTF_8);
+		Utils.saveCustomConfig("dailychallenges");
 		
 	}
 	
@@ -121,8 +118,9 @@ public class Main extends JavaPlugin {
 				
 				try{
 					customFile.createNewFile();
-					customConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getResource(pKey + ".yml"), StandardCharsets.UTF_8));
-					Utils.saveCustomConfig(customConfig, customFile, StandardCharsets.UTF_8);
+					InputStreamReader defaultConfigReader = new InputStreamReader(getResource(pKey + ".yml"));
+					customConfig = YamlConfiguration.loadConfiguration(defaultConfigReader);
+					Utils.saveCustomConfig(pKey);
 				}
 				
 				catch (IOException e) {
@@ -134,17 +132,7 @@ public class Main extends JavaPlugin {
 		}
 		
 		else{
-			
-			try {
-				FileInputStream fis = new FileInputStream(customFile);
-				InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-				customConfig = YamlConfiguration.loadConfiguration(isr);
-			}
-			
-			catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			
+			customConfig = YamlConfiguration.loadConfiguration(customFile);
 		}
 		
 		customConfigs.put(pKey, customConfig);
