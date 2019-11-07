@@ -3,10 +3,8 @@ package fr.alphashadows77.dailychallenge;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +28,7 @@ public class Gift implements ConfigurationSerializable{
 		this.xp = ((Integer) serializedGift.get("xp")).shortValue();
 		this.money = (double) serializedGift.get("money");
 		
-		Set<ItemStack> itemList = new HashSet<ItemStack>();
+		List<ItemStack> itemList = new ArrayList<ItemStack>();
 		
 		if (serializedGift.containsKey("itemlist")){
 		

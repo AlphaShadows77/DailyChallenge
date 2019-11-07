@@ -64,8 +64,8 @@ public class Utils {
 	}
 
 	public static void toGift(Player pPlayer, ItemStack[] pItemList){
-		ItemStack[] sortedItemList = sortItems(pItemList);
-		challenges.get(pPlayer).setNeed(sortedItemList);
+		ItemStack[] cleanedItemList = removeNullObjects(pItemList);
+		challenges.get(pPlayer).setNeed(cleanedItemList);
 		pPlayer.sendMessage(Utils.getMessage("save-need-need-gift"));
 	}
 
@@ -85,9 +85,9 @@ public class Utils {
 	}
 
 	public static void addChallenge(Player pPlayer, ItemStack[] pItemList){
-
-		ItemStack[] sortedItemList = sortItems(pItemList);
-		challenges.get(pPlayer).setGift(new Gift(sortedItemList));
+		
+		ItemStack[] cleanedItemList = removeNullObjects(pItemList);
+		challenges.get(pPlayer).setGift(new Gift(cleanedItemList));
 
 		pPlayer.sendMessage(Utils.getMessage("need-challenge-name"));
 		needName.add(pPlayer);
@@ -259,6 +259,19 @@ public class Utils {
 		tempLineLoreNeed = tempLineLoreNeed.replaceAll("%need%", statName);
 
 		return tempLineLoreNeed;
+	}
+	
+	public static ItemStack[] removeNullObjects(ItemStack[] array) {
+		
+		List<ItemStack> cleanedList = new ArrayList<ItemStack>();
+		for (ItemStack elem : array) {
+			if (elem != null) {
+				cleanedList.add(elem);
+			}
+		}
+		
+		return cleanedList.toArray(new ItemStack[cleanedList.size()]);
+		
 	}
 
 	public static void showStats(Player player, StatChallenge challenge) {
@@ -468,17 +481,15 @@ public class Utils {
 
 	public static Inventory getNeedSubInfoMenu(ItemChallenge challenge) {
 		ItemStack[] items = Utils.deepCopy((ItemStack[]) challenge.getNeed());
-		ItemStack[] splitItems = Utils.splitInStack(items);
 
-		return getSubInfoMenu(splitItems);
+		return getSubInfoMenu(items);
 	}
 
 	public static Inventory getGiftSubInfoMenu(Challenge challenge) {
 
 		ItemStack[] items = Utils.deepCopy(challenge.getGift().getItemList());
-		ItemStack[] splitItems = Utils.splitInStack(items);
 
-		return getSubInfoMenu(splitItems);
+		return getSubInfoMenu(items);
 	}
 
 	/**
@@ -503,7 +514,7 @@ public class Utils {
 	 */
 	public static ItemStack[] deepCopy(ItemStack[] original){
 
-		Set<ItemStack> itemSet = new HashSet<ItemStack>();
+		List<ItemStack> itemSet = new ArrayList<ItemStack>();
 
 		for (ItemStack tmpItem : original){
 			itemSet.add(tmpItem.clone());
